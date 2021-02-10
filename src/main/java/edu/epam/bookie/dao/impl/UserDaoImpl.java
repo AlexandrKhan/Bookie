@@ -7,18 +7,12 @@ import edu.epam.bookie.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@SuppressWarnings("Duplicates")
 public class UserDaoImpl implements UserDao {
-
-
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
 
     public final static UserDaoImpl INSTANCE = new UserDaoImpl();
@@ -26,12 +20,11 @@ public class UserDaoImpl implements UserDao {
     private UserDaoImpl() {
     }
 
-    private static final String ADD_USER = "INSERT INTO user (username, password) VALUES (?, ?)";
+    private static final String ADD_USER = "INSERT INTO user (username, first_name, last_name, email, password, date_of_birth, role) VALUES (?,?,?,?,?,?,?)";
     private static final String SELECT_ALL_USERS = "SELECT id, username, password FROM user";
     private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM user WHERE username=?";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id=?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM user WHERE id=?";
-    private static final String DELETE_USER_BY_USERNAME = "DELETE FROM user WHERE username=?";
     private static final String UPDATE_USER_BY_ID = "UPDATE user SET username=?, password=? WHERE id=?";
     private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "SELECT * FROM user WHERE username=? AND password=?";
 
@@ -80,13 +73,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean create(User entity) throws UserDaoException {
+    public boolean create(User user) throws UserDaoException {
         boolean result = false;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(ADD_USER)){
-
-            statement.setString(1, entity.getUsername());
-            statement.setString(2, entity.getPassword());
+            statement.setString(1, user.getUsername());
+            statement.setString(2, user.getFirst_name());
+            statement.setString(3, user.getLast_name());
+            statement.setString(4, user.getEmail());
+            statement.setString(5, user.getPassword());
+            statement.setDate(6, Date.valueOf(user.getDate_of_birth()));
+            statement.setString(7, user.getRole().toString());
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Can't add user");
@@ -146,19 +143,6 @@ public class UserDaoImpl implements UserDao {
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Can't delete user by id");
-        }
-        return result;
-    }
-
-    @Override
-    public boolean deleteByName(String username) throws UserDaoException {
-        boolean result = false;
-        try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_USERNAME)) {
-            statement.setString(1, username);
-            result = statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            logger.error("Can't delete user by username");
         }
         return result;
     }

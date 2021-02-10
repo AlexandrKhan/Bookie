@@ -6,6 +6,9 @@
 <fmt:message key="register.email.placeHolder" var="emailPlaceHolder"/>
 <fmt:message key="register.password.placeHolder" var="passwordPlaceHolder"/>
 <fmt:message key="register.username.placeHolder" var="usernamePlaceHolder"/>
+<fmt:message key="register.firstname" var="firstnamePlaceHolder"/>
+<fmt:message key="register.lastname" var="lastnamePlaceholder"/>
+<fmt:message key="register.dateOfBirth" var="dateOfBirthPlaceholder"/>
 <!DOCTYPE html>
 <html lang="${sessionScope.lang}">
 <meta charset="utf-8">
@@ -29,6 +32,33 @@
             </small>
         </div>
         <div class="form-group">
+            <label for="first_name">
+                <fmt:message key="register.firstname"/>
+            </label>
+            <input type="text" name="first_name" class="form-control" id="first_name" aria-describedby="firstnameHelp" placeholder="${firstnamePlaceHolder}" >
+            <small id="firstnameHelp" class="form-text text-muted">
+                <fmt:message key="register.firstname.help"/>
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="last_name">
+                <fmt:message key="register.lastname"/>
+            </label>
+            <input type="text" name="last_name" class="form-control" id="last_name" aria-describedby="lastnameHelp" placeholder="${lastnamePlaceholder}"  >
+            <small id="lastnameHelp" class="form-text text-muted">
+                <fmt:message key="register.lastname.help"/>
+            </small>
+        </div>
+        <div class="form-group">
+            <label for="username">
+                <fmt:message key="register.email"/>
+            </label>
+            <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="${emailPlaceHolder}"  >
+            <small id="emailHelp" class="form-text text-muted">
+                <fmt:message key="register.email.help"/>
+            </small>
+        </div>
+        <div class="form-group">
             <label for="password">
                 <fmt:message key="register.password.label"/>
             </label>
@@ -37,6 +67,17 @@
                 <fmt:message key="register.password.help"/>
             </small>
         </div>
+
+        <div class="form-group">
+            <label for="username">
+                <fmt:message key="register.dateOfBirth"/>
+            </label>
+            <input type="date" name="date_of_birth" class="form-control" id="date_of_birth" aria-describedby="dateOfBirthHelp" placeholder="${dateOfBirthPlaceholder}" >
+            <small id="dateOfBirthHelp" class="form-text text-muted">
+                <fmt:message key="register.dateOfBirth.help"/>
+            </small>
+        </div>
+
         <button type="submit" class="btn btn-primary">
             <fmt:message key="register.register"/>
         </button>

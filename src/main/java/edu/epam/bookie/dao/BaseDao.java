@@ -12,15 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BaseDao<T extends Entity> {
-    static final Logger logger = LogManager.getLogger(BaseDao.class);
-
     Optional<List<T>> findAll() throws UserDaoException;
 
     Optional<T> findById(long id) throws UserDaoException;
 
     boolean deleteById(long id) throws UserDaoException;
-
-    boolean deleteByName(String name) throws UserDaoException;
 
     boolean create(T entity) throws UserDaoException;
 

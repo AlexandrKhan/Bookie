@@ -3,19 +3,21 @@ package edu.epam.bookie.service.impl;
 import edu.epam.bookie.dao.impl.UserDaoImpl;
 import edu.epam.bookie.exception.UserDaoException;
 import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.UserService;
 import edu.epam.bookie.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
+    public static final UserServiceImpl INSTANCE = new UserServiceImpl();
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private static final UserValidator VALIDATOR = UserValidator.getInstance();
-    public static final UserServiceImpl INSTANCE = new UserServiceImpl();
     private static final UserDaoImpl userDao = UserDaoImpl.INSTANCE;
 
     private UserServiceImpl() {
@@ -46,13 +48,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-     public boolean registerUser(String username, String password) throws UserServiceException {
+     public boolean registerUser(String username, String first_name, String last_name, String email, String password, LocalDate date_of_birth) throws UserServiceException {
          try {
              if (VALIDATOR.isUsername(username) && VALIDATOR.isPassword(password)) {
                  if (!userDao.findUserByUsername(username).equals(Optional.empty())) {
                      return false;
                  } else {
-                     User user = new User(username, password);
+                     User user = new User(username, first_name, last_name, email, password, date_of_birth);
+                     user.setRole(Role.USER);
                      return userDao.create(user);
                  }
              } else {
