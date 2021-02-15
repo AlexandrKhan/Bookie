@@ -7,6 +7,22 @@
 <html lang="${sessionScope.lang}">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/header.css"/>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="collapse navbar-collapse" id="admin">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    ${sessionScope.user.role}
+                </a>
+            </li>
+            <c:if test="${sessionScope.userRole=='ADMIN'}">
+                <li class="nav-item">
+                    <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=admin_panel">
+                        Admin panel
+                    </a>
+                </li>
+            </c:if>
+        </ul>
+    </div>
     <div class="collapse navbar-collapse" id="navbar">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
@@ -34,7 +50,7 @@
             <c:choose>
                 <c:when test="${sessionScope.authorised}">
                     <li class="nav-item ">
-                        <a href="#" class="nav-link m-2 menu-item ">${sessionScope.username}</a>
+                        <a href="#" class="nav-link m-2 menu-item ">${sessionScope.user.username}</a>
                     </li>
                     <li class="nav-item">
                         <a href="${pageContext.request.contextPath}/controller?command=logout" class="nav-link m-2 menu-item">

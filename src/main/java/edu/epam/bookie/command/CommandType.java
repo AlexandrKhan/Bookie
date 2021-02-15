@@ -12,7 +12,9 @@ public enum CommandType {
     TO_LOGIN_PAGE_COMMAND(new ToLoginPageCommand()),
     TO_REGISTER_PAGE_COMMAND(new ToRegistrationPageCommand()),
     REGISTRATION(new RegistrationCommand()),
-    FILE_UPLOAD(new FileUploadCommand());
+    FILE_UPLOAD(new FileUploadCommand()),
+    ADMIN_PANEL(new AdminPanelCommand()),
+    CONFIRM_ACCOUNT(new ConfirmAccountCommand());
 
     CommandType(Command command) {
         this.command = command;

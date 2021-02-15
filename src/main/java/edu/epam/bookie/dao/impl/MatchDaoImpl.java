@@ -23,7 +23,7 @@ public class MatchDaoImpl implements MatchDao {
 
     public final static MatchDaoImpl INSTANCE = new MatchDaoImpl();
 
-    private static final String SELECT_ALL_MATCHES = "SELECT * FROM match";
+    private static final String SELECT_ALL_MATCHES = "SELECT * FROM matches";
 
     @Override
     public Optional<List<Match>> findAll() throws UserDaoException {

@@ -5,10 +5,16 @@ import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.service.impl.UserServiceImpl;
+import edu.epam.bookie.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 
@@ -18,15 +24,17 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+
         try {
             String username = request.getParameter(RequestParameter.USERNAME);
-            String first_name = request.getParameter(RequestParameter.FIRST_NAME);
-            String last_name = request.getParameter(RequestParameter.LAST_NAME);
+            String firstName = request.getParameter(RequestParameter.FIRST_NAME);
+            String lastName = request.getParameter(RequestParameter.LAST_NAME);
             String email = request.getParameter(RequestParameter.EMAIL);
             String password = request.getParameter(RequestParameter.PASSWORD);
-            String date_of_birth = request.getParameter(RequestParameter.DATE_OF_BIRTH);
+            LocalDate dateOfBirth = LocalDate.parse(request.getParameter(RequestParameter.DATE_OF_BIRTH));
+            String passportScan = request.getParameter(RequestParameter.PASSPORT_SCAN_NAME);
 
-            if (userService.registerUser(username, first_name, last_name, email, password, LocalDate.parse(date_of_birth))) {
+            if (userService.registerUser(username, firstName, lastName, email, password, dateOfBirth, passportScan)) {
                 return PagePath.LOGIN;
             } else {
                 logger.info("Invalid email or password");

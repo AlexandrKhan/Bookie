@@ -1,5 +1,7 @@
 package edu.epam.bookie.connection;
 
+import edu.epam.bookie.util.PropertiesPath;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +9,6 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionFactory {
-    private static final String DB_PROPERTIES_PATH = "property/database.properties";
     private static final String DB_URL  = "db.url";
     private static final String DB_DRIVER = "db.driver";
     private static final Properties properties = new Properties();
@@ -16,7 +17,7 @@ public class ConnectionFactory {
     static {
         try {
             ClassLoader classLoader = ConnectionFactory.class.getClassLoader();
-            properties.load(classLoader.getResourceAsStream(DB_PROPERTIES_PATH));
+            properties.load(classLoader.getResourceAsStream(PropertiesPath.DB_PROPERTIES));
             String driverName = (String) properties.get(DB_DRIVER);
             Class.forName(driverName);
         } catch (IOException | ClassNotFoundException e) {

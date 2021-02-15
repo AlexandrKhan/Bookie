@@ -1,28 +1,50 @@
 package edu.epam.bookie.model;
 
-
 import java.time.LocalDate;
 
 public class User implements Entity {
     private String username;
     private String password;
-    private String first_name;
-    private String last_name;
+    private String firstName;
+    private String lastName;
     private String email;
     private Role role;
-    private LocalDate date_of_birth;
-    private Double money_balance;
+    private LocalDate dateOfBirth;
+    private Double moneyBalance;
+    private String passportScan;
+    private StatusType statusType;
 
     public User() {
     }
 
-    public User(String username, String first_name, String last_name, String email, String password, LocalDate date_of_birth) {
+    public User(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth, String passportScan) {
         this.username = username;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.date_of_birth = date_of_birth;
+        this.dateOfBirth = dateOfBirth;
+        this.passportScan = passportScan;
+    }
+
+    public StatusType getStatusType() {
+        return statusType;
+    }
+
+    public void setStatusType(String statusType) {
+        this.statusType = StatusType.valueOf(statusType.toUpperCase());
+    }
+
+    public void setStatusType(StatusType statusType) {
+        this.statusType = statusType;
+    }
+
+    public String getPassportScan() {
+        return passportScan;
+    }
+
+    public void setPassportScan(String passportScan) {
+        this.passportScan = passportScan;
     }
 
     public String getUsername() {
@@ -41,20 +63,20 @@ public class User implements Entity {
         this.password = password;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
@@ -69,23 +91,27 @@ public class User implements Entity {
         return role;
     }
 
+    public void setRole(String role) {
+        this.role = Role.valueOf(role.toUpperCase());
+    }
+
     public void setRole(Role role) {
         this.role = role;
     }
 
-    public LocalDate getDate_of_birth() {
-        return date_of_birth;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDate_of_birth(LocalDate date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
-    public Double getMoney_balance() {
-        return money_balance;
+    public Double getMoneyBalance() {
+        return moneyBalance;
     }
 
-    public void setMoney_balance(Double money_balance) {
-        this.money_balance = money_balance;
+    public void setMoneyBalance(Double moneyBalance) {
+        this.moneyBalance = moneyBalance;
     }
 }

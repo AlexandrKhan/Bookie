@@ -21,6 +21,11 @@
 <body>
 <jsp:include page="/jsp/header.jsp"/>
 <div>
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=file_upload" enctype="multipart/form-data">
+        Choose a file: <input type="file" name="file"/>
+        <input type="submit" value="Upload" />
+    </form>
+
     <form id="registration_form" action="${pageContext.request.contextPath}/controller?command=registration" method="post">
         <div class="form-group">
             <label for="username">
@@ -32,19 +37,19 @@
             </small>
         </div>
         <div class="form-group">
-            <label for="first_name">
+            <label for="firstName">
                 <fmt:message key="register.firstname"/>
             </label>
-            <input type="text" name="first_name" class="form-control" id="first_name" aria-describedby="firstnameHelp" placeholder="${firstnamePlaceHolder}" >
+            <input type="text" name="firstName" class="form-control" id="firstName" aria-describedby="firstnameHelp" placeholder="${firstnamePlaceHolder}" >
             <small id="firstnameHelp" class="form-text text-muted">
                 <fmt:message key="register.firstname.help"/>
             </small>
         </div>
         <div class="form-group">
-            <label for="last_name">
+            <label for="lastName">
                 <fmt:message key="register.lastname"/>
             </label>
-            <input type="text" name="last_name" class="form-control" id="last_name" aria-describedby="lastnameHelp" placeholder="${lastnamePlaceholder}"  >
+            <input type="text" name="lastName" class="form-control" id="lastName" aria-describedby="lastnameHelp" placeholder="${lastnamePlaceholder}"  >
             <small id="lastnameHelp" class="form-text text-muted">
                 <fmt:message key="register.lastname.help"/>
             </small>
@@ -67,14 +72,23 @@
                 <fmt:message key="register.password.help"/>
             </small>
         </div>
-
         <div class="form-group">
             <label for="username">
                 <fmt:message key="register.dateOfBirth"/>
             </label>
-            <input type="date" name="date_of_birth" class="form-control" id="date_of_birth" aria-describedby="dateOfBirthHelp" placeholder="${dateOfBirthPlaceholder}" >
+            <input type="date" name="dateOfBirth" class="form-control" id="dateOfBirth" aria-describedby="dateOfBirthHelp" placeholder="${dateOfBirthPlaceholder}" >
             <small id="dateOfBirthHelp" class="form-text text-muted">
                 <fmt:message key="register.dateOfBirth.help"/>
+            </small>
+        </div>
+
+        <div class="form-group">
+        <label for="passportScanName">
+            <fmt:message key="register.passportScan"/>
+        </label>
+        <input type="text" readonly="readonly" name="passportScanName" class="form-control" id="passportScanName" aria-describedby="passportScanNameHelp" value="${sessionScope.passportScan}">
+            <small id="passportScanNameHelp" class="form-text text-muted">
+                <fmt:message key="register.passportScan.help"/>
             </small>
         </div>
 

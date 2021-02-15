@@ -35,8 +35,7 @@ public class ControllerServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         logger.info("URI: " + request.getRequestURI() + ", content type: " + request.getContentType() + ", method: " + request.getMethod());
 
-        CommandFactory commandFactory = CommandFactory.getInstance();
-        Optional<Command> optionalCommand = commandFactory.defineCommand(request);
+        Optional<Command> optionalCommand = CommandFactory.defineCommand(request);
         Command command = optionalCommand.orElseThrow(NoSuchElementException::new);
         String path = command.execute(request);
 

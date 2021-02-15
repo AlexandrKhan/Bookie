@@ -3,13 +3,19 @@ package edu.epam.bookie.service;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.User;
 
+import javax.jws.soap.SOAPBinding;
+import javax.servlet.http.Part;
+import java.io.File;
+import java.io.InputStream;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException;
-
+    List<User> findAll() throws UserServiceException;
     boolean checkUser(String username, String password) throws UserServiceException;
 
-    boolean registerUser(String username, String first_name, String last_name, String email, String password, LocalDate date_of_birth) throws UserServiceException;
+    boolean registerUser(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth, String scan) throws UserServiceException;
+
+    Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException;
 }

@@ -28,16 +28,14 @@ public class FileUploadCommand implements Command {
             try {
                 List<FileItem> items = FILE_UPLOAD.parseRequest(request);
                 for (FileItem item : items) {
-
-                    //Filter only images
                     if (!FILE_TYPE.contains(item.getContentType())) {
                         throw new FileUploadException("Wrong type");
                     }
-
                     if (!item.isFormField()) {
                         String fileName = item.getName();
                         String root = request.getServletContext().getRealPath("/");
                         File path = new File(root + "/uploads/" + fileName);
+                        request.getSession().setAttribute("passportScan", fileName);
                         try {
                             item.write(path);
                         } catch (Exception e) {
@@ -49,6 +47,6 @@ public class FileUploadCommand implements Command {
                 logger.error("File upload error " + e);
             }
         }
-        return PagePath.HOME;
+        return PagePath.REGISTER;
     }
 }

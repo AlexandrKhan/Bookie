@@ -15,7 +15,7 @@
 <body>
 <jsp:include page="/jsp/header.jsp"/>
 <h1>
-    <fmt:message key="home.welcomeMessage"/> ${sessionScope.username}
+    <fmt:message key="home.welcomeMessage"/> ${sessionScope.user.username}
 </h1>
 <c:if test="${requestScope.confirmedMessage}">
     <div id="success" class="alert alert-success" role="alert">
@@ -24,13 +24,7 @@
         <hr>
         <p class="mb-0"><fmt:message key="home.successMessage.next"/> </p>
     </div>
-
 </c:if>
-
-<form method="post" action="${pageContext.request.contextPath}/controller?command=file_upload" enctype="multipart/form-data">
-    Choose a file: <input type="file" name="file"/>
-    <input type="submit" value="Upload" />
-</form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>

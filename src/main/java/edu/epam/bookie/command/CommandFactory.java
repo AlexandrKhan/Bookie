@@ -14,7 +14,7 @@ public class CommandFactory {
         return instance;
     }
 
-    public Optional<Command> defineCommand(HttpServletRequest request) {
+    public static Optional<Command> defineCommand(HttpServletRequest request) {
         String value = request.getParameter(RequestParameter.COMMAND);
 
         if (value != null && !value.isEmpty()) {
