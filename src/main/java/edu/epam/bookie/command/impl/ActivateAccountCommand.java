@@ -9,24 +9,27 @@ import edu.epam.bookie.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-public class AdminPanelCommand implements Command {
-    private Logger logger = LogManager.getLogger(AdminPanelCommand.class);
-    private static final UserServiceImpl service = UserServiceImpl.INSTANCE;
+import java.util.Optional;
+
+public class ActivateAccountCommand implements Command{
+    public static final Logger logger = LogManager.getLogger(ActivateAccountCommand.class);
+    private UserServiceImpl service = UserServiceImpl.INSTANCE;
+
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        List<User> users;
+        String username = (String) session.getAttribute("username");
         try {
-            users = service.findAll();
-            session.setAttribute(RequestParameter.USERS, users);
+            if (service.activateAccount(username)) {
+                return PagePath.LOGIN;
+                } else {
+                    return PagePath.REGISTER;
+                }
         } catch (UserServiceException e) {
-            logger.error("Cant collect all users");
+            e.printStackTrace();
         }
-        return PagePath.ADMIN;
+        return PagePath.HOME;
     }
 }

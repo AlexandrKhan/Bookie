@@ -8,6 +8,7 @@ import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.UserService;
 import edu.epam.bookie.util.PasswordEncryption;
+import edu.epam.bookie.util.mail.MailUtility;
 import edu.epam.bookie.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -54,27 +55,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean registerUser(String username, String firstName, String lastName, String email,
-                                String password, LocalDate dateOfBirth, String scan) throws UserServiceException {
+    public User registerUser(String username, String firstName, String lastName, String email,
+                             String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException {
+        User user = null;
         try {
-            if (VALIDATOR.isUsername(username) && VALIDATOR.isPassword(password)) {
-                if (!userDao.findUserByUsername(username).equals(Optional.empty())) {
-                    return false;
-                } else {
-                    String encryptedPassword = PasswordEncryption.encryptMessage(password);
-                    User user = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
-                    user.setRole(Role.USER.toString());
-                    user.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
-                    user.setMoneyBalance(0.0);
-                    return userDao.create(user);
+            if (userDao.findUserByUsername(username).equals(Optional.empty())) {
+                if (VALIDATOR.isUsername(username) && VALIDATOR.isPassword(password) && password.equals(repeatPassword)) {
+                    if (password.equals(repeatPassword)) {
+                        String encryptedPassword = PasswordEncryption.encryptMessage(password);
+                        User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
+                        userTemp.setRole(Role.USER.toString());
+                        userTemp.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
+                        userTemp.setMoneyBalance(0.0);
+
+                        user = userDao.create(userTemp);
+                        MailUtility.sendConfirmMessage(email, user.getUsername());
+                    } else {
+                        throw new UserServiceException("Passwords dont match");
+                    }
                 }
-            } else {
-                return false;
             }
         } catch (UserDaoException e) {
             logger.error(e);
-            throw new UserServiceException(e);
         }
+        return user;
     }
 
     @Override
@@ -91,5 +95,32 @@ public class UserServiceImpl implements UserService {
             logger.error("Service can't find user by username and pass");
         }
         return user;
+    }
+
+    @Override
+    public boolean activateAccount(String username) throws UserServiceException {
+        boolean result = false;
+        try {
+            result = userDao.activateAccount(username);
+            if (result) {
+                logger.info("Account {} is activated", username);
+            } else {
+                logger.info("Cant find {} account", username);
+            }
+        } catch (UserDaoException e) {
+            logger.error("Service activation account error");
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<String> findEmailById(String id) throws UserServiceException {
+        Optional<String> email = Optional.empty();
+        try {
+            email = userDao.findEmailById(Integer.parseInt(id));
+        } catch (UserDaoException e) {
+            logger.error("Service cant find email by id");
+        }
+        return email;
     }
 }

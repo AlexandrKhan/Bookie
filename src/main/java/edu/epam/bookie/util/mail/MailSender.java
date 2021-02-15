@@ -45,6 +45,7 @@ public class MailSender {
         mailSession = SessionFactory.createSession(properties);
         mailSession.setDebug(true);
         message = new MimeMessage(mailSession);
+        message.setFrom("bushwacker148@gmail.com");
         message.setSubject(mailSubject);
         message.setText(mailText, ENCODING);
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendToEmail));

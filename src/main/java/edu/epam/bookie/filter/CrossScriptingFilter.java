@@ -1,9 +1,10 @@
 package edu.epam.bookie.filter;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Enumeration;
-
+@WebFilter(urlPatterns = {"/*"})
 public class CrossScriptingFilter implements Filter {
     private static final String EMPTY = "";
     private static final String SCRIPT_REGEX = "</?script>";

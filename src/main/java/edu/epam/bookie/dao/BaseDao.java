@@ -18,7 +18,7 @@ public interface BaseDao<T extends Entity> {
 
     boolean deleteById(long id) throws UserDaoException;
 
-    boolean create(T entity) throws UserDaoException;
+    T create(T entity) throws UserDaoException;
 
     boolean update(long id, String...params) throws UserDaoException;
 }

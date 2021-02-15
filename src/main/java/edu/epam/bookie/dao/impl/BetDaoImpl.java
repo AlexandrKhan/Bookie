@@ -24,8 +24,8 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
-    public boolean create(Bet entity) throws UserDaoException {
-        return false;
+    public Bet create(Bet entity) throws UserDaoException {
+        return entity;
     }
 
     @Override

@@ -4,18 +4,13 @@ import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
-import edu.epam.bookie.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
-import java.io.File;
-import java.io.IOException;
-import java.sql.Date;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 
 public class RegistrationCommand implements Command {
@@ -24,25 +19,25 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-
+        HttpSession session = request.getSession();
         try {
             String username = request.getParameter(RequestParameter.USERNAME);
             String firstName = request.getParameter(RequestParameter.FIRST_NAME);
             String lastName = request.getParameter(RequestParameter.LAST_NAME);
             String email = request.getParameter(RequestParameter.EMAIL);
             String password = request.getParameter(RequestParameter.PASSWORD);
+            String repeatPassword = request.getParameter(RequestParameter.REPEAT_PASSWORD);
             LocalDate dateOfBirth = LocalDate.parse(request.getParameter(RequestParameter.DATE_OF_BIRTH));
             String passportScan = request.getParameter(RequestParameter.PASSPORT_SCAN_NAME);
 
-            if (userService.registerUser(username, firstName, lastName, email, password, dateOfBirth, passportScan)) {
-                return PagePath.LOGIN;
-            } else {
-                logger.info("Invalid email or password");
-                return PagePath.REGISTER;
-            }
+            User user = userService.registerUser(username, firstName, lastName, email, password, repeatPassword, dateOfBirth, passportScan);
+            session.setAttribute("username", username);
+
+            logger.info("New user registered: " + username);
+            return PagePath.LOGIN;
         } catch (UserServiceException e) {
             logger.error(e);
-            throw new RuntimeException();
+            return PagePath.REGISTER;
         }
     }
 }

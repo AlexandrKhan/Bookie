@@ -57,8 +57,8 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public boolean create(Match entity) throws UserDaoException {
-        return false;
+    public Match create(Match entity) throws UserDaoException {
+        return entity;
     }
 
     @Override

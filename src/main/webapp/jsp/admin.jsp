@@ -9,7 +9,7 @@
 </head>
 <body>
 <h1>List of users</h1>
-<c:forEach items="${requestScope.users}" var="user">
+<c:forEach items="${sessionScope.users}" var="user">
    <h1><c:out value="${user.username}"/></h1>
 </c:forEach>
 </body>

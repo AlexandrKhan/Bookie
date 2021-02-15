@@ -73,6 +73,15 @@
             </small>
         </div>
         <div class="form-group">
+            <label for="password">
+                <fmt:message key="register.password.label"/>
+            </label>
+            <input type="text" name="repeatPassword" class="form-control" id="repeatPassword" aria-describedby="repeatPasswordHelp" placeholder="${passwordPlaceHolder}" required  pattern="[a-zA-Z0-9@#$%!]{8,40}">
+            <small id="repeatPasswordHelp" class="form-text text-muted">
+                <fmt:message key="register.password.help"/>
+            </small>
+        </div>
+        <div class="form-group">
             <label for="username">
                 <fmt:message key="register.dateOfBirth"/>
             </label>

@@ -3,6 +3,7 @@ package edu.epam.bookie.model;
 import java.time.LocalDate;
 
 public class User implements Entity {
+    private int id;
     private String username;
     private String password;
     private String firstName;
@@ -19,12 +20,21 @@ public class User implements Entity {
 
     public User(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth, String passportScan) {
         this.username = username;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.passportScan = passportScan;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public StatusType getStatusType() {

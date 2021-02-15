@@ -14,7 +14,7 @@ public enum CommandType {
     REGISTRATION(new RegistrationCommand()),
     FILE_UPLOAD(new FileUploadCommand()),
     ADMIN_PANEL(new AdminPanelCommand()),
-    CONFIRM_ACCOUNT(new ConfirmAccountCommand());
+    ACTIVATE_ACCOUNT(new ActivateAccountCommand());
 
     CommandType(Command command) {
         this.command = command;

@@ -12,14 +12,14 @@ public class MailUtility {
     private static final Logger logger = LogManager.getLogger(MailUtility.class);
     private static final String MESSAGE_TEXT = "Your confirmation link: \n%s";
     private static final String MESSAGE_SUBJECT = "Email confirmation";
-    private static final String CONFIRMATION_LINK = "http://localhost:8081/controller?command=confirm_account&id=%d";
+    private static final String CONFIRMATION_LINK = "http://localhost:8081/controller?command=activate_account&username=%s";
 
     private MailUtility() {
     }
 
-    public static void sendConfirmMessage(String email, int id) {
+    public static void sendConfirmMessage(String email, String username) {
         String path = PropertiesPath.MAIL_PROPERTIES;
-        String confirmLink = prepareConfirmLink(id);
+        String confirmLink = prepareConfirmLink(username);
         String text = String.format(MESSAGE_TEXT, confirmLink);
         try {
             Properties properties = PropertiesReader.readProperties(path);
@@ -47,8 +47,8 @@ public class MailUtility {
         return result;
     }
 
-    private static String prepareConfirmLink(int id) {
-        return String.format(CONFIRMATION_LINK, id);
+    private static String prepareConfirmLink(String username) {
+        return String.format(CONFIRMATION_LINK, username);
     }
 
 }
