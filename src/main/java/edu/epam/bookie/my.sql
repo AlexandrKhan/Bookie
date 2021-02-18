@@ -21,7 +21,10 @@ CREATE TABLE `match` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `first` VARCHAR(255) NOT NULL,
   `second` VARCHAR(255) NOT NULL,
-  `start_time` DATETIME NOT NULL,
+  `start_date` DATE NOT NULL,
+  `start_time` TIME NOT NULL,
+  `result` ENUM('FIRST', 'DRAW', 'SECOND') DEFAULT NULL,
+  `match_progress` ENUM('NOT_STARTED', 'IN_PROGRESS', 'OVER') NOT NULL DEFAULT 'NOT_STARTED',
   PRIMARY KEY (`id`)
 );
 

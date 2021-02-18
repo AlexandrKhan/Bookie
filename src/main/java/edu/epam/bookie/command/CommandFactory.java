@@ -10,7 +10,7 @@ public class CommandFactory {
     private CommandFactory() {
     }
 
-    public static CommandFactory getInstance(){
+    public static CommandFactory getInstance() {
         return instance;
     }
 
@@ -24,5 +24,9 @@ public class CommandFactory {
         } else {
             return Optional.empty();
         }
+    }
+
+    public static CommandType getCommandType(String command) {
+        return CommandType.valueOf(command.toUpperCase());
     }
 }

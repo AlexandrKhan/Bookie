@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> findAll() throws UserServiceException;
+
     boolean checkUser(String username, String password) throws UserServiceException;
 
     User registerUser(String username, String firstName, String lastName, String email, String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException;
@@ -22,4 +23,8 @@ public interface UserService {
     boolean activateAccount(String userId) throws UserServiceException;
 
     Optional<String> findEmailById(String id) throws UserServiceException;
+
+    boolean blockUser(int username) throws UserServiceException;
+
+    boolean unblockUser(int username) throws UserServiceException;
 }

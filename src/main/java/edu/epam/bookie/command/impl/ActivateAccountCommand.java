@@ -17,6 +17,7 @@ public class ActivateAccountCommand implements Command{
     public static final Logger logger = LogManager.getLogger(ActivateAccountCommand.class);
     private UserServiceImpl service = UserServiceImpl.INSTANCE;
 
+
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();

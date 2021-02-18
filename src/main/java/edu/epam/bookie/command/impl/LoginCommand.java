@@ -32,7 +32,6 @@ public class LoginCommand implements Command {
 
         if (userTemp.isPresent()) {
             session.setAttribute("authorised", true);
-            session.setAttribute("userRole", userTemp.get().getRole().name());
             session.setAttribute("user", userTemp.get());
             return PagePath.HOME;
         } else {

@@ -1,8 +1,8 @@
 package edu.epam.bookie.command;
 
 import edu.epam.bookie.command.impl.*;
-import edu.epam.bookie.command.pagecommand.ToLoginPageCommand;
-import edu.epam.bookie.command.pagecommand.ToRegistrationPageCommand;
+import edu.epam.bookie.command.impl.ToLoginPageCommand;
+import edu.epam.bookie.command.impl.ToRegistrationPageCommand;
 
 public enum CommandType {
     HOME(new HomeCommand()),
@@ -14,7 +14,9 @@ public enum CommandType {
     REGISTRATION(new RegistrationCommand()),
     FILE_UPLOAD(new FileUploadCommand()),
     ADMIN_PANEL(new AdminPanelCommand()),
-    ACTIVATE_ACCOUNT(new ActivateAccountCommand());
+    ACTIVATE_ACCOUNT(new ActivateAccountCommand()),
+    BLOCK_USER(new BlockUserCommand()),
+    UNBLOCK_USER(new UnblockUserCommand());
 
     CommandType(Command command) {
         this.command = command;

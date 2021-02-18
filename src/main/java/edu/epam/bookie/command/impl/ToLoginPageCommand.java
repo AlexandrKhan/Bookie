@@ -1,4 +1,4 @@
-package edu.epam.bookie.command.pagecommand;
+package edu.epam.bookie.command.impl;
 
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;

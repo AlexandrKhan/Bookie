@@ -1,6 +1,5 @@
 package edu.epam.bookie.dao.impl;
 
-import com.sun.org.apache.regexp.internal.RE;
 import edu.epam.bookie.connection.ConnectionFactory;
 import edu.epam.bookie.dao.UserDao;
 import edu.epam.bookie.exception.UserDaoException;
@@ -30,6 +29,10 @@ public class UserDaoImpl implements UserDao {
     private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "SELECT username, first_name, last_name, email, password, date_of_birth, passport_scan, role FROM bookie.user WHERE username=? AND password=?";
     private static final String SELECT_EMAIL_BY_ID = "SELECT email FROM bookie.user WHERE id=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE bookie.user SET status='ACTIVE' WHERE username=?";
+    private static final String EMAIL_EXISTS = "SELECT * FROM bookie.user WHERE email=?";
+    private static final String USERNAME_EXISTS = "SELECT * FROM bookie.user WHERE username=?";
+    private static final String BLOCK_USER = "UPDATE bookie.user SET status='BLOCKED' WHERE id=?";
+    private static final String UNBLOCK_USER = "UPDATE bookie.user SET status='ACTIVE' WHERE id=?";
 
     @Override
     public User create(User user) throws UserDaoException {
@@ -60,6 +63,7 @@ public class UserDaoImpl implements UserDao {
             List<User> userList = new ArrayList<>();
             while (resultSet.next()) {
                 User user = new User();
+                user.setId(resultSet.getInt("id"));
                 user.setUsername(resultSet.getString("username"));
                 user.setFirstName(resultSet.getString("first_name"));
                 user.setLastName(resultSet.getString("last_name"));
@@ -157,6 +161,64 @@ public class UserDaoImpl implements UserDao {
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error activating account");
+        }
+        return result;
+    }
+
+    @Override
+    public boolean loginExists(String username) throws UserDaoException {
+        boolean result = false;
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(USERNAME_EXISTS)) {
+            statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = true;
+            }
+        } catch (SQLException e) {
+            logger.error("Error selecting login");
+        }
+        return result;
+    }
+
+    @Override
+    public boolean emailExists(String email) throws UserDaoException {
+        boolean result = false;
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(EMAIL_EXISTS)) {
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                result = true;
+            }
+        } catch (SQLException e) {
+            logger.error("Error selecting email");
+        }
+        return result;
+    }
+
+    @Override
+    public boolean blockUser(int id) throws UserDaoException {
+        boolean result = false;
+        try (Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement statement = connection.prepareStatement(BLOCK_USER)) {
+            statement.setInt(1, id);
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error blocking user");
+        }
+        return result;
+    }
+
+    @Override
+    public boolean unblockUser(int id) throws UserDaoException {
+        boolean result = false;
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UNBLOCK_USER)) {
+            statement.setInt(1, id);
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error blocking user");
         }
         return result;
     }

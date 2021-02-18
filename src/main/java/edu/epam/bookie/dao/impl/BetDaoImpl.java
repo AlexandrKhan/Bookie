@@ -2,7 +2,7 @@ package edu.epam.bookie.dao.impl;
 
 import edu.epam.bookie.dao.BetDao;
 import edu.epam.bookie.exception.UserDaoException;
-import edu.epam.bookie.model.Bet;
+import edu.epam.bookie.model.sport.Bet;
 
 import java.util.List;
 import java.util.Optional;

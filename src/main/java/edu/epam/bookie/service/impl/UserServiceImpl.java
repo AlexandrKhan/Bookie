@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
                              String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException {
         User user = null;
         try {
-            if (userDao.findUserByUsername(username).equals(Optional.empty())) {
+            if (!userDao.loginExists(username) && !userDao.emailExists(email)) {
                 if (VALIDATOR.isUsername(username) && VALIDATOR.isPassword(password) && password.equals(repeatPassword)) {
                     if (password.equals(repeatPassword)) {
                         String encryptedPassword = PasswordEncryption.encryptMessage(password);
@@ -70,10 +70,10 @@ public class UserServiceImpl implements UserService {
 
                         user = userDao.create(userTemp);
                         MailUtility.sendConfirmMessage(email, user.getUsername());
-                    } else {
-                        throw new UserServiceException("Passwords dont match");
                     }
                 }
+            } else {
+                throw new UserServiceException("Passwords dont match");
             }
         } catch (UserDaoException e) {
             logger.error(e);
@@ -122,5 +122,37 @@ public class UserServiceImpl implements UserService {
             logger.error("Service cant find email by id");
         }
         return email;
+    }
+
+    @Override
+    public boolean blockUser(int id) throws UserServiceException {
+        boolean result = false;
+        try {
+            result = userDao.blockUser(id);
+            if (result) {
+                logger.info("User {} is blocked", id);
+            } else {
+                logger.info("User {} is not found for blocking", id);
+            }
+        } catch (UserDaoException e) {
+            logger.error("Service error blocking user");
+        }
+        return result;
+    }
+
+    @Override
+    public boolean unblockUser(int id) throws UserServiceException {
+        boolean result = false;
+        try {
+            result = userDao.unblockUser(id);
+            if (result) {
+                logger.info("User {} is unblocked", id);
+            } else {
+                logger.info("User {} is not found for unblocking", id);
+            }
+        } catch (UserDaoException e) {
+            logger.error("Service error unblocking user");
+        }
+        return result;
     }
 }

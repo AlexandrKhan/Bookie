@@ -10,4 +10,8 @@ public interface UserDao extends BaseDao<User> {
     Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserDaoException;
     Optional<String> findEmailById(int id) throws UserDaoException;
     boolean activateAccount(String username) throws UserDaoException;
+    boolean loginExists(String username) throws UserDaoException;
+    boolean emailExists(String email) throws UserDaoException;
+    boolean blockUser(int id) throws UserDaoException;
+    boolean unblockUser(int id) throws UserDaoException;
 }

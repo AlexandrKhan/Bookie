@@ -14,7 +14,7 @@
                     ${sessionScope.user.role}
                 </a>
             </li>
-            <c:if test="${sessionScope.userRole=='ADMIN'}">
+            <c:if test="${sessionScope.user.role=='ADMIN'}">
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=admin_panel">
                         Admin panel

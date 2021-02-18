@@ -20,24 +20,24 @@ public class RegistrationCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
+        String username = request.getParameter(RequestParameter.USERNAME);
+        String firstName = request.getParameter(RequestParameter.FIRST_NAME);
+        String lastName = request.getParameter(RequestParameter.LAST_NAME);
+        String email = request.getParameter(RequestParameter.EMAIL);
+        String password = request.getParameter(RequestParameter.PASSWORD);
+        String repeatPassword = request.getParameter(RequestParameter.REPEAT_PASSWORD);
+        LocalDate dateOfBirth = LocalDate.parse(request.getParameter(RequestParameter.DATE_OF_BIRTH));
+        String passportScan = request.getParameter(RequestParameter.PASSPORT_SCAN_NAME);
+
+        User user = null;
         try {
-            String username = request.getParameter(RequestParameter.USERNAME);
-            String firstName = request.getParameter(RequestParameter.FIRST_NAME);
-            String lastName = request.getParameter(RequestParameter.LAST_NAME);
-            String email = request.getParameter(RequestParameter.EMAIL);
-            String password = request.getParameter(RequestParameter.PASSWORD);
-            String repeatPassword = request.getParameter(RequestParameter.REPEAT_PASSWORD);
-            LocalDate dateOfBirth = LocalDate.parse(request.getParameter(RequestParameter.DATE_OF_BIRTH));
-            String passportScan = request.getParameter(RequestParameter.PASSPORT_SCAN_NAME);
-
-            User user = userService.registerUser(username, firstName, lastName, email, password, repeatPassword, dateOfBirth, passportScan);
-            session.setAttribute("username", username);
-
-            logger.info("New user registered: " + username);
-            return PagePath.LOGIN;
+            user = userService.registerUser(username, firstName, lastName, email, password, repeatPassword, dateOfBirth, passportScan);
         } catch (UserServiceException e) {
-            logger.error(e);
-            return PagePath.REGISTER;
+            logger.error("Register error");
         }
+        if (user != null) {
+            logger.info("New user registered: " + username);
+        }
+        return PagePath.LOGIN;
     }
 }

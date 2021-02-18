@@ -31,31 +31,5 @@ public class EncodingFilter implements Filter {
     }
 }
 
-/*@WebFilter(urlPatterns = {"/*"}, initParams = { @WebInitParam(name = "encoding", value = "UTF-8", description = "Encoding Param")})
-public class EncodingFilter implements Filter {
-    private static final String ENCODING = "encoding";
-
-    private String encoding;
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        encoding = filterConfig.getInitParameter(ENCODING);
-    }
-
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String codeRequest = request.getCharacterEncoding();
-        if (encoding != null && !encoding.equalsIgnoreCase(codeRequest)) {
-            request.setCharacterEncoding(encoding);
-            response.setCharacterEncoding(encoding);
-        }
-        chain.doFilter(request, response);
-    }
-
-    @Override
-    public void destroy() {
-        encoding = null;
-    }
-}*/
 
 
