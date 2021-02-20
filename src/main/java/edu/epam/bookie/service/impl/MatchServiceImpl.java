@@ -18,7 +18,6 @@ public class MatchServiceImpl implements MatchService {
     public static final MatchServiceImpl INSTANCE = new MatchServiceImpl();
     private static final Logger logger = LogManager.getLogger(MatchServiceImpl.class);
     private static final MatchDaoImpl matchDao = MatchDaoImpl.INSTANCE;
-
     public static Map<Integer, LocalTime> todayMatchStartTimeMap = new HashMap<>();
 
     private MatchServiceImpl() {
@@ -93,21 +92,12 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public boolean setGoalsById(Long id) throws MatchServiceException {
-        int firstGoal = (int) (6.0 * Math.random());
-        int secondGoal = (int) (6.0 * Math.random());
         boolean result = false;
-        int goalDifference = firstGoal - secondGoal;
-        Result matchResult;
-        if (goalDifference > 0) {
-            matchResult = Result.FIRST;
-        } else if (goalDifference < 0) {
-            matchResult = Result.SECOND;
-        } else {
-            matchResult = Result.DRAW;
-        }
-
+        int firstTeamGoal = (int) (6.0 * Math.random());
+        int secondTeamGoal = (int) (6.0 * Math.random());
+        Result matchResult = calculateResult(firstTeamGoal, secondTeamGoal);
             try {
-                result = matchDao.setGoalsAndResultById(id, firstGoal, secondGoal, matchResult);
+                result = matchDao.setGoalsAndResultById(id, firstTeamGoal, secondTeamGoal, matchResult);
             } catch (DaoException e) {
                 logger.error("Cant set score by id: {}", id);
             }
@@ -123,5 +113,18 @@ public class MatchServiceImpl implements MatchService {
             logger.error("Cant over match by id: {}", id);
         }
         return result;
+    }
+
+    private Result calculateResult(int firstTeamGoal, int secondTeamGoal) {
+        int goalDifference = firstTeamGoal - secondTeamGoal;
+        Result matchResult;
+        if (goalDifference > 0) {
+            matchResult = Result.FIRST;
+        } else if (goalDifference < 0) {
+            matchResult = Result.SECOND;
+        } else {
+            matchResult = Result.DRAW;
+        }
+        return matchResult;
     }
 }

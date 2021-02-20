@@ -40,14 +40,15 @@ public class MatchDaoImpl implements MatchDao {
             statement.setTime(4, Time.valueOf(match.getStartTime()));
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error("Cant create match");
+            throw new DaoException(e);
         }
         return match;
     }
 
     @Override
     public Optional<List<Match>> findAll() throws DaoException {
-        Optional<List<Match>> matches = Optional.empty();
+        Optional<List<Match>> matches;
 
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_ALL_MATCHES)) {
@@ -70,7 +71,8 @@ public class MatchDaoImpl implements MatchDao {
             }
             matches = Optional.of(matchList);
         } catch (SQLException e) {
-            logger.error("Can't find all matches: " + e);
+            logger.error("Can't find all matches" );
+            throw new DaoException(e);
         }
         return matches;
     }
@@ -99,13 +101,14 @@ public class MatchDaoImpl implements MatchDao {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Cant select match by id: {}", id);
+            throw new DaoException(e);
         }
         return match;
     }
 
     @Override
     public Optional<List<Match>> findAllNotStartedMatches() throws DaoException {
-        Optional<List<Match>> matches = Optional.empty();
+        Optional<List<Match>> matches;
 
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_ALL_NOT_STARTED_MATCHES)) {
@@ -123,13 +126,14 @@ public class MatchDaoImpl implements MatchDao {
             matches = Optional.of(matchList);
         } catch (SQLException e) {
             logger.error("Cant find all not started matches");
+            throw new DaoException(e);
         }
         return matches;
     }
 
     @Override
     public boolean setGoalsAndResultById(Long id, int first, int second, Result matchResult) throws DaoException {
-        boolean result = false;
+        boolean result;
 
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(SET_GOALS_AND_RESULT_BY_ID)) {
@@ -140,19 +144,21 @@ public class MatchDaoImpl implements MatchDao {
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Cant set goals by id");
+            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
     public boolean setMatchProgressOverById(Long id) throws DaoException {
-        boolean result = false;
+        boolean result;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(SET_MATCH_PROGRESS_OVER_BY_ID)) {
             statement.setLong(1, id);
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Cant over match");
+            throw new DaoException(e);
         }
         return result;
     }

@@ -1,7 +1,4 @@
-package edu.epam.bookie.controller;
-
-import edu.epam.bookie.controller.scheduler.GenerateScoreRunnable;
-import edu.epam.bookie.controller.scheduler.GetTodayMatchRunnable;
+package edu.epam.bookie.controller.scheduler;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -14,12 +11,13 @@ import java.util.concurrent.TimeUnit;
 public class MatchManager implements ServletContextListener {
     private ScheduledExecutorService scheduler;
 
+
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        scheduler.scheduleAtFixedRate(new GetTodayMatchRunnable(), 0, 7, TimeUnit.SECONDS);
-        scheduler.scheduleAtFixedRate(new GenerateScoreRunnable(), 0, 13, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new GetTodayMatchRunnable(), 0, 5, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new GenerateScoreRunnable(), 10, 15, TimeUnit.SECONDS);
     }
 
     @Override
