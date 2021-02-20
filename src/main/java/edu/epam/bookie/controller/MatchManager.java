@@ -11,15 +11,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @WebListener
-public class TodayMatchManager implements ServletContextListener {
+public class MatchManager implements ServletContextListener {
     private ScheduledExecutorService scheduler;
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newSingleThreadScheduledExecutor();
 
-        scheduler.scheduleAtFixedRate(new GetTodayMatchRunnable(), 0, 10, TimeUnit.SECONDS);
-        scheduler.scheduleAtFixedRate(new GenerateScoreRunnable(), 0, 10, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new GetTodayMatchRunnable(), 0, 7, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new GenerateScoreRunnable(), 0, 13, TimeUnit.SECONDS);
     }
 
     @Override

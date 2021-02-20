@@ -33,8 +33,12 @@ CREATE TABLE `match` (
 CREATE TABLE `bet` (
   `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
   `user_id` BIGINT(20) NOT NULL,
+  `match_id` BIGINT(20) NOT NULL,
+  `bet_sum` BIGINT(20) NOT NULL,
+  `result` ENUM('FIRST', 'DRAW', 'SECOND') DEFAULT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (user_id) REFERENCES user(id)
+  FOREIGN KEY (user_id) REFERENCES bookie.user(id),
+  FOREIGN KEY (match_id) REFERENCES bookie.match(id)
 );
 
 INSERT INTO user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES

@@ -4,6 +4,7 @@ import edu.epam.bookie.connection.ConnectionFactory;
 import edu.epam.bookie.dao.MatchDao;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.model.sport.Match;
+import edu.epam.bookie.model.sport.Result;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,8 +26,9 @@ public class MatchDaoImpl implements MatchDao {
     private static final String ADD_MATCH = "INSERT INTO bookie.match(first, second, start_date, start_time)" +
             "VALUES (?,?,?,?)";
     private static final String DELETE_MATCH_BY_ID = "DELETE FROM bookie.match WHERE id=?";
-    private static final String SET_GOALS_BY_ID = "UPDATE bookie.match SET first_goal=?, second_goal=? WHERE id=?";
-
+    private static final String SET_GOALS_AND_RESULT_BY_ID = "UPDATE bookie.match SET first_goal=?, second_goal=?, result=? WHERE id=?";
+    private static final String SET_MATCH_PROGRESS_OVER_BY_ID = "UPDATE bookie.match SET match_progress='OVER' WHERE id=?";
+    private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match WHERE id=?";
 
     @Override
     public Match create(Match match) throws DaoException {
@@ -58,6 +60,8 @@ public class MatchDaoImpl implements MatchDao {
                 match.setSecondTeam(resultSet.getString("second"));
                 match.setStartDate((resultSet.getDate("start_date").toLocalDate()));
                 match.setStartTime((resultSet.getTime("start_time").toLocalTime()));
+                match.setFirstTeamGoals(resultSet.getInt("first_goal"));
+                match.setFirstTeamGoals(resultSet.getInt("second_goal"));
                 if (resultSet.getString("result") != null) {
                     match.setResult(resultSet.getString("result"));
                 }
@@ -69,6 +73,34 @@ public class MatchDaoImpl implements MatchDao {
             logger.error("Can't find all matches: " + e);
         }
         return matches;
+    }
+
+    @Override
+    public Optional<Match> findById(long id) throws DaoException {
+        Optional<Match> match = Optional.empty();
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_MATCH_BY_ID)) {
+            ResultSet resultSet = statement.executeQuery(SELECT_MATCH_BY_ID);
+            while (resultSet.next()) {
+                Match matchTemp = new Match();
+                matchTemp.setId(resultSet.getInt("id"));
+                matchTemp.setFirstTeam(resultSet.getString("first"));
+                matchTemp.setSecondTeam(resultSet.getString("second"));
+                matchTemp.setStartDate((resultSet.getDate("start_date").toLocalDate()));
+                matchTemp.setStartTime((resultSet.getTime("start_time").toLocalTime()));
+                matchTemp.setFirstTeamGoals(resultSet.getInt("first_goal"));
+                matchTemp.setFirstTeamGoals(resultSet.getInt("second_goal"));
+                if (resultSet.getString("result") != null) {
+                    matchTemp.setResult(resultSet.getString("result"));
+                }
+                matchTemp.setMatchProgress(resultSet.getString("match_progress"));
+            }
+            statement.setLong(1, id);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Cant select match by id: {}", id);
+        }
+        return match;
     }
 
     @Override
@@ -96,13 +128,15 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public boolean setGoalsById(Long id) throws DaoException {
+    public boolean setGoalsAndResultById(Long id, int first, int second, Result matchResult) throws DaoException {
         boolean result = false;
+
         try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SET_GOALS_BY_ID)) {
-            statement.setLong(1, 3);
-            statement.setLong(2, 3);
-            statement.setLong(3, id);
+             PreparedStatement statement = connection.prepareStatement(SET_GOALS_AND_RESULT_BY_ID)) {
+            statement.setLong(1, first);
+            statement.setLong(2, second);
+            statement.setString(3, matchResult.name());
+            statement.setLong(4, id);
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Cant set goals by id");
@@ -111,8 +145,16 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public Optional<Match> findById(long id) throws DaoException {
-        return Optional.empty();
+    public boolean setMatchProgressOverById(Long id) throws DaoException {
+        boolean result = false;
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SET_MATCH_PROGRESS_OVER_BY_ID)) {
+            statement.setLong(1, id);
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Cant over match");
+        }
+        return result;
     }
 
     @Override
