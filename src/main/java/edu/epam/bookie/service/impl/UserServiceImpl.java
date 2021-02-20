@@ -1,7 +1,7 @@
 package edu.epam.bookie.service.impl;
 
 import edu.epam.bookie.dao.impl.UserDaoImpl;
-import edu.epam.bookie.exception.UserDaoException;
+import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.StatusType;
@@ -22,7 +22,6 @@ public class UserServiceImpl implements UserService {
     public static final UserServiceImpl INSTANCE = new UserServiceImpl();
 
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-    private static final UserValidator VALIDATOR = UserValidator.getInstance();
     private static final UserDaoImpl userDao = UserDaoImpl.INSTANCE;
 
     private UserServiceImpl() {
@@ -34,7 +33,7 @@ public class UserServiceImpl implements UserService {
         List<User> users = new ArrayList<>();
         try {
             usersTemp = userDao.findAll();
-        } catch (UserDaoException e) {
+        } catch (DaoException e) {
             logger.error("No users found");
         }
         if (usersTemp.isPresent()) {
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
         try {
             Optional<User> optionalUser = userDao.findUserByUsername(username);
             return optionalUser.filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password)).isPresent();
-        } catch (UserDaoException e) {
+        } catch (DaoException e) {
             logger.error(e);
             throw new UserServiceException(e);
         }
@@ -60,7 +59,7 @@ public class UserServiceImpl implements UserService {
         User user = null;
         try {
             if (!userDao.loginExists(username) && !userDao.emailExists(email)) {
-                if (VALIDATOR.isUsername(username) && VALIDATOR.isPassword(password) && password.equals(repeatPassword)) {
+                if (UserValidator.isUsername(username) && UserValidator.isPassword(password) && password.equals(repeatPassword)) {
                     if (password.equals(repeatPassword)) {
                         String encryptedPassword = PasswordEncryption.encryptMessage(password);
                         User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
@@ -75,7 +74,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 throw new UserServiceException("Passwords dont match");
             }
-        } catch (UserDaoException e) {
+        } catch (DaoException e) {
             logger.error(e);
         }
         return user;
@@ -84,11 +83,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException {
         Optional<User> user = Optional.empty();
-        if (VALIDATOR.isUsername(username) && VALIDATOR.isPassword(password)) {
+        if (UserValidator.isUsername(username) && UserValidator.isPassword(password)) {
             try {
                 String encryptedPassword = PasswordEncryption.encryptMessage(password);
                 user = userDao.findUserByUsernameAndPassword(username, encryptedPassword);
-            } catch (UserDaoException e) {
+            } catch (DaoException e) {
                 logger.error("DB error");
             }
         } else {
@@ -107,7 +106,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 logger.info("Cant find {} account", username);
             }
-        } catch (UserDaoException e) {
+        } catch (DaoException e) {
             logger.error("Service activation account error");
         }
         return result;
@@ -118,7 +117,7 @@ public class UserServiceImpl implements UserService {
         Optional<String> email = Optional.empty();
         try {
             email = userDao.findEmailById(Integer.parseInt(id));
-        } catch (UserDaoException e) {
+        } catch (DaoException e) {
             logger.error("Service cant find email by id");
         }
         return email;
@@ -134,7 +133,7 @@ public class UserServiceImpl implements UserService {
             } else {
                 logger.info("User {} is not found for blocking", id);
             }
-        } catch (UserDaoException e) {
+        } catch (DaoException e) {
             logger.error("Service error blocking user");
         }
         return result;
@@ -150,9 +149,11 @@ public class UserServiceImpl implements UserService {
             } else {
                 logger.info("User {} is not found for unblocking", id);
             }
-        } catch (UserDaoException e) {
+        } catch (DaoException e) {
             logger.error("Service error unblocking user");
         }
         return result;
     }
+
+
 }

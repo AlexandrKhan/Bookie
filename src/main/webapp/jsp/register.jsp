@@ -2,7 +2,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="text"/>
+<fmt:setBundle basename="property/text"/>
 <fmt:message key="register.email.placeHolder" var="emailPlaceHolder"/>
 <fmt:message key="register.password.placeHolder" var="passwordPlaceHolder"/>
 <fmt:message key="register.username.placeHolder" var="usernamePlaceHolder"/>

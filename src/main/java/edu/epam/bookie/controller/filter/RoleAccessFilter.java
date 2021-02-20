@@ -1,4 +1,4 @@
-package edu.epam.bookie.filter;
+package edu.epam.bookie.controller.filter;
 
 import edu.epam.bookie.command.CommandFactory;
 import edu.epam.bookie.command.CommandRoleMap;

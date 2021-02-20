@@ -11,7 +11,7 @@ CREATE TABLE `user` (
   `password` VARCHAR(255) NOT NULL,
   `date_of_birth` DATE NOT NULL,
   `role` ENUM('ADMIN','USER','GUEST') NOT NULL DEFAULT 'GUEST',
-  `money_balance` DOUBLE DEFAULT 0,
+  `money_balance` DOUBLE NOT NULL DEFAULT 0,
   `passport_scan` VARCHAR(255) NOT NULL,
   `status` ENUM('ACTIVE','BLOCKED','NOT_ACTIVATED') NOT NULL DEFAULT 'NOT_ACTIVATED',
   PRIMARY KEY (`id`)
@@ -23,6 +23,8 @@ CREATE TABLE `match` (
   `second` VARCHAR(255) NOT NULL,
   `start_date` DATE NOT NULL,
   `start_time` TIME NOT NULL,
+  `first_goal` INT(10) NOT NULL DEFAULT 0,
+  `second_goal` INT(10) NOT NULL DEFAULT 0,
   `result` ENUM('FIRST', 'DRAW', 'SECOND') DEFAULT NULL,
   `match_progress` ENUM('NOT_STARTED', 'IN_PROGRESS', 'OVER') NOT NULL DEFAULT 'NOT_STARTED',
   PRIMARY KEY (`id`)

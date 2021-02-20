@@ -2,7 +2,7 @@ package edu.epam.bookie.dao.impl;
 
 import edu.epam.bookie.connection.ConnectionFactory;
 import edu.epam.bookie.dao.UserDao;
-import edu.epam.bookie.exception.UserDaoException;
+import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.model.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,11 +14,7 @@ import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
-
     public final static UserDaoImpl INSTANCE = new UserDaoImpl();
-
-    private UserDaoImpl() {
-    }
 
     private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES (?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL_USERS = "SELECT id, username, first_name, last_name, email, money_balance,date_of_birth, role, passport_scan FROM bookie.user";
@@ -34,8 +30,11 @@ public class UserDaoImpl implements UserDao {
     private static final String BLOCK_USER = "UPDATE bookie.user SET status='BLOCKED' WHERE id=?";
     private static final String UNBLOCK_USER = "UPDATE bookie.user SET status='ACTIVE' WHERE id=?";
 
+    private UserDaoImpl() {
+    }
+
     @Override
-    public User create(User user) throws UserDaoException {
+    public User create(User user) throws DaoException {
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(ADD_USER)) {
             statement.setString(1, user.getUsername());
@@ -49,13 +48,14 @@ public class UserDaoImpl implements UserDao {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Can't add user");
+            throw new DaoException(e);
         }
         return user;
     }
 
     @Override
-    public Optional<List<User>> findAll() throws UserDaoException {
-        Optional<List<User>> users = Optional.empty();
+    public Optional<List<User>> findAll() throws DaoException {
+        Optional<List<User>> users;
 
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_ALL_USERS)) {
@@ -76,14 +76,14 @@ public class UserDaoImpl implements UserDao {
             }
             users = Optional.of(userList);
         } catch (SQLException e) {
-            e.printStackTrace();
             logger.error("Can't find all users");
+            throw new DaoException(e);
         }
         return users;
     }
 
     @Override
-    public Optional<User> findUserByUsername(String username) throws UserDaoException {
+    public Optional<User> findUserByUsername(String username) throws DaoException {
         Optional<User> user = Optional.empty();
 
         try (Connection connection = ConnectionFactory.getConnection();
@@ -104,12 +104,13 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             logger.error("Can't find user with username");
+            throw new DaoException(e);
         }
         return user;
     }
 
     @Override
-    public Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserDaoException {
+    public Optional<User> findUserByUsernameAndPassword(String username, String password) throws DaoException {
         Optional<User> user = Optional.empty();
 
         try {
@@ -132,12 +133,13 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             logger.error("Can't find user with username and pass");
+            throw new DaoException(e);
         }
         return user;
     }
 
     @Override
-    public Optional<String> findEmailById(int id) throws UserDaoException {
+    public Optional<String> findEmailById(int id) throws DaoException {
         Optional<String> email = Optional.empty();
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_EMAIL_BY_ID)) {
@@ -148,25 +150,27 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             logger.error("Can't find user with such id");
+            throw new DaoException(e);
         }
         return email;
     }
 
     @Override
-    public boolean activateAccount(String username) throws UserDaoException {
-        boolean result = false;
+    public boolean activateAccount(String username) throws DaoException {
+        boolean result;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(ACTIVATE_ACCOUNT)) {
             statement.setString(1, username);
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error activating account");
+            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public boolean loginExists(String username) throws UserDaoException {
+    public boolean loginExists(String username) throws DaoException {
         boolean result = false;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(USERNAME_EXISTS)) {
@@ -177,12 +181,13 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             logger.error("Error selecting login");
+            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public boolean emailExists(String email) throws UserDaoException {
+    public boolean emailExists(String email) throws DaoException {
         boolean result = false;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(EMAIL_EXISTS)) {
@@ -193,39 +198,42 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (SQLException e) {
             logger.error("Error selecting email");
+            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public boolean blockUser(int id) throws UserDaoException {
-        boolean result = false;
+    public boolean blockUser(int id) throws DaoException {
+        boolean result;
         try (Connection connection = ConnectionFactory.getConnection();
         PreparedStatement statement = connection.prepareStatement(BLOCK_USER)) {
             statement.setInt(1, id);
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error blocking user");
+            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public boolean unblockUser(int id) throws UserDaoException {
-        boolean result = false;
+    public boolean unblockUser(int id) throws DaoException {
+        boolean result;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(UNBLOCK_USER)) {
             statement.setInt(1, id);
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
-            logger.error("Error blocking user");
+            logger.error("Error unblocking user");
+            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public Optional<User> findById(long id) throws UserDaoException {
-        Optional<User> user = Optional.empty();
+    public Optional<User> findById(long id) throws DaoException {
+        Optional<User> user;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_ID)) {
             ResultSet resultSet = statement.executeQuery(SELECT_USER_BY_ID);
@@ -240,29 +248,30 @@ public class UserDaoImpl implements UserDao {
                 userTemp.setUsername(resultSet.getString("username"));
             }
             user = Optional.of(userTemp);
-
         } catch (SQLException e) {
             logger.error("Can't find user with username");
+            throw new DaoException(e);
         }
         return user;
     }
 
     @Override
-    public boolean deleteById(long id) throws UserDaoException {
-        boolean result = false;
+    public boolean deleteById(long id) throws DaoException {
+        boolean result;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID)) {
             statement.setLong(1, id);
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Can't delete user by id");
+            throw new DaoException(e);
         }
         return result;
     }
 
     @Override
-    public boolean update(long id, String... params) throws UserDaoException {
-        boolean result = false;
+    public boolean update(long id, String... params) throws DaoException {
+        boolean result;
         try (Connection connection = ConnectionFactory.getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_USER_BY_ID)) {
             statement.setString(1, params[0]);
@@ -271,6 +280,7 @@ public class UserDaoImpl implements UserDao {
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Can't update user at id: " + id);
+            throw new DaoException(e);
         }
         return result;
     }

@@ -1,6 +1,8 @@
 package edu.epam.bookie.connection;
 
 import edu.epam.bookie.exception.ConnectionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.ConnectException;
 import java.sql.*;
@@ -9,6 +11,7 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 public class ProxyConnection implements Connection {
+    Logger logger = LogManager.getLogger(ProxyConnection.class);
     private Connection connection;
 
     public ProxyConnection(Connection connection) {
@@ -60,7 +63,7 @@ public class ProxyConnection implements Connection {
         try {
             ConnectionPool.INSTANCE.releaseConnection(this);
         } catch (ConnectionException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 
@@ -68,7 +71,7 @@ public class ProxyConnection implements Connection {
         try {
             connection.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
     }
 

@@ -17,6 +17,13 @@ public class RequestParameter {
     public static final String USERS = "users";
     public static final String AUTHORISED = "authorised";
 
+    public static final String FIRST = "first";
+    public static final String SECOND = "second";
+    public static final String START_DATE = "startDate";
+    public static final String START_TIME = "startTime";
+    public static final String RESULT = "result";
+    public static final String MATCH_PROGRESS = "matchProgress";
+
     private RequestParameter() {
     }
 }

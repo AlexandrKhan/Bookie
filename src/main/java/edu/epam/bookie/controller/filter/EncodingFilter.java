@@ -1,4 +1,4 @@
-package edu.epam.bookie.filter;
+package edu.epam.bookie.controller.filter;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;

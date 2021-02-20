@@ -14,6 +14,8 @@ public class CommandRoleMap {
     static {
         ROLE_MAP = new EnumMap<>(CommandType.class);
         ROLE_MAP.put(CommandType.ADMIN_PANEL, Collections.singletonList(Role.ADMIN));
+        ROLE_MAP.put(CommandType.TO_CREATE_MATCH_COMMAND, Collections.singletonList(Role.ADMIN));
+        ROLE_MAP.put(CommandType.ADD_MATCH, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.BLOCK_USER, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.UNBLOCK_USER, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.LOGIN, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
@@ -25,6 +27,7 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.TO_LOGIN_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.TO_REGISTER_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.LOGOUT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
+        ROLE_MAP.put(CommandType.MATCH_LIST, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
     }
 
     private CommandRoleMap() {

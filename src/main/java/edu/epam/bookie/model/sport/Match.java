@@ -9,6 +9,8 @@ public class Match implements Entity {
     private int id;
     private Team firstTeam;
     private Team secondTeam;
+    private int firstTeamGoals;
+    private int secondTeamGoals;
     private LocalDate startDate;
     private LocalTime startTime;
     private Result result;
@@ -20,8 +22,27 @@ public class Match implements Entity {
     public Match(Team firstTeam, Team secondTeam, LocalDate startDate, LocalTime startTime) {
         this.firstTeam = firstTeam;
         this.secondTeam = secondTeam;
+        this.firstTeamGoals = 0;
+        this.secondTeamGoals = 0;
         this.startDate = startDate;
         this.startTime = startTime;
+        this.matchProgress = MatchProgress.NOT_STARTED;
+    }
+
+    public int getFirstTeamGoals() {
+        return firstTeamGoals;
+    }
+
+    public void setFirstTeamGoals(int firstTeamGoals) {
+        this.firstTeamGoals = firstTeamGoals;
+    }
+
+    public int getSecondTeamGoals() {
+        return secondTeamGoals;
+    }
+
+    public void setSecondTeamGoals(int secondTeamGoals) {
+        this.secondTeamGoals = secondTeamGoals;
     }
 
     public MatchProgress getMatchProgress() {
@@ -57,6 +78,10 @@ public class Match implements Entity {
 
     public Team getSecondTeam() {
         return secondTeam;
+    }
+
+    public void setSecondTeam(Team secondTeam) {
+        this.secondTeam = secondTeam;
     }
 
     public void setSecondTeam(String secondTeam) {

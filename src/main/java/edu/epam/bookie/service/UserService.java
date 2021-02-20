@@ -27,4 +27,6 @@ public interface UserService {
     boolean blockUser(int username) throws UserServiceException;
 
     boolean unblockUser(int username) throws UserServiceException;
+
+
 }

@@ -5,6 +5,8 @@ public class PagePath {
     public static final String LOGIN = "/jsp/login.jsp";
     public static final String REGISTER = "/jsp/register.jsp";
     public static final String ADMIN = "/jsp/admin.jsp";
+    public static final String MATCHES = "/jsp/matchList.jsp";
+    public static final String ADD_MATCH = "/jsp/addMatch.jsp";
 
     private PagePath() {
     }

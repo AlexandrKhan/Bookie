@@ -1,12 +1,16 @@
 package edu.epam.bookie.command.impl;
 
 import edu.epam.bookie.command.Command;
+import edu.epam.bookie.command.PagePath;
+import edu.epam.bookie.exception.MatchServiceException;
+import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 public class MatchListCommand implements Command {
     private static final Logger logger = LogManager.getLogger(MatchListCommand.class);
@@ -15,7 +19,13 @@ public class MatchListCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
-
-        return null;
+        List<Match> matches;
+        try {
+            matches = service.findAll();
+            session.setAttribute("matches", matches);
+        } catch (MatchServiceException e) {
+            logger.error("Cant find all matches");
+        }
+        return PagePath.MATCHES;
     }
 }
