@@ -10,6 +10,5 @@ import java.util.Optional;
 
 public interface MatchDao extends BaseDao<Match> {
     Optional<List<Match>> findAllNotStartedMatches() throws DaoException;
-    boolean setGoalsAndResultById(Long id, int first, int second, Result result) throws DaoException;
-    boolean setMatchProgressOverById(Long id) throws DaoException;
+    boolean setGoalsResultAndOverMatchById(Long id, int first, int second, Result result) throws DaoException;
 }

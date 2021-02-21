@@ -1,17 +1,26 @@
 package edu.epam.bookie.dao.impl;
 
-public class DatabaseColumn {
-    public static final String ID = "id";
-    public static final String USERNAME = "username";
-    public static final String FIRST_NAME = "first_name";
-    public static final String LAST_NAME = "last_name";
-    public static final String EMAIL = "email";
-    public static final String PASSWORD = "password";
-    public static final String DATE_OF_BIRTH = "date_of_birth";
-    public static final String ROLE = "role";
-    public static final String MONEY_BALANCE = "money_balance";
-    public static final String FIRST_TEAM = "first";
-    public static final String SECOND_TEAM = "second";
-    public static final String MATCH_START_TIME = "start_time";
-    public static final String USER_ID = "user_id";
+class DatabaseColumn {
+    static final String ID = "id";
+    static final String USERNAME = "username";
+    static final String FIRST_NAME = "first_name";
+    static final String LAST_NAME = "last_name";
+    static final String EMAIL = "email";
+    static final String PASSWORD = "password";
+    static final String DATE_OF_BIRTH = "date_of_birth";
+    static final String ROLE = "role";
+    static final String PASSPORT_SCAN = "passport_scan";
+    static final String MONEY_BALANCE = "money_balance";
+    static final String HOME_TEAM = "home_team";
+    static final String AWAY_TEAM = "away_team";
+    static final String MATCH_START_TIME = "start_time";
+    static final String MATCH_START_DATE = "start_date";
+    static final String HOME_TEAM_GOALS = "home_team_goals";
+    static final String AWAY_TEAM_GOALS = "away_team_goals";
+    static final String MATCH_RESULT = "result";
+    static final String MATCH_PROGRESS = "match_progress";
+    static final String HOME_COEFF = "home_coeff";
+    static final String DRAW_COEFF = "draw_coeff";
+    static final String AWAY_COEFF = "away_coeff";
+    static final String USER_ID = "user_id";
 }

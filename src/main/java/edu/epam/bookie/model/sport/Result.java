@@ -1,7 +1,7 @@
 package edu.epam.bookie.model.sport;
 
 public enum Result {
-    FIRST,
+    HOME,
     DRAW,
-    SECOND
+    AWAY
 }

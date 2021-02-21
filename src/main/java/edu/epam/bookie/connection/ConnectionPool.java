@@ -1,6 +1,8 @@
 package edu.epam.bookie.connection;
 
-import edu.epam.bookie.exception.ConnectionException;
+import edu.epam.bookie.exception.PropertyReaderException;
+import edu.epam.bookie.util.PropertiesPath;
+import edu.epam.bookie.util.PropertiesReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -8,50 +10,70 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayDeque;
 import java.util.Enumeration;
-import java.util.Queue;
+import java.util.Properties;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public enum ConnectionPool {
-    INSTANCE;
-
+public class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
-    private final static int DEFAULT_POOL_SIZE = 32;
+    private static final ConnectionPool INSTANCE = new ConnectionPool();
+    private static final int DEFAULT_POOL_SIZE = 32;
     private final BlockingQueue<ProxyConnection> freeConnection;
-    private final Queue<ProxyConnection> lockedConnection;
+    private final BlockingQueue<ProxyConnection> releasedConnection;
+    private static final String DRIVER = "db.driver";
+    private static final String URL = "db.url";
 
-    ConnectionPool() {
-        freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
-        lockedConnection = new ArrayDeque<>();
+    private ConnectionPool() {
+        String propertiesPath = PropertiesPath.DB_PROPERTIES;
+        Properties properties;
         try {
-            for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-                freeConnection.offer(new ProxyConnection(ConnectionFactory.getConnection()));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            properties = PropertiesReader.readProperties(propertiesPath);
+        } catch (PropertyReaderException e) {
+            throw new RuntimeException("Can't read DB properties", e);
         }
 
+        String driver = properties.getProperty(DRIVER);
+        String url = properties.getProperty(URL);
+
+        try {
+            Class.forName(driver);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException("Can't register driver", e);
+        }
+
+        freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
+        releasedConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
+        for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
+            try {
+                Connection connection = DriverManager.getConnection(url, properties);
+                ProxyConnection proxyConnection = new ProxyConnection(connection);
+                freeConnection.add(proxyConnection);
+            } catch (SQLException e) {
+                logger.error("Can'r create connection", e);
+            }
+        }
     }
 
     public Connection getConnection() {
         ProxyConnection connection = null;
         try {
             connection = freeConnection.take();
-            lockedConnection.offer(connection);
+            releasedConnection.add(connection);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error("Can't provide connection", e);
+            Thread.currentThread().interrupt();
         }
         return connection;
     }
 
-    public void releaseConnection(Connection connection) throws ConnectionException {
+    void releaseConnection(Connection connection) {
         if (connection instanceof ProxyConnection) {
-            lockedConnection.remove(connection);
-            freeConnection.offer((ProxyConnection) connection);
+            if (releasedConnection.remove(connection)) {
+                freeConnection.offer((ProxyConnection) connection);
+            }
         } else {
-            throw new ConnectionException("Connection mismatch");
+            logger.error("Released connection isn't proxy");
         }
     }
 
@@ -59,8 +81,9 @@ public enum ConnectionPool {
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
                 freeConnection.take().finalClose();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            } catch (SQLException | InterruptedException e) {
+                logger.error("Can't close connection", e);
+                Thread.currentThread().interrupt();
             }
         }
         deregisterDrivers();
@@ -72,9 +95,13 @@ public enum ConnectionPool {
             Driver driver = drivers.nextElement();
             try {
                 DriverManager.deregisterDriver(driver);
-            } catch (SQLException exp) {
-                logger.error("Error while deregister drivers", exp);
+            } catch (SQLException e) {
+                logger.error("Error while deregister drivers", e);
             }
         }
+    }
+
+    public static ConnectionPool getInstance() {
+        return INSTANCE;
     }
 }

@@ -13,7 +13,9 @@
 <jsp:include page="/jsp/header.jsp"/>
 <h1>List of matches</h1>
 <c:forEach items="${sessionScope.matches}" var="match">
-    <h1><c:out value="${match.firstTeam.name} - ${match.secondTeam.name}"/></h1>
+    <a><c:out value="${match.homeTeam.name} - ${match.awayTeam.name}"/></a>
+    <a><c:out value="${match.homeTeamGoals} : ${match.awayTeamGoals}"/></a>
+<br>
 </c:forEach>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>

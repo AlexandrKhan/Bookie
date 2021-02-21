@@ -2,7 +2,7 @@ package edu.epam.bookie.controller;
 
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.CommandFactory;
-import edu.epam.bookie.connection.ConnectionFactory;
+import edu.epam.bookie.connection.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -45,5 +43,10 @@ public class ControllerServlet extends HttpServlet {
         } else {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
+    }
+
+    @Override
+    public void destroy() {
+        ConnectionPool.getInstance().destroyPool();
     }
 }

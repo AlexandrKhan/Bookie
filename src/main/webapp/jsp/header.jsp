@@ -13,7 +13,7 @@
             <c:if test="${sessionScope.user.role=='ADMIN'}">
                 <li class="nav-item">
                     <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=admin_panel">
-                        Admin panel
+                        <fmt:message key="admin.panel"/>
                     </a>
                 </li>
                 <li class="nav-item">

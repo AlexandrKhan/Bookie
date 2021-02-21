@@ -2,47 +2,80 @@ package edu.epam.bookie.model.sport;
 
 import edu.epam.bookie.model.Entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class Match implements Entity {
     private int id;
-    private Team firstTeam;
-    private Team secondTeam;
-    private int firstTeamGoals;
-    private int secondTeamGoals;
+    private Team homeTeam;
+    private Team awayTeam;
+    private int homeTeamGoals;
+    private int awayTeamGoals;
     private LocalDate startDate;
     private LocalTime startTime;
     private Result result;
     private MatchProgress matchProgress;
+    private BigDecimal homeCoeff;
+    private BigDecimal drawCoeff;
+    private BigDecimal awayCoeff;
 
     public Match() {
     }
 
-    public Match(Team firstTeam, Team secondTeam, LocalDate startDate, LocalTime startTime) {
-        this.firstTeam = firstTeam;
-        this.secondTeam = secondTeam;
-        this.firstTeamGoals = 0;
-        this.secondTeamGoals = 0;
+    public Match(Team homeTeam, Team awayTeam, LocalDate startDate, LocalTime startTime, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) {
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
         this.startDate = startDate;
         this.startTime = startTime;
+        this.homeCoeff = homeCoeff;
+        this.drawCoeff = drawCoeff;
+        this.awayCoeff = awayCoeff;
+        this.homeTeamGoals = 0;
+        this.awayTeamGoals = 0;
         this.matchProgress = MatchProgress.NOT_STARTED;
+        this.result = Result.DRAW;
     }
 
-    public int getFirstTeamGoals() {
-        return firstTeamGoals;
+
+    public BigDecimal getHomeCoeff() {
+        return homeCoeff;
     }
 
-    public void setFirstTeamGoals(int firstTeamGoals) {
-        this.firstTeamGoals = firstTeamGoals;
+    public void setHomeCoeff(BigDecimal homeCoeff) {
+        this.homeCoeff = homeCoeff;
     }
 
-    public int getSecondTeamGoals() {
-        return secondTeamGoals;
+    public BigDecimal getDrawCoeff() {
+        return drawCoeff;
     }
 
-    public void setSecondTeamGoals(int secondTeamGoals) {
-        this.secondTeamGoals = secondTeamGoals;
+    public void setDrawCoeff(BigDecimal drawCoeff) {
+        this.drawCoeff = drawCoeff;
+    }
+
+    public BigDecimal getAwayCoeff() {
+        return awayCoeff;
+    }
+
+    public void setAwayCoeff(BigDecimal awayCoeff) {
+        this.awayCoeff = awayCoeff;
+    }
+
+    public int getHomeTeamGoals() {
+        return homeTeamGoals;
+    }
+
+    public void setHomeTeamGoals(int firstTeamGoals) {
+        this.homeTeamGoals = firstTeamGoals;
+    }
+
+    public int getAwayTeamGoals() {
+        return awayTeamGoals;
+    }
+
+    public void setAwayTeamGoals(int awayTeamGoals) {
+        this.awayTeamGoals = awayTeamGoals;
     }
 
     public MatchProgress getMatchProgress() {
@@ -64,28 +97,28 @@ public class Match implements Entity {
         this.id = id;
     }
 
-    public Team getFirstTeam() {
-        return firstTeam;
+    public Team getHomeTeam() {
+        return homeTeam;
     }
 
-    public void setFirstTeam(Team firstTeam) {
-        this.firstTeam = firstTeam;
+    public void setHomeTeam(Team homeTeam) {
+        this.homeTeam = homeTeam;
     }
 
     public void setFirstTeam(String firstTeam) {
-        this.firstTeam = Team.valueOf(firstTeam);
+        this.homeTeam = Team.valueOf(firstTeam);
     }
 
-    public Team getSecondTeam() {
-        return secondTeam;
+    public Team getAwayTeam() {
+        return awayTeam;
     }
 
-    public void setSecondTeam(Team secondTeam) {
-        this.secondTeam = secondTeam;
+    public void setAwayTeam(Team awayTeam) {
+        this.awayTeam = awayTeam;
     }
 
     public void setSecondTeam(String secondTeam) {
-        this.secondTeam = Team.valueOf(secondTeam);
+        this.awayTeam = Team.valueOf(secondTeam);
     }
 
     public LocalDate getStartDate() {

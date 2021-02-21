@@ -16,7 +16,7 @@
     <form id="add_match" action="${pageContext.request.contextPath}/controller?command=add_match" method="post">
         <div class="form-group">
         <label>
-            <select name="firstTeam">
+            <select name="homeTeam">
                 <c:forEach items="${requestScope.teams}" var="team">
                     <option>${team.name}</option>
                 </c:forEach>
@@ -25,7 +25,7 @@
         </div>
         <div class="form-group">
         <label>
-            <select name="secondTeam">
+            <select name="awayTeam">
                 <c:forEach items="${requestScope.teams}" var="team">
                     <option>${team.name}</option>
                 </c:forEach>
@@ -38,7 +38,15 @@
         <div class="form-group">
         <label for="startTime"></label><input type="time" name="startTime" id="startTime" required>
         </div>
-
+        <div class="form-group">
+            <label for="homeCoeff"></label><input type="number" name="homeCoeff" id="homeCoeff" required>
+        </div>
+        <div class="form-group">
+            <label for="drawCoeff"></label><input type="number" name="drawCoeff" id="drawCoeff" required>
+        </div>
+        <div class="form-group">
+            <label for="awayCoeff"></label><input type="number" name="awayCoeff" id="awayCoeff" required>
+        </div>
 
         <button type="submit" class="btn btn-primary">
             <fmt:message key="create.match"/>

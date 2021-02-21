@@ -10,6 +10,7 @@ import edu.epam.bookie.service.MatchService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -18,7 +19,6 @@ public class MatchServiceImpl implements MatchService {
     public static final MatchServiceImpl INSTANCE = new MatchServiceImpl();
     private static final Logger logger = LogManager.getLogger(MatchServiceImpl.class);
     private static final MatchDaoImpl matchDao = MatchDaoImpl.INSTANCE;
-    public static Map<Integer, LocalTime> todayMatchStartTimeMap = new HashMap<>();
 
     private MatchServiceImpl() {
     }
@@ -30,7 +30,7 @@ public class MatchServiceImpl implements MatchService {
         try {
             matchList = matchDao.findAll();
         } catch (DaoException e) {
-            logger.error("Cant find all matches");
+            logger.error("Cant find all matches",e);
         }
         if (matchList.isPresent()) {
             matches = matchList.get();
@@ -69,12 +69,12 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match create(Team first, Team second, LocalDate date, LocalTime time) throws MatchServiceException {
-        Match match = new Match(first, second, date, time);
+    public Match create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws MatchServiceException {
+        Match match = new Match(first, second, date, time, homeCoeff, drawCoeff, awayCoeff);
         try {
             match = matchDao.create(match);
         } catch (DaoException e) {
-            logger.error("Cant create match");
+            logger.error("Cant create match",e);
         }
         return match;
     }
@@ -91,27 +91,16 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public boolean setGoalsById(Long id) throws MatchServiceException {
+    public boolean setGoalsResultAndOverMatchById(Long id) throws MatchServiceException {
         boolean result = false;
         int firstTeamGoal = (int) (6.0 * Math.random());
         int secondTeamGoal = (int) (6.0 * Math.random());
         Result matchResult = calculateResult(firstTeamGoal, secondTeamGoal);
             try {
-                result = matchDao.setGoalsAndResultById(id, firstTeamGoal, secondTeamGoal, matchResult);
+                result = matchDao.setGoalsResultAndOverMatchById(id, firstTeamGoal, secondTeamGoal, matchResult);
             } catch (DaoException e) {
                 logger.error("Cant set score by id: {}", id);
             }
-        return result;
-    }
-
-    @Override
-    public boolean setMatchProgressOver(Long id) throws MatchServiceException {
-        boolean result = false;
-        try {
-            result = matchDao.setMatchProgressOverById(id);
-        } catch (DaoException e) {
-            logger.error("Cant over match by id: {}", id);
-        }
         return result;
     }
 
@@ -119,9 +108,9 @@ public class MatchServiceImpl implements MatchService {
         int goalDifference = firstTeamGoal - secondTeamGoal;
         Result matchResult;
         if (goalDifference > 0) {
-            matchResult = Result.FIRST;
+            matchResult = Result.HOME;
         } else if (goalDifference < 0) {
-            matchResult = Result.SECOND;
+            matchResult = Result.AWAY;
         } else {
             matchResult = Result.DRAW;
         }
