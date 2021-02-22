@@ -7,6 +7,7 @@ public class PagePath {
     public static final String ADMIN = "/jsp/admin.jsp";
     public static final String MATCHES = "/jsp/matchList.jsp";
     public static final String ADD_MATCH = "/jsp/addMatch.jsp";
+    public static final String CASH_IN = "/jsp/cashIn.jsp";
 
     private PagePath() {
     }

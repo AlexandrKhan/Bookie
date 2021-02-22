@@ -9,8 +9,8 @@ public class Bet implements Entity {
     private int id;
     private int user_id;
     private int match_id;
-    private Result betOnResult;
-    private double betAmount;
     private LocalDate bet_date;
     private LocalTime bet_time;
+    private double betAmount;
+    private Result betOnResult;
 }

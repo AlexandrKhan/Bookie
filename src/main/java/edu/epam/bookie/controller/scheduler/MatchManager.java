@@ -16,10 +16,10 @@ public class MatchManager implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
-        scheduler = Executors.newSingleThreadScheduledExecutor();
+        scheduler = Executors.newScheduledThreadPool(2);
 
         scheduler.scheduleAtFixedRate(new GetTodayMatchRunnable(), 0, 5, TimeUnit.SECONDS);
-        scheduler.scheduleAtFixedRate(new GenerateScoreRunnable(), 10, 15, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new GenerateScoreRunnable(), 0, 5, TimeUnit.SECONDS);
     }
 
     @Override

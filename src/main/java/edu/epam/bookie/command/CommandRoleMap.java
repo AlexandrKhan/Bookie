@@ -19,6 +19,8 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.BLOCK_USER, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.UNBLOCK_USER, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.LOGIN, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
+        ROLE_MAP.put(CommandType.PLACE_BET, Arrays.asList(Role.ADMIN, Role.USER));
+        ROLE_MAP.put(CommandType.CASH_IN, Arrays.asList(Role.ADMIN, Role.USER));
         ROLE_MAP.put(CommandType.REGISTRATION, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.ACTIVATE_ACCOUNT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.FILE_UPLOAD, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
@@ -26,6 +28,7 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.LANGUAGE, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.TO_LOGIN_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.TO_REGISTER_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
+        ROLE_MAP.put(CommandType.TO_CASH_IN_COMMAND, Arrays.asList(Role.ADMIN, Role.USER));
         ROLE_MAP.put(CommandType.LOGOUT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.MATCH_LIST, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
     }

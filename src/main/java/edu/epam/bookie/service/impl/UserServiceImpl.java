@@ -13,6 +13,7 @@ import edu.epam.bookie.validator.UserValidator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class UserServiceImpl implements UserService {
                         User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
                         userTemp.setRole(Role.USER.toString());
                         userTemp.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
-                        userTemp.setMoneyBalance(0.0);
+                        userTemp.setMoneyBalance(BigDecimal.valueOf(0));
 
                         user = userDao.create(userTemp);
                         MailUtility.sendConfirmMessage(email, user.getUsername());
@@ -134,7 +135,7 @@ public class UserServiceImpl implements UserService {
                 logger.info("User {} is not found for blocking", id);
             }
         } catch (DaoException e) {
-            logger.error("Service error blocking user");
+            logger.error("Service error blocking user", e);
         }
         return result;
     }
@@ -150,10 +151,20 @@ public class UserServiceImpl implements UserService {
                 logger.info("User {} is not found for unblocking", id);
             }
         } catch (DaoException e) {
-            logger.error("Service error unblocking user");
+            logger.error("Service error unblocking user", e);
         }
         return result;
     }
 
-
+    @Override
+    public boolean cashIn(int id, BigDecimal money) throws UserServiceException {
+        boolean result = false;
+        try {
+            result = userDao.cashIn(id, money);
+            logger.info("User with id: {} got {} money", id, money);
+        } catch (DaoException e) {
+            logger.error("Error cashing in", e);
+        }
+        return result;
+    }
 }

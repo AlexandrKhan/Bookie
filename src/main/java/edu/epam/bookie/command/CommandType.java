@@ -12,6 +12,7 @@ public enum CommandType {
     TO_LOGIN_PAGE_COMMAND(new ToLoginPageCommand()),
     TO_REGISTER_PAGE_COMMAND(new ToRegistrationPageCommand()),
     TO_CREATE_MATCH_COMMAND(new ToAddMatchCommand()),
+    TO_CASH_IN_COMMAND(new ToCashInCommand()),
     REGISTRATION(new RegistrationCommand()),
     FILE_UPLOAD(new FileUploadCommand()),
     ADMIN_PANEL(new AdminPanelCommand()),
@@ -19,7 +20,9 @@ public enum CommandType {
     BLOCK_USER(new BlockUserCommand()),
     UNBLOCK_USER(new UnblockUserCommand()),
     MATCH_LIST(new MatchListCommand()),
-    ADD_MATCH(new AddMatchCommand());
+    ADD_MATCH(new AddMatchCommand()),
+    PLACE_BET(new PlaceBetCommand()),
+    CASH_IN(new CashInCommand());
 
     CommandType(Command command) {
         this.command = command;

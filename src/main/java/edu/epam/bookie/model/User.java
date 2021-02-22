@@ -1,5 +1,6 @@
 package edu.epam.bookie.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class User implements Entity {
@@ -11,7 +12,7 @@ public class User implements Entity {
     private String email;
     private Role role;
     private LocalDate dateOfBirth;
-    private Double moneyBalance;
+    private BigDecimal moneyBalance;
     private String passportScan;
     private StatusType statusType;
 
@@ -117,11 +118,11 @@ public class User implements Entity {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public Double getMoneyBalance() {
+    public BigDecimal getMoneyBalance() {
         return moneyBalance;
     }
 
-    public void setMoneyBalance(Double moneyBalance) {
+    public void setMoneyBalance(BigDecimal moneyBalance) {
         this.moneyBalance = moneyBalance;
     }
 }

@@ -28,6 +28,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=to_cash_in_command">
+                    <fmt:message key="cash.in"/>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=match_list">
                     <fmt:message key="match.list"/>
                 </a>

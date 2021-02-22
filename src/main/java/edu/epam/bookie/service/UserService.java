@@ -7,6 +7,7 @@ import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.Part;
 import java.io.File;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -20,13 +21,15 @@ public interface UserService {
 
     Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException;
 
-    boolean activateAccount(String userId) throws UserServiceException;
+    boolean activateAccount(String id) throws UserServiceException;
 
     Optional<String> findEmailById(String id) throws UserServiceException;
 
     boolean blockUser(int username) throws UserServiceException;
 
     boolean unblockUser(int username) throws UserServiceException;
+
+    boolean cashIn(int id, BigDecimal money) throws UserServiceException;
 
 
 }

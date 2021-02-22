@@ -39,13 +39,13 @@
         <label for="startTime"></label><input type="time" name="startTime" id="startTime" required>
         </div>
         <div class="form-group">
-            <label for="homeCoeff"></label><input type="number" name="homeCoeff" id="homeCoeff" required>
+            <label for="homeCoeff"></label><input type="number" name="homeCoeff" id="homeCoeff" step="0.01" min="0.01" required>
         </div>
         <div class="form-group">
-            <label for="drawCoeff"></label><input type="number" name="drawCoeff" id="drawCoeff" required>
+            <label for="drawCoeff"></label><input type="number" name="drawCoeff" id="drawCoeff" step="0.01" min="0.01" required>
         </div>
         <div class="form-group">
-            <label for="awayCoeff"></label><input type="number" name="awayCoeff" id="awayCoeff" required>
+            <label for="awayCoeff"></label><input type="number" name="awayCoeff" id="awayCoeff" step="0.01" min="0.01" required>
         </div>
 
         <button type="submit" class="btn btn-primary">
@@ -65,24 +65,4 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
-
-<%--<button class="btn btn-light btn-sm dropdown-toggle " type="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-        <fmt:message key="choose.team"/>
-    </button>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <c:forEach items="${requestScope.teams}" var="team">
-            <a class="dropdown-item">${team}</a>
-        </c:forEach>
-    </div>
-
-    <button class="btn btn-light btn-sm dropdown-toggle " type="button"
-            data-bs-toggle="dropdown" aria-expanded="false">
-        <fmt:message key="choose.team"/>
-    </button>
-    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-        <c:forEach items="${requestScope.teams}" var="team">
-            <a class="dropdown-item">${team}</a>
-        </c:forEach>
-    </div>--%>
 
