@@ -2,6 +2,7 @@ package edu.epam.bookie.command.impl;
 
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
+import edu.epam.bookie.command.RequestParameter;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -35,7 +36,7 @@ public class FileUploadCommand implements Command {
                         String fileName = item.getName();
                         String root = request.getServletContext().getRealPath("/");
                         File path = new File(root + "/uploads/" + fileName);
-                        request.getSession().setAttribute("passportScan", fileName);
+                        request.getSession().setAttribute(RequestParameter.PASSPORT_SCAN, fileName);
                         try {
                             item.write(path);
                         } catch (Exception e) {

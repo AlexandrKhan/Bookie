@@ -16,9 +16,9 @@ import java.time.LocalTime;
 import java.util.*;
 
 public class MatchServiceImpl implements MatchService {
-    public static final MatchServiceImpl INSTANCE = new MatchServiceImpl();
+    public static final MatchServiceImpl matchService = new MatchServiceImpl();
     private static final Logger logger = LogManager.getLogger(MatchServiceImpl.class);
-    private static final MatchDaoImpl matchDao = MatchDaoImpl.INSTANCE;
+    private static final MatchDaoImpl matchDao = MatchDaoImpl.matchDao;
 
     private MatchServiceImpl() {
     }

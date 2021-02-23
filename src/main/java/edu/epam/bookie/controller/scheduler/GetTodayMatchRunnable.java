@@ -13,7 +13,7 @@ import java.util.List;
 
 public class GetTodayMatchRunnable implements Runnable {
     private static final Logger logger = LogManager.getLogger(GetTodayMatchRunnable.class);
-    private static final MatchServiceImpl service = MatchServiceImpl.INSTANCE;
+    private static final MatchServiceImpl service = MatchServiceImpl.matchService;
 
     @Override
     public void run() {

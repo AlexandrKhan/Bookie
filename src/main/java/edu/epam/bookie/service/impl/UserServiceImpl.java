@@ -1,11 +1,13 @@
 package edu.epam.bookie.service.impl;
 
+import edu.epam.bookie.dao.impl.BetDaoImpl;
 import edu.epam.bookie.dao.impl.UserDaoImpl;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
+import edu.epam.bookie.model.sport.Bet;
 import edu.epam.bookie.service.UserService;
 import edu.epam.bookie.util.PasswordEncryption;
 import edu.epam.bookie.util.mail.MailUtility;
@@ -20,10 +22,10 @@ import java.util.List;
 import java.util.Optional;
 
 public class UserServiceImpl implements UserService {
-    public static final UserServiceImpl INSTANCE = new UserServiceImpl();
-
+    public static final UserServiceImpl userService = new UserServiceImpl();
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
-    private static final UserDaoImpl userDao = UserDaoImpl.INSTANCE;
+    private static final UserDaoImpl userDao = UserDaoImpl.userDao;
+    private static final BetDaoImpl betDao = BetDaoImpl.betDao;
 
     private UserServiceImpl() {
     }
@@ -164,6 +166,29 @@ public class UserServiceImpl implements UserService {
             logger.info("User with id: {} got {} money", id, money);
         } catch (DaoException e) {
             logger.error("Error cashing in", e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean withdrawMoney(int id, BigDecimal money) throws UserServiceException {
+        boolean result = false;
+        try {
+            result = userDao.withdrawMoney(id, money);
+            logger.info("User with id: {} withdrawed {} money", id, money);
+        } catch (DaoException e) {
+            logger.error("Error withdrawing money in", e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean placeBet(Bet bet) throws UserServiceException {
+        boolean result = false;
+        try {
+            result = (betDao.placeBet(bet) && userDao.withdrawMoney(bet.getUserId(), bet.getBetAmount()));
+        } catch (DaoException e) {
+            logger.error("Error placing bet", e);
         }
         return result;
     }

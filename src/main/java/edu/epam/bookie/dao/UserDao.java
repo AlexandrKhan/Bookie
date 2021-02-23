@@ -16,4 +16,6 @@ public interface UserDao extends BaseDao<User> {
     boolean blockUser(int id) throws DaoException;
     boolean unblockUser(int id) throws DaoException;
     boolean cashIn(int id, BigDecimal money) throws DaoException;
+    boolean placeBet(int id, BigDecimal money) throws DaoException;
+    boolean withdrawMoney(int id, BigDecimal money) throws DaoException;
 }

@@ -22,6 +22,7 @@ public enum CommandType {
     MATCH_LIST(new MatchListCommand()),
     ADD_MATCH(new AddMatchCommand()),
     PLACE_BET(new PlaceBetCommand()),
+    TO_PLACE_BET_COMMAND(new ToPlaceBetCommand()),
     CASH_IN(new CashInCommand());
 
     CommandType(Command command) {

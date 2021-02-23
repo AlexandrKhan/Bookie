@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class BlockUserCommand implements Command {
     public static final Logger logger = LogManager.getLogger(BlockUserCommand.class);
-    private UserServiceImpl service = UserServiceImpl.INSTANCE;
+    private UserServiceImpl service = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {

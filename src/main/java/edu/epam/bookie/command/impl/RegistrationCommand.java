@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 public class RegistrationCommand implements Command {
     private static final Logger logger = LogManager.getLogger(RegistrationCommand.class);
-    private static final UserServiceImpl userService = UserServiceImpl.INSTANCE;
+    private static final UserServiceImpl userService = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {

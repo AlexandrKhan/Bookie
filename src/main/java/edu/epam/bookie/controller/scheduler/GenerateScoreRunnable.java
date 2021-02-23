@@ -10,7 +10,7 @@ import java.time.LocalTime;
 
 public class GenerateScoreRunnable implements Runnable {
     private static final Logger logger = LogManager.getLogger(GenerateScoreRunnable.class);
-    private MatchServiceImpl service = MatchServiceImpl.INSTANCE;
+    private MatchServiceImpl service = MatchServiceImpl.matchService;
 
     @Override
     public void run() {

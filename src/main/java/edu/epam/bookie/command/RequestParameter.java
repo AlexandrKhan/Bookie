@@ -17,12 +17,20 @@ public class RequestParameter {
     public static final String USERS = "users";
     public static final String AUTHORISED = "authorised";
 
-    public static final String FIRST = "first";
-    public static final String SECOND = "second";
+    public static final String HOME_TEAM = "homeTeam";
+    public static final String AWAY_TEAM = "awayTeam";
     public static final String START_DATE = "startDate";
     public static final String START_TIME = "startTime";
+    public static final String HOME_COEFF = "homeCoeff";
+    public static final String AWAY_COEFF = "awayCoeff";
+    public static final String DRAW_COEFF = "drawCoeff";
     public static final String RESULT = "result";
     public static final String MATCH_PROGRESS = "matchProgress";
+    public static final String TEAMS = "teams";
+    public static final String CASH_IN_SUM = "cashInSum";
+    public static final String MATCH_ID = "matchId";
+    public static final String BET_AMOUNT = "betAmount";
+    public static final String BET_ON_RESULT = "betOnResult";
 
     private RequestParameter() {
     }

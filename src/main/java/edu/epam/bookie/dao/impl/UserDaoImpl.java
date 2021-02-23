@@ -15,7 +15,7 @@ import java.util.Optional;
 
 public class UserDaoImpl implements UserDao {
     private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
-    public final static UserDaoImpl INSTANCE = new UserDaoImpl();
+    public static final  UserDaoImpl userDao = new UserDaoImpl();
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES (?,?,?,?,?,?,?,?)";
@@ -32,6 +32,8 @@ public class UserDaoImpl implements UserDao {
     private static final String BLOCK_USER = "UPDATE bookie.user SET status='BLOCKED' WHERE id=?";
     private static final String UNBLOCK_USER = "UPDATE bookie.user SET status='ACTIVE' WHERE id=?";
     private static final String CASH_IN = "UPDATE bookie.user SET money_balance=money_balance + ? WHERE id=?";
+    private static final String WITHDRAW_MONEY = "UPDATE bookie.user SET money_balance=money_balance - ? WHERE id=?";
+
 
     private UserDaoImpl() {
     }
@@ -245,6 +247,26 @@ public class UserDaoImpl implements UserDao {
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error cashing in", e);
+            throw new DaoException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean placeBet(int id, BigDecimal money) throws DaoException {
+        return false;
+    }
+
+    @Override
+    public boolean withdrawMoney(int id, BigDecimal money) throws DaoException {
+        boolean result;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(WITHDRAW_MONEY)) {
+            statement.setBigDecimal(1, money);
+            statement.setInt(2, id);
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error withdrawing money from: {}", id, e);
             throw new DaoException(e);
         }
         return result;

@@ -3,6 +3,7 @@ package edu.epam.bookie.command.impl;
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
+import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
@@ -15,7 +16,7 @@ import java.util.Optional;
 
 public class LoginCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
-    private static final UserServiceImpl userService = UserServiceImpl.INSTANCE;
+    private static final UserServiceImpl userService = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -31,12 +32,12 @@ public class LoginCommand implements Command {
         }
 
         if (userTemp.isPresent()) {
-            session.setAttribute("authorised", true);
-            session.setAttribute("user", userTemp.get());
+            session.setAttribute(SessionAttribute.AUTHORISED, true);
+            session.setAttribute(SessionAttribute.CURRENT_USER, userTemp.get());
             return PagePath.HOME;
         } else {
             logger.error("Some error logging in");
-            session.setAttribute("errorMessage", true);
+            session.setAttribute(SessionAttribute.ERROR_MESSAGE, true);
             return PagePath.LOGIN;
         }
     }

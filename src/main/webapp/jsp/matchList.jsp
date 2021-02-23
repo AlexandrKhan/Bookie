@@ -15,6 +15,11 @@
 <c:forEach items="${sessionScope.matches}" var="match">
     <a><c:out value="${match.homeTeam.name} - ${match.awayTeam.name}"/></a>
     <a><c:out value="${match.homeTeamGoals} : ${match.awayTeamGoals}"/></a>
+    <form method="post" action="${pageContext.request.contextPath}/controller?command=to_place_bet_command&matchId=${match.id}">
+        <button type="submit" class="btn btn-primary">
+            <fmt:message key="unblock.user"/>
+        </button>
+    </form>
 <br>
 </c:forEach>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>

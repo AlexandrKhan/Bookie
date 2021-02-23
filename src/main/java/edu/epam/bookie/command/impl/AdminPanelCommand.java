@@ -9,14 +9,12 @@ import edu.epam.bookie.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 public class AdminPanelCommand implements Command {
     private Logger logger = LogManager.getLogger(AdminPanelCommand.class);
-    private static final UserServiceImpl service = UserServiceImpl.INSTANCE;
+    private static final UserServiceImpl service = UserServiceImpl.userService;
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();

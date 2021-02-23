@@ -15,11 +15,10 @@ import java.util.Optional;
 
 public class MatchDaoImpl implements MatchDao {
     private static final Logger logger = LogManager.getLogger(MatchDaoImpl.class);
+    public final static MatchDaoImpl matchDao = new MatchDaoImpl();
 
     private MatchDaoImpl() {
     }
-
-    public final static MatchDaoImpl INSTANCE = new MatchDaoImpl();
 
     private static final String SELECT_ALL_MATCHES = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id";
     private static final String ADD_MATCH = "INSERT INTO bookie.match(home_team, away_team, start_date, start_time, home_coeff, draw_coeff, away_coeff) VALUES (?,?,?,?,?,?,?)";

@@ -2,6 +2,7 @@ package edu.epam.bookie.service;
 
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.User;
+import edu.epam.bookie.model.sport.Bet;
 
 import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.Part;
@@ -30,6 +31,9 @@ public interface UserService {
     boolean unblockUser(int username) throws UserServiceException;
 
     boolean cashIn(int id, BigDecimal money) throws UserServiceException;
+    boolean withdrawMoney(int id, BigDecimal money) throws UserServiceException;
+
+    boolean placeBet(Bet bet) throws UserServiceException;
 
 
 }

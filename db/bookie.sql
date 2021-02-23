@@ -11,7 +11,7 @@ CREATE TABLE `user` (
   `password` VARCHAR(255) NOT NULL,
   `date_of_birth` DATE NOT NULL,
   `role` ENUM('ADMIN','USER','GUEST') NOT NULL DEFAULT 'GUEST',
-  `money` DECIMAL NOT NULL DEFAULT 0,
+  `money` DECIMAL(7,2) NOT NULL DEFAULT 0,
   `passport_scan` VARCHAR(255) NOT NULL,
   `status` ENUM('ACTIVE','BLOCKED','NOT_ACTIVATED') NOT NULL DEFAULT 'NOT_ACTIVATED',
   PRIMARY KEY (`id`)
@@ -45,7 +45,7 @@ CREATE TABLE `bet` (
   `match_id` BIGINT(20) NOT NULL,
   `bet_date` DATE NOT NULL,
   `bet_time` TIME NOT NULL,
-  `bet_amount` BIGINT(20) NOT NULL,
+  `bet_amount` DECIMAL(7,2) NOT NULL,
   `bet_on_result` ENUM('HOME', 'DRAW', 'AWAY') DEFAULT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (user_id) REFERENCES bookie.user(id),
