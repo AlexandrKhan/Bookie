@@ -31,7 +31,9 @@ public class BetServiceImpl implements BetService {
         }
         if (optional.isPresent()) {
             bets = optional.get();
-        } else System.out.println("No bets found for match");
+        } else {
+            logger.info("No bets found for match");
+        }
         return bets;
     }
 

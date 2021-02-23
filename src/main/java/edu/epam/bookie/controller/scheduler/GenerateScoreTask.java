@@ -28,21 +28,21 @@ public class GenerateScoreTask implements Runnable {
                     logger.info("Generated score for match id = {}", key);
                     Match match = matchService.findById(Long.valueOf(key));
 
-//                    List<Bet> matchBets = betService.selectBetsByMatchId(key);
-//                    for (Bet bet : matchBets) {
-//                        if (bet.getBetOnResult().equals(match.getResult())) {
-//                            betService.payBets(bet);
-//                        } else {
-//                            betService.betLost(bet);
-//                        }
-//                    }
+                    List<Bet> matchBets = betService.selectBetsByMatchId(key);
+                    for (Bet bet : matchBets) {
+                        if (bet.getBetOnResult() == (match.getResult())) {
+                            betService.payBets(bet);
+                        } else {
+                            betService.betLost(bet);
+                        }
+                    }
 
                     todayMatchStartTimeMap.remove(key);
                 } catch (MatchServiceException e) {
                     logger.error("Can't generate score", e);
-                } /*catch (BetServiceException e) {
+                } catch (BetServiceException e) {
                     logger.error("Bet service ex", e);
-                }*/
+                }
             }
         });
     }

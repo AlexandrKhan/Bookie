@@ -29,4 +29,5 @@ class DatabaseColumn {
     static final String BET_AMOUNT = "bet_amount";
     static final String BET_ON_RESULT = "bet_on_result";
     static final String BET_STATUS = "bet_status";
+    static final String BET_COEFF = "bet_coeff";
 }

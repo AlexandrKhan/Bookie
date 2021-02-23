@@ -21,7 +21,7 @@ public class BetDaoImpl implements BetDao {
     private static final String SELECT_ALL_BETS = "SELECT * FROM bookie.bet";
     private static final String SELECT_BET_BY_ID = "SELECT * FROM bookie.bet WHERE id=?";
     private static final String SELECT_ALL_BETS_ON_MATCH_ID = "SELECT * FROM bookie.bet WHERE match_id=?";
-    private static final String PAY_BETS_ON_BET_ID = "UPDATE bookie.user, bookie.bet SET money_balance = money_balance + ?, bet_status='WON' WHERE bookie.bet.id=?";
+    private static final String PAY_BETS_ON_BET_ID = "UPDATE bookie.user, bookie.bet SET money_balance = money_balance + ?, bet_status='WON' WHERE bookie.bet.id=? AND bookie.user.id=bookie.bet.user_id";
     private static final String SET_BET_STATUS_LOST = "UPDATE bookie.bet SET bet_status='LOST' WHERE id=?";
     private static final String SELECT_ALL_BETS_OF_USER = "SELECT * FROM bookie.bet WHERE user.id=?";
     private static final String SELECT_ALL_BETS_OF_DATE = "SELECT * FROM bookie.bet WHERE bet_date=?";
@@ -76,6 +76,7 @@ public class BetDaoImpl implements BetDao {
                 bet.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
                 bet.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
                 bet.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
+                bet.setBetCoeff(resultSet.getBigDecimal(DatabaseColumn.BET_COEFF));
                 betsTemp.add(bet);
             }
             bets = Optional.of(betsTemp);

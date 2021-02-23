@@ -108,4 +108,51 @@ public class Bet implements Entity {
     public void setBetStatus(String status) {
         this.betStatus = BetStatus.valueOf(status);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Bet bet = (Bet) o;
+
+        if (id != bet.id) return false;
+        if (userId != bet.userId) return false;
+        if (matchId != bet.matchId) return false;
+        if (betDate != null ? !betDate.equals(bet.betDate) : bet.betDate != null) return false;
+        if (betTime != null ? !betTime.equals(bet.betTime) : bet.betTime != null) return false;
+        if (betAmount != null ? !betAmount.equals(bet.betAmount) : bet.betAmount != null) return false;
+        if (betOnResult != bet.betOnResult) return false;
+        if (betStatus != bet.betStatus) return false;
+        return betCoeff != null ? betCoeff.equals(bet.betCoeff) : bet.betCoeff == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + userId;
+        result = 31 * result + matchId;
+        result = 31 * result + (betDate != null ? betDate.hashCode() : 0);
+        result = 31 * result + (betTime != null ? betTime.hashCode() : 0);
+        result = 31 * result + (betAmount != null ? betAmount.hashCode() : 0);
+        result = 31 * result + (betOnResult != null ? betOnResult.hashCode() : 0);
+        result = 31 * result + (betStatus != null ? betStatus.hashCode() : 0);
+        result = 31 * result + (betCoeff != null ? betCoeff.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Bet{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", matchId=" + matchId +
+                ", betDate=" + betDate +
+                ", betTime=" + betTime +
+                ", betAmount=" + betAmount +
+                ", betOnResult=" + betOnResult +
+                ", betStatus=" + betStatus +
+                ", betCoeff=" + betCoeff +
+                '}';
+    }
 }
