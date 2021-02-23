@@ -17,16 +17,16 @@ public class MatchDaoImpl implements MatchDao {
     private static final Logger logger = LogManager.getLogger(MatchDaoImpl.class);
     public final static MatchDaoImpl matchDao = new MatchDaoImpl();
 
-    private MatchDaoImpl() {
-    }
-
     private static final String SELECT_ALL_MATCHES = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id";
     private static final String ADD_MATCH = "INSERT INTO bookie.match(home_team, away_team, start_date, start_time, home_coeff, draw_coeff, away_coeff) VALUES (?,?,?,?,?,?,?)";
-    private static final String ADD_DEFAULT_MATCH_PROGRESS = "INSERT INTO bookie.match_result(id, home_team_goals, away_team_goals, result, match_progress) VALUES (LAST_INSERT_ID(), 0, 0, 'DRAW', 'NOT_STARTED') ";
+    private static final String ADD_DEFAULT_MATCH_PROGRESS = "INSERT INTO bookie.match_result(id, home_team_goals, away_team_goals, result, match_progress) VALUES (LAST_INSERT_ID(), 0, 0, 'DRAW', 'NOT_STARTED')";
     private static final String SELECT_ALL_NOT_STARTED_MATCHES = "SELECT * FROM bookie.match WHERE bookie.match_result.match_progress='NOT_STARTED'";
     private static final String DELETE_MATCH_BY_ID = "DELETE FROM bookie.match WHERE id=?";
     private static final String SET_GOALS_RESULT_AND_OVER_MATCH_BY_ID = "UPDATE bookie.match_result SET home_team_goals=?, away_team_goals=?, result=?, match_progress='OVER' WHERE id=?";
-    private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match WHERE id=?";
+    private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.id=?";
+
+    private MatchDaoImpl() {
+    }
 
     @Override
     public Match create(Match match) throws DaoException {
@@ -84,26 +84,27 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public Optional<Match> findById(long id) throws DaoException {
-        Optional<Match> match = Optional.empty();
+        Optional<Match> match;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_MATCH_BY_ID)) {
-            ResultSet resultSet = statement.executeQuery(SELECT_MATCH_BY_ID);
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            Match matchTemp = new Match();
             while (resultSet.next()) {
-                Match matchTemp = new Match();
                 matchTemp.setId(resultSet.getInt(DatabaseColumn.ID));
                 matchTemp.setFirstTeam(resultSet.getString(DatabaseColumn.HOME_TEAM));
                 matchTemp.setSecondTeam(resultSet.getString(DatabaseColumn.AWAY_TEAM));
                 matchTemp.setStartDate((resultSet.getDate(DatabaseColumn.MATCH_START_DATE).toLocalDate()));
                 matchTemp.setStartTime((resultSet.getTime(DatabaseColumn.MATCH_START_TIME).toLocalTime()));
+                matchTemp.setHomeCoeff(resultSet.getBigDecimal(DatabaseColumn.HOME_COEFF));
+                matchTemp.setDrawCoeff(resultSet.getBigDecimal(DatabaseColumn.DRAW_COEFF));
+                matchTemp.setAwayCoeff(resultSet.getBigDecimal(DatabaseColumn.AWAY_COEFF));
                 matchTemp.setHomeTeamGoals(resultSet.getInt(DatabaseColumn.HOME_TEAM_GOALS));
-                matchTemp.setHomeTeamGoals(resultSet.getInt(DatabaseColumn.AWAY_TEAM_GOALS));
-                if (resultSet.getString(DatabaseColumn.MATCH_RESULT) != null) {
-                    matchTemp.setResult(resultSet.getString(DatabaseColumn.MATCH_RESULT));
-                }
+                matchTemp.setAwayTeamGoals(resultSet.getInt(DatabaseColumn.AWAY_TEAM_GOALS));
+                matchTemp.setResult(resultSet.getString(DatabaseColumn.MATCH_RESULT));
                 matchTemp.setMatchProgress(resultSet.getString(DatabaseColumn.MATCH_PROGRESS));
             }
-            statement.setLong(1, id);
-            statement.executeUpdate();
+            match = Optional.of(matchTemp);
         } catch (SQLException e) {
             logger.error("Cant select match by id: {}", id, e);
             throw new DaoException(e);

@@ -1,6 +1,6 @@
 package edu.epam.bookie.controller.scheduler;
 
-import static edu.epam.bookie.controller.scheduler.MatchManager.todayMatchStartTimeMap;
+import static edu.epam.bookie.controller.scheduler.MatchContextListener.todayMatchStartTimeMap;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.MatchProgress;
@@ -11,8 +11,8 @@ import org.apache.logging.log4j.Logger;
 import java.time.LocalDate;
 import java.util.List;
 
-public class GetTodayMatchRunnable implements Runnable {
-    private static final Logger logger = LogManager.getLogger(GetTodayMatchRunnable.class);
+public class GetTodayMatchTask implements Runnable {
+    private static final Logger logger = LogManager.getLogger(GetTodayMatchTask.class);
     private static final MatchServiceImpl service = MatchServiceImpl.matchService;
 
     @Override

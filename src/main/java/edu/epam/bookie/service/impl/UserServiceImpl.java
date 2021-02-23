@@ -186,7 +186,9 @@ public class UserServiceImpl implements UserService {
     public boolean placeBet(Bet bet) throws UserServiceException {
         boolean result = false;
         try {
-            result = (betDao.placeBet(bet) && userDao.withdrawMoney(bet.getUserId(), bet.getBetAmount()));
+            betDao.create(bet);
+            result = (userDao.withdrawMoney(bet.getUserId(), bet.getBetAmount()));
+            logger.info("Placed bet with id: {}, money: {}", bet.getMatchId(), bet.getBetAmount());
         } catch (DaoException e) {
             logger.error("Error placing bet", e);
         }

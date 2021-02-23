@@ -1,6 +1,7 @@
 package edu.epam.bookie.model.sport;
 
 import edu.epam.bookie.model.Entity;
+import edu.epam.bookie.model.StatusType;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,14 +15,28 @@ public class Bet implements Entity {
     private LocalTime betTime;
     private BigDecimal betAmount;
     private Result betOnResult;
+    private BetStatus betStatus;
+    private BigDecimal betCoeff;
 
-    public Bet(int userId, int matchId, LocalDate betDate, LocalTime betTime, BigDecimal betAmount, Result betOnResult) {
+    public Bet() {
+    }
+
+    public Bet(int userId, int matchId, BigDecimal betAmount, Result betOnResult) {
         this.userId = userId;
         this.matchId = matchId;
-        this.betDate = betDate;
-        this.betTime = betTime;
+        this.betDate = LocalDate.now();
+        this.betTime = LocalTime.now();
         this.betAmount = betAmount;
         this.betOnResult = betOnResult;
+        this.betStatus = BetStatus.NOT_STARTED;
+    }
+
+    public BigDecimal getBetCoeff() {
+        return betCoeff;
+    }
+
+    public void setBetCoeff(BigDecimal betCoeff) {
+        this.betCoeff = betCoeff;
     }
 
     public int getId() {
@@ -78,5 +93,19 @@ public class Bet implements Entity {
 
     public void setBetOnResult(Result betOnResult) {
         this.betOnResult = betOnResult;
+    }
+    public void setBetOnResult(String betOnResult) {
+        this.betOnResult = Result.valueOf(betOnResult);
+    }
+
+    public BetStatus getBetStatus() {
+        return betStatus;
+    }
+
+    public void setBetStatus(BetStatus status) {
+        this.betStatus = status;
+    }
+    public void setBetStatus(String status) {
+        this.betStatus = BetStatus.valueOf(status);
     }
 }

@@ -47,9 +47,11 @@ CREATE TABLE `bet` (
   `bet_time` TIME NOT NULL,
   `bet_amount` DECIMAL(7,2) NOT NULL,
   `bet_on_result` ENUM('HOME', 'DRAW', 'AWAY') DEFAULT NULL,
+  `bet_status` ENUM('NOT_STARTED', 'WON', 'LOST') DEFAULT 'NOT_STARTED',
+  `bet_coeff` DECIMAL(4,2) NOT NULL,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (user_id) REFERENCES bookie.user(id),
-  FOREIGN KEY (match_id) REFERENCES bookie.match(id)
+  FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE,
+  FOREIGN KEY (match_id) REFERENCES bookie.match(id) ON DELETE CASCADE
 );
 
 INSERT INTO user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES

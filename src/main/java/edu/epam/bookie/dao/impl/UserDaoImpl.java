@@ -34,7 +34,6 @@ public class UserDaoImpl implements UserDao {
     private static final String CASH_IN = "UPDATE bookie.user SET money_balance=money_balance + ? WHERE id=?";
     private static final String WITHDRAW_MONEY = "UPDATE bookie.user SET money_balance=money_balance - ? WHERE id=?";
 
-
     private UserDaoImpl() {
     }
 

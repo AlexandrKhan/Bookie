@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,39 +16,78 @@ public class BetDaoImpl implements BetDao {
     private static final Logger logger = LogManager.getLogger(BetDaoImpl.class);
     public static final BetDaoImpl betDao = new BetDaoImpl();
     private final ConnectionPool pool = ConnectionPool.getInstance();
-    private static final String PLACE_BET = "INSERT INTO bookie.bet SET user_id=?, match_id=?, bet_date=?, bet_time=?, bet_amount=?, bet_on_result=?";
+
+    private static final String PLACE_BET = "INSERT INTO bookie.bet SET user_id=?, match_id=?, bet_date=?, bet_time=?, bet_amount=?, bet_on_result=?, bet_coeff=?";
+    private static final String SELECT_ALL_BETS = "SELECT * FROM bookie.bet";
+    private static final String SELECT_BET_BY_ID = "SELECT * FROM bookie.bet WHERE id=?";
+    private static final String SELECT_ALL_BETS_ON_MATCH_ID = "SELECT * FROM bookie.bet WHERE match_id=?";
+    private static final String PAY_BETS_ON_BET_ID = "UPDATE bookie.user, bookie.bet SET money_balance = money_balance + ?, bet_status='WON' WHERE bookie.bet.id=?";
+    private static final String SET_BET_STATUS_LOST = "UPDATE bookie.bet SET bet_status='LOST' WHERE id=?";
+    private static final String SELECT_ALL_BETS_OF_USER = "SELECT * FROM bookie.bet WHERE user.id=?";
+    private static final String SELECT_ALL_BETS_OF_DATE = "SELECT * FROM bookie.bet WHERE bet_date=?";
 
     private BetDaoImpl() {
     }
 
     @Override
-    public Optional<List<Bet>> findAll() throws DaoException {
-        return null;
+    public boolean payBets(Bet bet) throws DaoException {
+        boolean result;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(PAY_BETS_ON_BET_ID)) {
+            statement.setBigDecimal(1, bet.getBetAmount().multiply(bet.getBetCoeff()));
+            statement.setLong(2, bet.getId());
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error paying for bets");
+            throw new DaoException(e);
+        }
+        return result;
     }
 
     @Override
-    public Optional<Bet> findById(long id) throws DaoException {
-        return null;
+    public boolean betLost(Bet bet) throws DaoException {
+        boolean result;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SET_BET_STATUS_LOST)) {
+            statement.setLong(1, bet.getId());
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Cant set bet lost", e);
+            throw new DaoException(e);
+        }
+        return result;
     }
 
     @Override
-    public boolean deleteById(long id) throws DaoException {
-        return false;
+    public Optional<List<Bet>> selectBetsByMatchId(Long matchId) throws DaoException {
+        Optional<List<Bet>> bets;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BETS_ON_MATCH_ID)) {
+            statement.setLong(1, matchId);
+            ResultSet resultSet = statement.executeQuery();
+            List<Bet> betsTemp = new ArrayList<>();
+            while (resultSet.next()) {
+                Bet bet = new Bet();
+                bet.setId(resultSet.getInt(DatabaseColumn.ID));
+                bet.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
+                bet.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
+                bet.setBetDate(resultSet.getDate(DatabaseColumn.BET_DATE).toLocalDate());
+                bet.setBetTime(resultSet.getTime(DatabaseColumn.BET_TIME).toLocalTime());
+                bet.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
+                bet.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
+                bet.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
+                betsTemp.add(bet);
+            }
+            bets = Optional.of(betsTemp);
+        } catch (SQLException e) {
+            logger.error("Cant select bets by match id: {}", matchId, e);
+            throw new DaoException(e);
+        }
+        return bets;
     }
 
     @Override
-    public Bet create(Bet entity) throws DaoException {
-        return entity;
-    }
-
-    @Override
-    public boolean update(long id, String... params) throws DaoException {
-        return false;
-    }
-
-    @Override
-    public boolean placeBet(Bet bet) throws DaoException {
-        boolean result = false;
+    public Bet create(Bet bet) throws DaoException {
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(PLACE_BET)) {
             statement.setInt(1, bet.getUserId());
@@ -56,10 +96,81 @@ public class BetDaoImpl implements BetDao {
             statement.setTime(4, Time.valueOf(bet.getBetTime()));
             statement.setBigDecimal(5, bet.getBetAmount());
             statement.setString(6, bet.getBetOnResult().name());
-             result = statement.executeUpdate() > 0;
+            statement.setBigDecimal(7, bet.getBetCoeff());
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Error placing bet", e);
+            throw new DaoException(e);
         }
-        return result;
+        return bet;
     }
+
+    @Override
+    public Optional<List<Bet>> findAll() throws DaoException {
+        Optional<List<Bet>> bets;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BETS)) {
+            ResultSet resultSet = statement.executeQuery(SELECT_ALL_BETS);
+            List<Bet> betsTemp = new ArrayList<>();
+            while (resultSet.next()) {
+                setBetFields(resultSet, betsTemp);
+            }
+            bets = Optional.of(betsTemp);
+
+        } catch (SQLException e) {
+            logger.error("Erorr finding all bets", e);
+            throw new DaoException(e);
+        }
+        return bets;
+    }
+
+    @Override
+    public Optional<Bet> findById(long id) throws DaoException {
+        Optional<Bet> bet;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_BET_BY_ID)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery(SELECT_BET_BY_ID);
+            Bet betTemp = new Bet();
+            while (resultSet.next()) {
+                betTemp.setId(resultSet.getInt(DatabaseColumn.ID));
+                betTemp.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
+                betTemp.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
+                betTemp.setBetDate(resultSet.getDate(DatabaseColumn.BET_DATE).toLocalDate());
+                betTemp.setBetTime(resultSet.getTime(DatabaseColumn.BET_TIME).toLocalTime());
+                betTemp.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
+                betTemp.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
+                betTemp.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
+            }
+            bet = Optional.of(betTemp);
+        } catch (SQLException e) {
+            logger.error("Can't find bet with id: {}", id, e);
+            throw new DaoException(e);
+        }
+        return bet;
+    }
+
+    @Override
+    public boolean deleteById(long id) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean update(long id, String... params) throws DaoException {
+        throw new UnsupportedOperationException();
+    }
+
+    private void setBetFields(ResultSet resultSet, List<Bet> betsTemp) throws SQLException {
+        Bet bet = new Bet();
+        bet.setId(resultSet.getInt(DatabaseColumn.ID));
+        bet.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
+        bet.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
+        bet.setBetDate(resultSet.getDate(DatabaseColumn.BET_DATE).toLocalDate());
+        bet.setBetTime(resultSet.getTime(DatabaseColumn.BET_TIME).toLocalTime());
+        bet.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
+        bet.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
+        bet.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
+        betsTemp.add(bet);
+    }
+
 }

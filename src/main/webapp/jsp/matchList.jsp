@@ -17,7 +17,7 @@
     <a><c:out value="${match.homeTeamGoals} : ${match.awayTeamGoals}"/></a>
     <form method="post" action="${pageContext.request.contextPath}/controller?command=to_place_bet_command&matchId=${match.id}">
         <button type="submit" class="btn btn-primary">
-            <fmt:message key="unblock.user"/>
+            <fmt:message key="place.bet"/>
         </button>
     </form>
 <br>

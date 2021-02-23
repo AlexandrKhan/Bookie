@@ -10,7 +10,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @WebListener
-public class MatchManager implements ServletContextListener {
+public class MatchContextListener implements ServletContextListener {
     private ScheduledExecutorService scheduler;
     static ConcurrentHashMap<Integer, LocalTime> todayMatchStartTimeMap = new ConcurrentHashMap<>();
 
@@ -18,8 +18,8 @@ public class MatchManager implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newScheduledThreadPool(2);
 
-        scheduler.scheduleAtFixedRate(new GetTodayMatchRunnable(), 0, 5, TimeUnit.SECONDS);
-        scheduler.scheduleAtFixedRate(new GenerateScoreRunnable(), 0, 5, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new GetTodayMatchTask(), 0, 5, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new GenerateScoreTask(), 0, 15, TimeUnit.SECONDS);
     }
 
     @Override

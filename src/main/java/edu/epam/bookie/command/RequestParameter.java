@@ -31,6 +31,7 @@ public class RequestParameter {
     public static final String MATCH_ID = "matchId";
     public static final String BET_AMOUNT = "betAmount";
     public static final String BET_ON_RESULT = "betOnResult";
+    public static final String MATCH = "match";
 
     private RequestParameter() {
     }

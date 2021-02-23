@@ -23,4 +23,10 @@ class DatabaseColumn {
     static final String DRAW_COEFF = "draw_coeff";
     static final String AWAY_COEFF = "away_coeff";
     static final String USER_ID = "user_id";
+    static final String MATCH_ID = "match_id";
+    static final String BET_DATE = "bet_date";
+    static final String BET_TIME = "bet_time";
+    static final String BET_AMOUNT = "bet_amount";
+    static final String BET_ON_RESULT = "bet_on_result";
+    static final String BET_STATUS = "bet_status";
 }
