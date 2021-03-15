@@ -7,6 +7,8 @@ import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.model.sport.Team;
 import edu.epam.bookie.service.MatchService;
+import edu.epam.bookie.validator.ValidationError;
+import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -69,10 +71,27 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws MatchServiceException {
-        Match match = new Match(first, second, date, time, homeCoeff, drawCoeff, awayCoeff);
+    public boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws MatchServiceException {
+        boolean result = false;
+        if (!date.isBefore(LocalDate.now()) && !time.isBefore(LocalTime.now())) {
+            try {
+                result = matchDao.updateDateTimeAtNotStartedMatch(id, date, time);
+            } catch (DaoException e) {
+                logger.error("Can't update date at match", e);
+            }
+        } else {
+            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
+        }
+        return result;
+    }
+
+    @Override
+    public Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws MatchServiceException {
+        Match matchTemp = new Match(first, second, date, time, homeCoeff, drawCoeff, awayCoeff);
+        Optional<Match> match = Optional.empty();
         try {
-            match = matchDao.create(match);
+            match = matchDao.create(matchTemp);
         } catch (DaoException e) {
             logger.error("Cant create match",e);
         }

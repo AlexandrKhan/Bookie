@@ -11,7 +11,7 @@ CREATE TABLE `user` (
   `password` VARCHAR(255) NOT NULL,
   `date_of_birth` DATE NOT NULL,
   `role` ENUM('ADMIN','USER','GUEST') NOT NULL DEFAULT 'GUEST',
-  `money` DECIMAL(7,2) NOT NULL DEFAULT 0,
+  `money` DECIMAL(10,2) NOT NULL DEFAULT 0,
   `passport_scan` VARCHAR(255) NOT NULL,
   `status` ENUM('ACTIVE','BLOCKED','NOT_ACTIVATED') NOT NULL DEFAULT 'NOT_ACTIVATED',
   PRIMARY KEY (`id`)
@@ -36,7 +36,7 @@ CREATE TABLE `match_result` (
   `result` ENUM('HOME', 'DRAW', 'AWAY') NOT NULL DEFAULT 'DRAW',
   `match_progress` ENUM('NOT_STARTED', 'OVER') NOT NULL DEFAULT 'NOT_STARTED',
   PRIMARY KEY (`id`),
-  FOREIGN KEY (`id`) REFERENCES bookie.match(id) ON DELETE CASCADE
+  FOREIGN KEY (`id`) REFERENCES bookie.match(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE `bet` (
@@ -51,8 +51,8 @@ CREATE TABLE `bet` (
   `bet_coeff` DECIMAL(4,2) NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE,
-  FOREIGN KEY (match_id) REFERENCES bookie.match(id) ON DELETE CASCADE
+  FOREIGN KEY (match_id) REFERENCES bookie.match(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 INSERT INTO user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES
-  ('admin', 'Alexandr', 'Khan', 'alexandrhan22@gmail.com', 'sasha6685321', '1995-06-28', 'ADMIN', 'pass.jpg');
+  ('admin', 'Alexandr', 'Khan', 'alexandrhan22@gmail.com', 'AYXS9InR{knQyJKe', '1995-06-28', 'ADMIN', 'pass.jpg');

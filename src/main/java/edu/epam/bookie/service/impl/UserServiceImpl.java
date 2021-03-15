@@ -12,6 +12,8 @@ import edu.epam.bookie.service.UserService;
 import edu.epam.bookie.util.PasswordEncryption;
 import edu.epam.bookie.util.mail.MailUtility;
 import edu.epam.bookie.validator.UserValidator;
+import edu.epam.bookie.validator.ValidationError;
+import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -57,28 +59,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(String username, String firstName, String lastName, String email,
-                             String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException {
-        User user = null;
+    public Optional<User> registerUser(String username, String firstName, String lastName, String email,
+                                       String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException {
+        Optional<User> user = Optional.empty();
         try {
-            if (!userDao.loginExists(username) && !userDao.emailExists(email)) {
-                if (UserValidator.isUsername(username) && UserValidator.isPassword(password) && password.equals(repeatPassword)) {
-                    if (password.equals(repeatPassword)) {
-                        String encryptedPassword = PasswordEncryption.encryptMessage(password);
-                        User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
-                        userTemp.setRole(Role.USER.toString());
-                        userTemp.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
-                        userTemp.setMoneyBalance(BigDecimal.valueOf(0));
+            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            if (userDao.loginExists(username)) {
+                errorSet.add(ValidationError.LOGIN_EXISTS);
+            }
+            if (userDao.emailExists(email)) {
+                errorSet.add(ValidationError.EMAIL_EXISTS);
+            }
+            if (!password.equals(repeatPassword)) {
+                errorSet.add(ValidationError.PASSWORDS_DONT_MATCH);
+            }
+            if (UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password) && password.equals(repeatPassword)) {
+                String encryptedPassword = PasswordEncryption.encryptMessage(password);
+                User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
+                userTemp.setRole(Role.USER.toString());
+                userTemp.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
+                userTemp.setMoneyBalance(BigDecimal.valueOf(0));
 
-                        user = userDao.create(userTemp);
-                        MailUtility.sendConfirmMessage(email, user.getUsername());
-                    }
-                }
-            } else {
-                throw new UserServiceException("Passwords dont match");
+                user = userDao.create(userTemp);
+                MailUtility.sendConfirmMessage(email, username);
             }
         } catch (DaoException e) {
-            logger.error(e);
+            throw new UserServiceException(e);
         }
         return user;
     }
@@ -86,15 +92,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException {
         Optional<User> user = Optional.empty();
-        if (UserValidator.isUsername(username) && UserValidator.isPassword(password)) {
-            try {
-                String encryptedPassword = PasswordEncryption.encryptMessage(password);
-                user = userDao.findUserByUsernameAndPassword(username, encryptedPassword);
-            } catch (DaoException e) {
-                logger.error("DB error");
+        try {
+            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            String encryptedPassword = PasswordEncryption.encryptMessage(password);
+            user = userDao.findUserByUsernameAndPassword(username, encryptedPassword);
+            if (!user.isPresent()) {
+                errorSet.add(ValidationError.WRONG_LOGIN_OR_PASSWORD);
             }
-        } else {
-            logger.error("Service can't find user by username and pass");
+            logger.info("Login result: {}", user.isPresent());
+        } catch (DaoException e) {
+            logger.error("DB error");
         }
         return user;
     }

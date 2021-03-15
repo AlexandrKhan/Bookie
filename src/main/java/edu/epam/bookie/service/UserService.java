@@ -18,7 +18,7 @@ public interface UserService {
 
     boolean checkUser(String username, String password) throws UserServiceException;
 
-    User registerUser(String username, String firstName, String lastName, String email, String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException;
+    Optional<User> registerUser(String username, String firstName, String lastName, String email, String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException;
 
     Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException;
 

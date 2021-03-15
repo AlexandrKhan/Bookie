@@ -19,12 +19,12 @@ public class UserDaoImpl implements UserDao {
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES (?,?,?,?,?,?,?,?)";
-    private static final String SELECT_ALL_USERS = "SELECT id, username, first_name, last_name, email, money_balance,date_of_birth, role, passport_scan FROM bookie.user";
-    private static final String SELECT_USER_BY_USERNAME = "SELECT id, username, first_name, last_name, email, date_of_birth, role FROM bookie.user WHERE username=?";
-    private static final String SELECT_USER_BY_ID = "SELECT id, username, first_name, last_name, email, date_of_birth, role FROM bookie.user WHERE id=?";
+    private static final String SELECT_ALL_USERS = "SELECT * FROM bookie.user";
+    private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM bookie.user WHERE username=?";
+    private static final String SELECT_USER_BY_ID = "SELECT * FROM bookie.user WHERE id=?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM bookie.user WHERE id=?";
     private static final String UPDATE_USER_BY_ID = "UPDATE bookie.user SET username=?, password=? WHERE id=?";
-    private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "SELECT id, username, first_name, last_name, email, password, date_of_birth, passport_scan, role FROM bookie.user WHERE username=? AND password=?";
+    private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "SELECT * FROM bookie.user WHERE username=? AND password=?";
     private static final String SELECT_EMAIL_BY_ID = "SELECT email FROM bookie.user WHERE id=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE bookie.user SET status='ACTIVE' WHERE username=?";
     private static final String EMAIL_EXISTS = "SELECT * FROM bookie.user WHERE email=?";
@@ -38,7 +38,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User create(User user) throws DaoException {
+    public Optional<User> create(User user) throws DaoException {
         try (Connection connection = pool.getConnection();
             PreparedStatement statement = connection.prepareStatement(ADD_USER)) {
             statement.setString(1, user.getUsername());
@@ -54,7 +54,7 @@ public class UserDaoImpl implements UserDao {
             logger.error("Can't add user");
             throw new DaoException(e);
         }
-        return user;
+        return Optional.of(user);
     }
 
     @Override
@@ -133,6 +133,8 @@ public class UserDaoImpl implements UserDao {
                 userTemp.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
                 userTemp.setRole(resultSet.getString(DatabaseColumn.ROLE));
                 userTemp.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
+                userTemp.setStatusType(resultSet.getString(DatabaseColumn.USER_STATUS));
+                userTemp.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
 
                 user = Optional.of(userTemp);
             }
@@ -288,7 +290,7 @@ public class UserDaoImpl implements UserDao {
             }
             user = Optional.of(userTemp);
         } catch (SQLException e) {
-            logger.error("Can't find user with username");
+            logger.error("Can't find user with id", e);
             throw new DaoException(e);
         }
         return user;
@@ -303,22 +305,6 @@ public class UserDaoImpl implements UserDao {
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Can't delete user by id");
-            throw new DaoException(e);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean update(long id, String... params) throws DaoException {
-        boolean result;
-        try (Connection connection = pool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_USER_BY_ID)) {
-            statement.setString(1, params[0]);
-            statement.setString(2, params[1]);
-            statement.setLong(3, id);
-            result = statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            logger.error("Can't update user at id: " + id);
             throw new DaoException(e);
         }
         return result;

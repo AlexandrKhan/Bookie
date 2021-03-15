@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
+import java.util.Optional;
 
 public class RegistrationCommand implements Command {
     private static final Logger logger = LogManager.getLogger(RegistrationCommand.class);
@@ -19,7 +20,6 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        HttpSession session = request.getSession();
         String username = request.getParameter(RequestParameter.USERNAME);
         String firstName = request.getParameter(RequestParameter.FIRST_NAME);
         String lastName = request.getParameter(RequestParameter.LAST_NAME);
@@ -29,13 +29,13 @@ public class RegistrationCommand implements Command {
         LocalDate dateOfBirth = LocalDate.parse(request.getParameter(RequestParameter.DATE_OF_BIRTH));
         String passportScan = request.getParameter(RequestParameter.PASSPORT_SCAN_NAME);
 
-        User user = null;
+        Optional<User> user = Optional.empty();
         try {
             user = userService.registerUser(username, firstName, lastName, email, password, repeatPassword, dateOfBirth, passportScan);
         } catch (UserServiceException e) {
-            logger.error("Register error");
+            logger.error("Register error", e);
         }
-        if (user != null) {
+        if (user.isPresent()) {
             logger.info("New user registered: " + username);
         }
         return PagePath.LOGIN;

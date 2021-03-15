@@ -3,6 +3,7 @@ package edu.epam.bookie.command.impl;
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
+import edu.epam.bookie.util.FileNameGenerator;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.FileUploadException;
@@ -33,7 +34,7 @@ public class FileUploadCommand implements Command {
                         throw new FileUploadException("Wrong type");
                     }
                     if (!item.isFormField()) {
-                        String fileName = item.getName();
+                        String fileName = FileNameGenerator.generateName(item.getName());
                         String root = request.getServletContext().getRealPath("/");
                         File path = new File(root + "/uploads/" + fileName);
                         request.getSession().setAttribute(RequestParameter.PASSPORT_SCAN, fileName);

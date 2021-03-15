@@ -31,7 +31,7 @@
             <label for="username">
                 <fmt:message key="register.username.label"/>
             </label>
-            <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="${usernamePlaceHolder}"  required pattern="[a-zA-Z0-9]+([_-]?[a-zA-Z0-9]+){8,40}">
+            <input type="text" name="username" class="form-control" id="username" aria-describedby="usernameHelp" placeholder="${usernamePlaceHolder}"  required pattern="[a-zA-Z0-9]+([_-]?[a-zA-Z0-9]+){5,20}">
             <small id="usernameHelp" class="form-text text-muted">
                 <fmt:message key="register.username.help"/>
             </small>
@@ -40,7 +40,7 @@
             <label for="firstName">
                 <fmt:message key="register.firstname"/>
             </label>
-            <input type="text" name="firstName" class="form-control" id="firstName" aria-describedby="firstnameHelp" placeholder="${firstnamePlaceHolder}" >
+            <input type="text" name="firstName" class="form-control" id="firstName" aria-describedby="firstnameHelp" placeholder="${firstnamePlaceHolder}" required>
             <small id="firstnameHelp" class="form-text text-muted">
                 <fmt:message key="register.firstname.help"/>
             </small>
@@ -49,7 +49,7 @@
             <label for="lastName">
                 <fmt:message key="register.lastname"/>
             </label>
-            <input type="text" name="lastName" class="form-control" id="lastName" aria-describedby="lastnameHelp" placeholder="${lastnamePlaceholder}"  >
+            <input type="text" name="lastName" class="form-control" id="lastName" aria-describedby="lastnameHelp" placeholder="${lastnamePlaceholder}" required >
             <small id="lastnameHelp" class="form-text text-muted">
                 <fmt:message key="register.lastname.help"/>
             </small>
@@ -58,7 +58,7 @@
             <label for="username">
                 <fmt:message key="register.email"/>
             </label>
-            <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="${emailPlaceHolder}"  >
+            <input type="text" name="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="${emailPlaceHolder}" required pattern="^([A-Za-z0-9_-]+\.)*[A-Za-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$">
             <small id="emailHelp" class="form-text text-muted">
                 <fmt:message key="register.email.help"/>
             </small>
@@ -67,7 +67,7 @@
             <label for="password">
                 <fmt:message key="register.password.label"/>
             </label>
-            <input type="text" name="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="${passwordPlaceHolder}" required  pattern="[a-zA-Z0-9@#$%!]{8,40}">
+            <input type="text" name="password" class="form-control" id="password" aria-describedby="passwordHelp" placeholder="${passwordPlaceHolder}" required  pattern="[a-zA-Z0-9@#$%!]{8,20}">
             <small id="passwordHelp" class="form-text text-muted">
                 <fmt:message key="register.password.help"/>
             </small>

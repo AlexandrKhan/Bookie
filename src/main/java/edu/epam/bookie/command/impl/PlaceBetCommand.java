@@ -6,12 +6,16 @@ import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.model.sport.Bet;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import edu.epam.bookie.service.impl.UserServiceImpl;
+import edu.epam.bookie.validator.SessionAttributeName;
+import edu.epam.bookie.validator.ValidationError;
+import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -38,29 +42,43 @@ public class PlaceBetCommand implements Command {
         Bet bet = new Bet();
         Match match;
 
-        try {
-            match = matchService.findById(Long.valueOf(request.getParameter(RequestParameter.MATCH_ID)));
-            bet = new Bet(userId, matchId, betAmount,betOnResult);
-            switch (betOnResult.getName()) {
-                case "Home":
-                    bet.setBetCoeff(match.getHomeCoeff());
-                    break;
-                case "Away":
-                    bet.setBetCoeff(match.getAwayCoeff());
-                    break;
-                default:
-                    bet.setBetCoeff(match.getDrawCoeff());
-                    break;
+        if (user.getStatusType().equals(StatusType.ACTIVE)) {
+            try {
+                match = matchService.findById(Long.valueOf(request.getParameter(RequestParameter.MATCH_ID)));
+                bet = new Bet(userId, matchId, betAmount, betOnResult);
+                switch (betOnResult.getName()) {
+                    case "Home":
+                        bet.setBetCoeff(match.getHomeCoeff());
+                        break;
+                    case "Away":
+                        bet.setBetCoeff(match.getAwayCoeff());
+                        break;
+                    default:
+                        bet.setBetCoeff(match.getDrawCoeff());
+                        break;
+                }
+            } catch (MatchServiceException e) {
+                logger.error("Error getting match by id", e);
             }
-        } catch (MatchServiceException e) {
-            logger.error("Error getting match by id", e);
+
+            try {
+                if (betAmount.compareTo(user.getMoneyBalance()) > 0) {
+                    logger.info("Not enough money for bet");
+                    ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+                    errorSet.add(ValidationError.NOT_ENOUGH_MONEY);
+                    request.setAttribute(RequestParameter.RESULT, Result.values());
+                    request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
+                    session.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
+                    return PagePath.PLACE_BET;
+                }
+                userService.placeBet(bet);
+            } catch (UserServiceException e) {
+                logger.error(e);
+            }
+        } else {
+            logger.error("You are blocked");
         }
 
-        try {
-            userService.placeBet(bet);
-        } catch (UserServiceException e) {
-            logger.error("Error placing bet", e);
-        }
         return PagePath.MATCHES;
     }
 }

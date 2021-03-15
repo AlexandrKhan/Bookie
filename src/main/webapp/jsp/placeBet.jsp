@@ -12,9 +12,12 @@
 </head>
 <body>
 <jsp:include page="/jsp/header.jsp"/>
-<form id="place_bet" action="${pageContext.request.contextPath}/controller?command=place_bet&matchId=${requestScope.matchId}" method="post">
+<form id="place_bet"
+      action="${pageContext.request.contextPath}/controller?command=place_bet&matchId=${requestScope.matchId}"
+      method="post">
     <div class="form-group">
-        <label for="betAmount"></label><input type="number" name="betAmount" id="betAmount" step="0.01" min="0.01" required>
+        <label for="betAmount"></label><input type="number" name="betAmount" id="betAmount" step="0.01" min="0.01"
+                                              required>
     </div>
     <div class="form-group">
         <label>
@@ -24,6 +27,13 @@
                 </c:forEach>
             </select>
         </label>
+    </div>
+    <div>
+        <c:if test="${not empty sessionScope.errorSet}">
+            <label style="color: red; font-size: medium">
+                <fmt:message key="no.money"/>
+            </label>
+        </c:if>
     </div>
     <button type="submit" class="btn btn-primary">
         <fmt:message key="place.bet"/>

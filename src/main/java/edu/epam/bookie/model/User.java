@@ -27,6 +27,8 @@ public class User implements Entity {
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.passportScan = passportScan;
+        this.role = Role.USER;
+        this.statusType = StatusType.NOT_ACTIVATED;
     }
 
 

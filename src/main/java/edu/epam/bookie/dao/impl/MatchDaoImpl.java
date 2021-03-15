@@ -9,6 +9,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,13 +25,14 @@ public class MatchDaoImpl implements MatchDao {
     private static final String SELECT_ALL_NOT_STARTED_MATCHES = "SELECT * FROM bookie.match WHERE bookie.match_result.match_progress='NOT_STARTED'";
     private static final String DELETE_MATCH_BY_ID = "DELETE FROM bookie.match WHERE id=?";
     private static final String SET_GOALS_RESULT_AND_OVER_MATCH_BY_ID = "UPDATE bookie.match_result SET home_team_goals=?, away_team_goals=?, result=?, match_progress='OVER' WHERE id=?";
+    private static final String UPDATE_DATE_TIME_AT_MATCH = "UPDATE bookie.match SET start_date=?, start_time=? WHERE id=?";
     private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.id=?";
 
     private MatchDaoImpl() {
     }
 
     @Override
-    public Match create(Match match) throws DaoException {
+    public Optional<Match> create(Match match) throws DaoException {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(ADD_MATCH);
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_DEFAULT_MATCH_PROGRESS)) {
@@ -46,7 +49,7 @@ public class MatchDaoImpl implements MatchDao {
             logger.error("Cant create match", e);
             throw new DaoException(e);
         }
-        return match;
+        return Optional.of(match);
     }
 
     @Override
@@ -170,9 +173,18 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public boolean update(long id, String... params) throws DaoException {
-        return false;
+    public boolean updateDateTimeAtNotStartedMatch(Long matchId, LocalDate date, LocalTime time) throws DaoException {
+        boolean result;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        PreparedStatement statement = connection.prepareStatement(UPDATE_DATE_TIME_AT_MATCH)) {
+            statement.setDate(1, Date.valueOf(date));
+            statement.setTime(2, Time.valueOf(time));
+            statement.setLong(3, matchId);
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Can't update date time at match with id: {}", matchId, e);
+            throw new DaoException(e);
+        }
+        return result;
     }
-
-
 }

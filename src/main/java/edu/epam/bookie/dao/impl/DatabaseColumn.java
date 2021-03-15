@@ -9,6 +9,7 @@ class DatabaseColumn {
     static final String PASSWORD = "password";
     static final String DATE_OF_BIRTH = "date_of_birth";
     static final String ROLE = "role";
+    static final String USER_STATUS = "status";
     static final String PASSPORT_SCAN = "passport_scan";
     static final String MONEY_BALANCE = "money_balance";
     static final String HOME_TEAM = "home_team";

@@ -88,7 +88,7 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
-    public Bet create(Bet bet) throws DaoException {
+    public Optional<Bet> create(Bet bet) throws DaoException {
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(PLACE_BET)) {
             statement.setInt(1, bet.getUserId());
@@ -103,7 +103,7 @@ public class BetDaoImpl implements BetDao {
             logger.error("Error placing bet", e);
             throw new DaoException(e);
         }
-        return bet;
+        return Optional.of(bet);
     }
 
     @Override
@@ -156,10 +156,6 @@ public class BetDaoImpl implements BetDao {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public boolean update(long id, String... params) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
 
     private void setBetFields(ResultSet resultSet, List<Bet> betsTemp) throws SQLException {
         Bet bet = new Bet();

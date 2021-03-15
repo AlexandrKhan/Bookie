@@ -13,7 +13,5 @@ public interface BaseDao<T extends Entity> {
 
     boolean deleteById(long id) throws DaoException;
 
-    T create(T entity) throws DaoException;
-
-    boolean update(long id, String...params) throws DaoException;
+    Optional<T> create(T entity) throws DaoException;
 }

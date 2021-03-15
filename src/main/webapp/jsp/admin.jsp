@@ -6,6 +6,7 @@
 <html>
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <title>Title</title>
 </head>
 <body>
@@ -13,6 +14,11 @@
 <h1>List of users</h1>
 <c:forEach items="${sessionScope.users}" var="user">
    <h1><c:out value="${user.username}"/></h1>
+
+    <a target="_blank" href="${pageContext.request.contextPath}/uploads/${user.passportScan}">
+        <img src="${pageContext.request.contextPath}/uploads/${user.passportScan}" width="100" height="100" alt="Scan">
+    </a>
+
     <form method="post" action="${pageContext.request.contextPath}/controller?command=block_user&id=${user.id}">
         <button type="submit" class="btn btn-primary">
             <fmt:message key="block.user"/>

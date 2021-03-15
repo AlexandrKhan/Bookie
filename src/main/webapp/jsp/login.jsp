@@ -24,7 +24,7 @@
             <label for="username">
                 <fmt:message key="login.username.label"/>
             </label>
-            <input type="text" name="username" class="form-control" id="username" placeholder="${usernamePlaceHolder}" required>
+            <input type="text" name="username" class="form-control" id="username" placeholder="${usernamePlaceHolder}" required pattern="[a-zA-Z0-9]{5,20}">
         </div>
 
         <%--Password--%>
@@ -32,25 +32,25 @@
             <label for="password">
                 <fmt:message key="login.password.label"/>
             </label>
-            <input type="password" name="password" class="form-control" id="password" placeholder="${passwordPlaceHolder}" required>
+            <input type="password" name="password" class="form-control" id="password" placeholder="${passwordPlaceHolder}" required pattern="[a-zA-Z0-9@#$%!]{8,20}">
         </div>
         <button type="submit" class="btn btn-primary">
             <fmt:message key="login.login"/>
         </button>
 
+            <c:if test="${not empty sessionScope.errorSet}">
+                <label style="color: red; font-size: medium"><fmt:message
+                        key="login.errorMessage"/></label>
+            </c:if>
+            <%--<label style="color: red; font-size: medium; display: none" id="needLogin">--%>
+                <%--<fmt:message key="message.must.login"/>--%>
+            <%--</label>--%>
     </form>
     <div id="formFooter">
         <a class="underlineHover" href="${pageContext.request.contextPath}/controller?command=to_register_page_command">
             <fmt:message key="login.register"/>
         </a>
     </div>
-
-    <%--Error--%>
-    <c:if test="${requestScope.errorMessage}">
-        <div id="error" class="p-3 mb-2 bg-danger text-white">
-            <fmt:message key="login.errorMessage"/>
-        </div>
-    </c:if>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
 </body>
