@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface BetService {
     List<Bet> selectBetsByMatchId(long id) throws BetServiceException;
+    List<Bet> selectBetsByUserId(long id) throws BetServiceException;
     boolean payBets(Bet bet) throws BetServiceException;
     boolean betLost(Bet bet) throws BetServiceException;
 }

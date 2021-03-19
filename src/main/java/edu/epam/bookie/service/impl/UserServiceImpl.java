@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
             if (!password.equals(repeatPassword)) {
                 errorSet.add(ValidationError.PASSWORDS_DONT_MATCH);
             }
-            if (UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password) && password.equals(repeatPassword)) {
+            if (validRegistrationData(username, email, password, repeatPassword)) {
                 String encryptedPassword = PasswordEncryption.encryptMessage(password);
                 User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
                 userTemp.setRole(Role.USER.toString());
@@ -87,6 +87,10 @@ public class UserServiceImpl implements UserService {
             throw new UserServiceException(e);
         }
         return user;
+    }
+
+    private boolean validRegistrationData(String username, String email, String password, String repeatPassword) {
+        return UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password) && password.equals(repeatPassword);
     }
 
     @Override

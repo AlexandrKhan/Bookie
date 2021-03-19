@@ -10,4 +10,5 @@ public interface BetDao extends BaseDao<Bet>{
     boolean payBets(Bet bet) throws DaoException;
     boolean betLost(Bet bet) throws DaoException;
     Optional<List<Bet>> selectBetsByMatchId(Long matchId) throws DaoException;
+    Optional<List<Bet>> selectBetsByUserId(Long userId) throws DaoException;
 }

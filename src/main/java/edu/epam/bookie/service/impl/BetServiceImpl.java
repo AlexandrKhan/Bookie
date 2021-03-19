@@ -38,6 +38,23 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
+    public List<Bet> selectBetsByUserId(long id) throws BetServiceException {
+        Optional<List<Bet>> optional = Optional.empty();
+        List<Bet> bets = new ArrayList<>();
+        try {
+            optional = betDao.selectBetsByUserId(id);
+        } catch (DaoException e) {
+            logger.error("Error selecting bets by user id: {}", id, e);
+        }
+        if (optional.isPresent()) {
+            bets = optional.get();
+        } else {
+            logger.info("No bets found for user");
+        }
+        return bets;
+    }
+
+    @Override
     public boolean payBets(Bet bet) throws BetServiceException {
         boolean result = false;
         try {
