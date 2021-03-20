@@ -5,7 +5,7 @@ import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.UserServiceException;
-import edu.epam.bookie.model.StatusType;
+import edu.epam.bookie.model.Message;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -13,27 +13,24 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
+import java.util.List;
 
-public class CashInCommand implements Command {
-    private static final Logger logger = LogManager.getLogger(CashInCommand.class);
-    private UserServiceImpl service = UserServiceImpl.userService;
+public class ToMessagesCommand implements Command {
+    private static final Logger logger = LogManager.getLogger(ToMessagesCommand.class);
+    private final UserServiceImpl service = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {
+        List<Message> messageList;
         HttpSession session = request.getSession();
-        BigDecimal money = new BigDecimal(request.getParameter(RequestParameter.CASH_IN_SUM));
         User user = (User) session.getAttribute(SessionAttribute.CURRENT_USER);
-        if (user.getStatusType() == StatusType.ACTIVE) {
-            try {
-                int userId = user.getId();
-                service.cashIn(userId, money);
-            } catch (UserServiceException e) {
-                logger.error("Error cashing in", e);
-            }
-        } else {
-            return PagePath.ERROR_404;
+        int userId = user.getId();
+        try {
+            messageList = service.findAllMessagesOfUser(userId);
+            request.setAttribute(RequestParameter.MESSAGES, messageList);
+        } catch (UserServiceException e) {
+            logger.error(e);
         }
-        return PagePath.HOME;
+        return PagePath.MESSAGES;
     }
 }

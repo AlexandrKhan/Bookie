@@ -33,6 +33,11 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a href="${pageContext.request.contextPath}/controller?command=to_messages_command" class="nav-link">
+                    <fmt:message key="personal.messages"/>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=to_cash_in_command">
                     <fmt:message key="cash.in"/>
                 </a>

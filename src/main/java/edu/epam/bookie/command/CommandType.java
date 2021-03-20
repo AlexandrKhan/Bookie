@@ -13,6 +13,7 @@ public enum CommandType {
     TO_REGISTER_PAGE_COMMAND(new ToRegistrationPageCommand()),
     TO_CREATE_MATCH_COMMAND(new ToAddMatchCommand()),
     TO_CASH_IN_COMMAND(new ToCashInCommand()),
+    TO_MESSAGES_COMMAND(new ToMessagesCommand()),
     REGISTRATION(new RegistrationCommand()),
     FILE_UPLOAD(new FileUploadCommand()),
     ADMIN_PANEL(new AdminPanelCommand()),

@@ -50,7 +50,6 @@ public class LoginCommand implements Command {
                 ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
                 session.setAttribute(SessionAttributeName.LOGIN_MAP, parameters);
                 request.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
-                //session.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
                 page = PagePath.LOGIN;
             }
         } catch (UserServiceException e) {

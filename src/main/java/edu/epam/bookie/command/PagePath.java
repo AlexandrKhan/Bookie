@@ -13,6 +13,7 @@ public class PagePath {
     public static final String UPDATE_MATCH = "/jsp/modal/updateMatch.jsp";
     public static final String ERROR_500 = "/jsp/error/500.jsp";
     public static final String ERROR_404 = "/jsp/error/404.jsp";
+    public static final String MESSAGES = "/jsp/messages.jsp";
 
     private PagePath() {
     }

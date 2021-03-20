@@ -1,9 +1,6 @@
 package edu.epam.bookie.controller.filter;
 
-import edu.epam.bookie.command.CommandFactory;
-import edu.epam.bookie.command.CommandRoleMap;
-import edu.epam.bookie.command.CommandType;
-import edu.epam.bookie.command.RequestParameter;
+import edu.epam.bookie.command.*;
 import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -31,7 +28,8 @@ public class RoleAccessFilter implements Filter {
             Role userRole = getUserRole(request);
             if (!MAP.hasRole(commandType, userRole)) {
                 logger.warn("Role filter. User with role {} can't execute {} command", userRole, commandType);
-                response.sendError(HttpServletResponse.SC_FORBIDDEN);
+                response.sendRedirect(request.getContextPath()+ PagePath.ERROR_404);
+                return;
             }
         } else {
             logger.warn("Role filter, empty command");

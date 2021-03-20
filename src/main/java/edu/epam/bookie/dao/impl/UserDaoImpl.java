@@ -23,7 +23,6 @@ public class UserDaoImpl implements UserDao {
     private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM bookie.user WHERE username=?";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM bookie.user WHERE id=?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM bookie.user WHERE id=?";
-    private static final String UPDATE_USER_BY_ID = "UPDATE bookie.user SET username=?, password=? WHERE id=?";
     private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "SELECT * FROM bookie.user WHERE username=? AND password=?";
     private static final String SELECT_EMAIL_BY_ID = "SELECT email FROM bookie.user WHERE id=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE bookie.user SET status='ACTIVE' WHERE username=?";
@@ -92,8 +91,8 @@ public class UserDaoImpl implements UserDao {
 
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_USERNAME)) {
-            ResultSet resultSet = statement.executeQuery(SELECT_USER_BY_USERNAME);
             statement.setString(1, username);
+            ResultSet resultSet = statement.executeQuery(SELECT_USER_BY_USERNAME);
 
             if (resultSet.next()) {
                 User userTemp = new User();
@@ -251,11 +250,6 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException(e);
         }
         return result;
-    }
-
-    @Override
-    public boolean placeBet(int id, BigDecimal money) throws DaoException {
-        return false;
     }
 
     @Override

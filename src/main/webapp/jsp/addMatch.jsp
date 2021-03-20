@@ -53,11 +53,9 @@
         </button>
     </form>
 
-    <%--Error--%>
-    <c:if test="${requestScope.errorMessage}">
-        <div id="error" class="p-3 mb-2 bg-danger text-white">
-            <fmt:message key="login.errorMessage"/>
-        </div>
+    <c:if test="${not empty requestScope.errorSet}">
+        <label style="color: red; font-size: medium"><fmt:message
+                key="same.team"/></label>
     </c:if>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"

@@ -6,6 +6,8 @@ import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
+import edu.epam.bookie.validator.SessionAttributeName;
+import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,6 +22,8 @@ public class RegistrationCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
+        String page;
+
         String username = request.getParameter(RequestParameter.USERNAME);
         String firstName = request.getParameter(RequestParameter.FIRST_NAME);
         String lastName = request.getParameter(RequestParameter.LAST_NAME);
@@ -30,6 +34,7 @@ public class RegistrationCommand implements Command {
         String passportScan = request.getParameter(RequestParameter.PASSPORT_SCAN_NAME);
 
         Optional<User> user = Optional.empty();
+
         try {
             user = userService.registerUser(username, firstName, lastName, email, password, repeatPassword, dateOfBirth, passportScan);
         } catch (UserServiceException e) {
@@ -37,7 +42,12 @@ public class RegistrationCommand implements Command {
         }
         if (user.isPresent()) {
             logger.info("New user registered: " + username);
+            page = PagePath.LOGIN;
+        } else {
+            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            request.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
+            page = PagePath.REGISTER;
         }
-        return PagePath.LOGIN;
+        return page;
     }
 }

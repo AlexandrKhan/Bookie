@@ -85,7 +85,7 @@
             <label for="username">
                 <fmt:message key="register.dateOfBirth"/>
             </label>
-            <input type="date" name="dateOfBirth" class="form-control" id="dateOfBirth" aria-describedby="dateOfBirthHelp" placeholder="${dateOfBirthPlaceholder}" >
+            <input type="date" name="dateOfBirth" class="form-control" id="dateOfBirth" aria-describedby="dateOfBirthHelp" placeholder="${dateOfBirthPlaceholder}" required>
             <small id="dateOfBirthHelp" class="form-text text-muted">
                 <fmt:message key="register.dateOfBirth.help"/>
             </small>
@@ -95,7 +95,7 @@
         <label for="passportScanName">
             <fmt:message key="register.passportScan"/>
         </label>
-        <input type="text" readonly="readonly" name="passportScanName" class="form-control" id="passportScanName" aria-describedby="passportScanNameHelp" value="${sessionScope.passportScan}">
+        <input type="text" readonly="readonly" name="passportScanName" class="form-control" id="passportScanName" aria-describedby="passportScanNameHelp" value="${sessionScope.passportScan}" required>
             <small id="passportScanNameHelp" class="form-text text-muted">
                 <fmt:message key="register.passportScan.help"/>
             </small>
@@ -105,10 +105,15 @@
             <fmt:message key="register.register"/>
         </button>
     </form>
-    <c:if test="${requestScope.errorMessage}">
-        <div id="error" class="p-3 mb-2 bg-danger text-white">
-            <fmt:message key="register.errorMessage"/>
-        </div>
+    <c:if test="${not empty requestScope.errorSet}">
+        <c:forEach items="${requestScope.errorSet}" var="message">
+            <label style="color: red; font-size: medium">
+                <a="${message}"/>
+            </label>
+            <%--<div id="error" class="p-3 mb-2 bg-danger text-red">--%>
+                <%--<fmt:message key="${message}"/>--%>
+            <%--</div>--%>
+        </c:forEach>
     </c:if>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>

@@ -28,7 +28,7 @@
         </button>
     </form>
 
-    <c:if test="${not empty sessionScope.errorSet}">
+    <c:if test="${not empty requestScope.errorSet}">
         <label style="color: red; font-size: medium"><fmt:message
                 key="match.dateError"/></label>
     </c:if>

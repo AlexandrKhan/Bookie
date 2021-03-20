@@ -6,6 +6,9 @@ import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.model.sport.Team;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
+import edu.epam.bookie.validator.SessionAttributeName;
+import edu.epam.bookie.validator.ValidationError;
+import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +32,15 @@ public class AddMatchCommand implements Command {
         String homeCoeff = request.getParameter(RequestParameter.HOME_COEFF);
         String drawCoeff = request.getParameter(RequestParameter.DRAW_COEFF);
         String awayCoeff = request.getParameter(RequestParameter.AWAY_COEFF);
+
+        if (firstTeam.equals(secondTeam)) {
+            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            errorSet.add(ValidationError.TWO_SAME_TEAMS);
+            request.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
+            request.setAttribute(RequestParameter.TEAMS, Team.values());
+            logger.error("Same team");
+            return PagePath.ADD_MATCH;
+        }
         try {
             matchService.create(firstTeam, secondTeam, LocalDate.parse(date), LocalTime.parse(time),
                     new BigDecimal(homeCoeff), new BigDecimal(drawCoeff), new BigDecimal(awayCoeff));

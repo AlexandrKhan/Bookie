@@ -1,9 +1,11 @@
 package edu.epam.bookie.service.impl;
 
 import edu.epam.bookie.dao.impl.BetDaoImpl;
+import edu.epam.bookie.dao.impl.MessageDaoImpl;
 import edu.epam.bookie.dao.impl.UserDaoImpl;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.model.Message;
 import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
@@ -28,6 +30,7 @@ public class UserServiceImpl implements UserService {
     private static final Logger logger = LogManager.getLogger(UserServiceImpl.class);
     private static final UserDaoImpl userDao = UserDaoImpl.userDao;
     private static final BetDaoImpl betDao = BetDaoImpl.betDao;
+    private static final MessageDaoImpl messageDao = MessageDaoImpl.messageDao;
 
     private UserServiceImpl() {
     }
@@ -45,6 +48,17 @@ public class UserServiceImpl implements UserService {
             users = usersTemp.get();
         }
         return users;
+    }
+
+    @Override
+    public List<Message> findAllMessagesOfUser(int id) throws UserServiceException {
+        List<Message> messages = new ArrayList<>();
+        try {
+            messages = messageDao.findAllMessagesOfUser(id).get();
+        } catch (DaoException e) {
+            logger.error("No messages found");
+        }
+        return messages;
     }
 
     @Override
@@ -66,14 +80,17 @@ public class UserServiceImpl implements UserService {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             if (userDao.loginExists(username)) {
                 errorSet.add(ValidationError.LOGIN_EXISTS);
+                return user;
             }
             if (userDao.emailExists(email)) {
                 errorSet.add(ValidationError.EMAIL_EXISTS);
+                return user;
             }
             if (!password.equals(repeatPassword)) {
                 errorSet.add(ValidationError.PASSWORDS_DONT_MATCH);
+                return user;
             }
-            if (validRegistrationData(username, email, password, repeatPassword)) {
+            if (UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password)) {
                 String encryptedPassword = PasswordEncryption.encryptMessage(password);
                 User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
                 userTemp.setRole(Role.USER.toString());
@@ -89,9 +106,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private boolean validRegistrationData(String username, String email, String password, String repeatPassword) {
-        return UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password) && password.equals(repeatPassword);
-    }
 
     @Override
     public Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException {

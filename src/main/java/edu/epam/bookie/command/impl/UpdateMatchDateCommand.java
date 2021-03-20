@@ -6,6 +6,7 @@ import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import edu.epam.bookie.validator.SessionAttributeName;
+import edu.epam.bookie.validator.ValidationError;
 import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,12 +26,11 @@ public class UpdateMatchDateCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         String page = null;
-        HttpSession session = request.getSession();
 
         Long id = Long.valueOf(request.getParameter(MATCH_ID));
         LocalDate date = LocalDate.parse(request.getParameter(START_DATE));
         LocalTime time = LocalTime.parse(request.getParameter(START_TIME));
-        if (!date.isBefore(LocalDate.now()) && !time.isBefore(LocalTime.now())) {
+        if (!date.isBefore(LocalDate.now()) && !time.isBefore(LocalTime.now().plusMinutes(60))) {
             try {
                 service.updateMatchDate(id, date, time);
                 page = PagePath.MATCHES;
@@ -39,8 +39,9 @@ public class UpdateMatchDateCommand implements Command {
             }
         } else {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
             request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
-            session.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
+            request.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
             page = PagePath.UPDATE_MATCH;
         }
         return page;

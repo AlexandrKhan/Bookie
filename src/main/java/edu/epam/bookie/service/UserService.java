@@ -1,6 +1,7 @@
 package edu.epam.bookie.service;
 
 import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.model.Message;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.model.sport.Bet;
 
@@ -15,6 +16,7 @@ import java.util.Optional;
 
 public interface UserService {
     List<User> findAll() throws UserServiceException;
+    List<Message> findAllMessagesOfUser(int id) throws UserServiceException;
 
     boolean checkUser(String username, String password) throws UserServiceException;
 
@@ -22,7 +24,7 @@ public interface UserService {
 
     Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException;
 
-    boolean activateAccount(String id) throws UserServiceException;
+    boolean activateAccount(String username) throws UserServiceException;
 
     Optional<String> findEmailById(String id) throws UserServiceException;
 
