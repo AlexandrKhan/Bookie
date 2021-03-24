@@ -18,4 +18,5 @@ public interface MatchService {
     boolean deleteById(Long id) throws MatchServiceException;
     boolean setGoalsResultAndOverMatchById(Long id) throws MatchServiceException;
     boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws MatchServiceException;
+    List<Match> findMatchesByTeam(String team) throws MatchServiceException;
 }

@@ -27,6 +27,7 @@ public class MatchDaoImpl implements MatchDao {
     private static final String SET_GOALS_RESULT_AND_OVER_MATCH_BY_ID = "UPDATE bookie.match_result SET home_team_goals=?, away_team_goals=?, result=?, match_progress='OVER' WHERE id=?";
     private static final String UPDATE_DATE_TIME_AT_MATCH = "UPDATE bookie.match SET start_date=?, start_time=? WHERE id=?";
     private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.id=?";
+    private static final String FIND_MATCHES_BY_TEAM = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.home_team LIKE ? OR bookie.match.away_team LIKE ?";
 
     private MatchDaoImpl() {
     }
@@ -141,6 +142,40 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
+    public Optional<List<Match>> findMatchesByTeam(String team) throws DaoException {
+        Optional<List<Match>> matches;
+
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_MATCHES_BY_TEAM)) {
+            statement.setString(1, "%" + team + "%");
+            statement.setString(2, "%" + team + "%");
+            ResultSet resultSet = statement.executeQuery();
+            List<Match> matchList = new ArrayList<>();
+            while (resultSet.next()) {
+                Match match = new Match();
+                match.setId(resultSet.getInt(DatabaseColumn.ID));
+                match.setFirstTeam(resultSet.getString(DatabaseColumn.HOME_TEAM));
+                match.setSecondTeam(resultSet.getString(DatabaseColumn.AWAY_TEAM));
+                match.setStartDate((resultSet.getDate(DatabaseColumn.MATCH_START_DATE).toLocalDate()));
+                match.setStartTime((resultSet.getTime(DatabaseColumn.MATCH_START_TIME).toLocalTime()));
+                match.setHomeCoeff(resultSet.getBigDecimal(DatabaseColumn.HOME_COEFF));
+                match.setDrawCoeff(resultSet.getBigDecimal(DatabaseColumn.DRAW_COEFF));
+                match.setAwayCoeff(resultSet.getBigDecimal(DatabaseColumn.AWAY_COEFF));
+                match.setHomeTeamGoals(resultSet.getInt(DatabaseColumn.HOME_TEAM_GOALS));
+                match.setAwayTeamGoals(resultSet.getInt(DatabaseColumn.AWAY_TEAM_GOALS));
+                match.setResult(resultSet.getString(DatabaseColumn.MATCH_RESULT));
+                match.setMatchProgress(resultSet.getString(DatabaseColumn.MATCH_PROGRESS));
+                matchList.add(match);
+            }
+            matches = Optional.of(matchList);
+        } catch (SQLException e) {
+            logger.error("Cant gind matches by team", e);
+            throw new DaoException(e);
+        }
+        return matches;
+    }
+
+    @Override
     public boolean setGoalsResultAndOverMatchById(Long id, int home, int away, Result matchResult) throws DaoException {
         boolean result;
 
@@ -176,7 +211,7 @@ public class MatchDaoImpl implements MatchDao {
     public boolean updateDateTimeAtNotStartedMatch(Long matchId, LocalDate date, LocalTime time) throws DaoException {
         boolean result;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
-        PreparedStatement statement = connection.prepareStatement(UPDATE_DATE_TIME_AT_MATCH)) {
+             PreparedStatement statement = connection.prepareStatement(UPDATE_DATE_TIME_AT_MATCH)) {
             statement.setDate(1, Date.valueOf(date));
             statement.setTime(2, Time.valueOf(time));
             statement.setLong(3, matchId);
@@ -187,4 +222,6 @@ public class MatchDaoImpl implements MatchDao {
         }
         return result;
     }
+
+
 }

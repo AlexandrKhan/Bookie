@@ -25,9 +25,9 @@ public enum CommandType {
     PLACE_BET(new PlaceBetCommand()),
     TO_PLACE_BET_COMMAND(new ToPlaceBetCommand()),
     CASH_IN(new CashInCommand()),
-    TO_UPDATE_MATCH_COMMAND(new ToUpdateMatchCommand()),
     UPDATE_MATCH(new UpdateMatchDateCommand()),
-    PERSONAL_CABINET(new PersonalCabinetCommand());
+    PERSONAL_CABINET(new PersonalCabinetCommand()),
+    SEARCH_MATCHES(new SearchMatchesByTeamCommand());
 
     CommandType(Command command) {
         this.command = command;

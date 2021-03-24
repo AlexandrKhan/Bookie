@@ -125,6 +125,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findUserById(int id) throws UserServiceException {
+        Optional<User> user = Optional.empty();
+        try {
+            user = userDao.findById(id);
+        } catch (DaoException e) {
+            logger.error("Cant find user by id");
+        }
+        return user;
+    }
+
+    @Override
     public boolean activateAccount(String username) throws UserServiceException {
         boolean result = false;
         try {
@@ -216,6 +227,18 @@ public class UserServiceImpl implements UserService {
             logger.info("Placed bet with id: {}, money: {}", bet.getMatchId(), bet.getBetAmount());
         } catch (DaoException e) {
             logger.error("Error placing bet", e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean addMessage(Message message) throws UserServiceException {
+        boolean result = false;
+        try {
+            messageDao.create(message);
+            result = true;
+        } catch (DaoException e) {
+            logger.error("Cant create message", e);
         }
         return result;
     }

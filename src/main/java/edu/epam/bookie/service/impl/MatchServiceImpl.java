@@ -87,6 +87,21 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
+    public List<Match> findMatchesByTeam(String team) throws MatchServiceException {
+        Optional<List<Match>> matchList = Optional.empty();
+        List<Match> matches = new ArrayList<>();
+        try {
+            matchList = matchDao.findMatchesByTeam(team);
+        } catch (DaoException e) {
+            logger.error("Cant find matches by team", e);
+        }
+        if (matchList.isPresent()) {
+            matches = matchList.get();
+        }
+        return matches;
+    }
+
+    @Override
     public Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws MatchServiceException {
         Match matchTemp = new Match(first, second, date, time, homeCoeff, drawCoeff, awayCoeff);
         Optional<Match> match = Optional.empty();

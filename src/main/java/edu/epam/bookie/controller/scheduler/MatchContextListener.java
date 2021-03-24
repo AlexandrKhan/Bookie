@@ -17,7 +17,6 @@ public class MatchContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent event) {
         scheduler = Executors.newScheduledThreadPool(2);
-
         scheduler.scheduleAtFixedRate(new GetTodayMatchTask(), 0, 5, TimeUnit.SECONDS);
         scheduler.scheduleAtFixedRate(new GenerateScoreTask(), 0, 15, TimeUnit.SECONDS);
     }

@@ -10,6 +10,16 @@ public class Message implements Entity{
     private LocalTime time;
     private String message;
 
+    public Message(int userId, String message) {
+        this.userId = userId;
+        this.date = LocalDate.now();
+        this.time = LocalTime.now();
+        this.message = message;
+    }
+
+    public Message() {
+    }
+
     public void setId(int id) {
         this.id = id;
     }

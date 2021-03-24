@@ -7,10 +7,7 @@ import edu.epam.bookie.model.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +17,8 @@ public class MessageDaoImpl implements MessageDao {
     public final static MessageDaoImpl messageDao = new MessageDaoImpl();
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
-
-    private static final String SELECT_ALL_MESSAGES = "SELECT * FROM bookie.message LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id";
     private static final String SELECT_ALL_MESSAGES_OF_USER = "SELECT * FROM bookie.message WHERE user_id=?";
-    private static final String ADD_MATCH = "INSERT INTO bookie.match(home_team, away_team, start_date, start_time, home_coeff, draw_coeff, away_coeff) VALUES (?,?,?,?,?,?,?)";
+    private static final String ADD_MESSAGE = "INSERT INTO bookie.message(user_id, date, time, text) VALUES (?,?,?,?)";
 
     private MessageDaoImpl() {
     }
@@ -44,8 +39,18 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public Optional<Message> create(Message entity) throws DaoException {
-        throw new UnsupportedOperationException();
+    public Optional<Message> create(Message message) throws DaoException {
+        try (Connection connection = pool.getConnection();
+        PreparedStatement statement = connection.prepareStatement(ADD_MESSAGE)) {
+            statement.setInt(1, message.getUserId());
+            statement.setDate(2, Date.valueOf(message.getDate()));
+            statement.setTime(3, Time.valueOf(message.getTime()));
+            statement.setString(4, message.getMessage());
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error("Eror creating message", e);
+        }
+        return Optional.of(message);
     }
 
     @Override

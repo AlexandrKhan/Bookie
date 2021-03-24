@@ -23,6 +23,7 @@ public interface UserService {
     Optional<User> registerUser(String username, String firstName, String lastName, String email, String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException;
 
     Optional<User> findUserByUsernameAndPassword(String username, String password) throws UserServiceException;
+    Optional<User> findUserById(int id) throws UserServiceException;
 
     boolean activateAccount(String username) throws UserServiceException;
 
@@ -36,6 +37,7 @@ public interface UserService {
     boolean withdrawMoney(int id, BigDecimal money) throws UserServiceException;
 
     boolean placeBet(Bet bet) throws UserServiceException;
+    boolean addMessage(Message message) throws UserServiceException;
 
 
 }

@@ -16,7 +16,6 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.ADMIN_PANEL, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.UPDATE_MATCH, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.TO_CREATE_MATCH_COMMAND, Collections.singletonList(Role.ADMIN));
-        ROLE_MAP.put(CommandType.TO_UPDATE_MATCH_COMMAND, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.ADD_MATCH, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.BLOCK_USER, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.UNBLOCK_USER, Collections.singletonList(Role.ADMIN));
@@ -30,6 +29,7 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.ACTIVATE_ACCOUNT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.FILE_UPLOAD, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.HOME, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
+        ROLE_MAP.put(CommandType.SEARCH_MATCHES, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.LANGUAGE, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.TO_LOGIN_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.TO_REGISTER_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));

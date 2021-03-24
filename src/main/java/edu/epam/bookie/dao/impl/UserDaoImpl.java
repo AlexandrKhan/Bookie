@@ -275,12 +275,17 @@ public class UserDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery(SELECT_USER_BY_ID);
             User userTemp = new User();
             while (resultSet.next()) {
+                userTemp.setId(resultSet.getInt(DatabaseColumn.ID));
                 userTemp.setUsername(resultSet.getString(DatabaseColumn.USERNAME));
                 userTemp.setFirstName(resultSet.getString(DatabaseColumn.FIRST_NAME));
                 userTemp.setLastName(resultSet.getString(DatabaseColumn.LAST_NAME));
                 userTemp.setEmail(resultSet.getString(DatabaseColumn.EMAIL));
                 userTemp.setPassword(resultSet.getString(DatabaseColumn.PASSWORD));
                 userTemp.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
+                userTemp.setRole(resultSet.getString(DatabaseColumn.ROLE));
+                userTemp.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
+                userTemp.setStatusType(resultSet.getString(DatabaseColumn.USER_STATUS));
+                userTemp.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
             }
             user = Optional.of(userTemp);
         } catch (SQLException e) {
