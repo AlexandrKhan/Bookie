@@ -1,0 +1,118 @@
+.row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 10px 0 10px 0;
+}
+.block {
+    margin: 10px auto 10px 20px;
+    border-radius: 30px;
+    width: 350px;
+    min-height: 430px;
+    background: #fff;
+    padding: 23px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    box-shadow: 0 2px 55px gray;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-title {
+    margin-bottom: .75rem;
+}
+.h4, h4 {
+    font-size: 1.5rem;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-bottom: .5rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+}
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    margin-bottom: .5rem;
+}
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+.middle {
+    margin: auto;
+    align-self: center;
+    flex: auto;
+}
+
+.middle img {
+    height: 130px;
+    width: auto;
+}
+
+.l-middle {
+    align-self: center;
+    flex: auto;
+    text-align:center;
+    margin: 30px auto auto;
+}
+img {
+    vertical-align: middle;
+    border-style: none;
+}
+.bottom {
+    text-align: center;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: flex-end;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+}
+
+.button2{
+    display:inline-block;
+    padding:0.5em 3em;
+    border:0.16em solid #FFFFFF;
+    margin:0 0.3em 0.3em 0;
+    box-sizing: border-box;
+    text-decoration:none;
+    text-transform:uppercase;
+    font-family:'Roboto',sans-serif;
+    font-weight:400;
+    color:black;
+    text-align:center;
+    transition: all 0.15s;
+    width: 100%;
+}
+.button2:hover{
+    color: #000000;
+    border-color:#DDDDDD;
+}
+.button2:active{
+    color:#BBBBBB;
+    border-color:#BBBBBB;
+}
+@media all and (max-width:30em) {
+     .button2 {
+        display: block;
+        margin: 0.4em auto;: 
+    }
+}
+
+.search {
+    margin: 5px 0 5px 5px;
+}
