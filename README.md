@@ -1,3 +1,3 @@
 # Bookie
-<h1>DESCRIPTION<h1>
+<h1>DESCRIPTION
 Application for sports bet
