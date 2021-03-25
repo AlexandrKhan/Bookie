@@ -12,7 +12,7 @@ CREATE TABLE `user` (
   `date_of_birth` DATE NOT NULL,
   `role` ENUM('ADMIN','USER','GUEST') NOT NULL DEFAULT 'GUEST',
   `money` DECIMAL(10,2) NOT NULL DEFAULT 0,
-  `passport_scan` VARCHAR(255) NOT NULL,
+  `passport_scan` VARCHAR(255) NOT NULL DEFAULT 'passport.jpg',
   `status` ENUM('ACTIVE','BLOCKED','NOT_ACTIVATED') NOT NULL DEFAULT 'NOT_ACTIVATED',
   PRIMARY KEY (`id`)
 );

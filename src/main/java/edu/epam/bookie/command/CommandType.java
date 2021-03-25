@@ -1,18 +1,15 @@
 package edu.epam.bookie.command;
 
 import edu.epam.bookie.command.impl.*;
-import edu.epam.bookie.command.impl.ToLoginPageCommand;
-import edu.epam.bookie.command.impl.ToRegistrationPageCommand;
+import edu.epam.bookie.command.impl.AuthorisationCommand;
 
 public enum CommandType {
     HOME(new HomeCommand()),
     LOGOUT(new LogoutCommand()),
     LOGIN(new LoginCommand()),
     LANGUAGE(new LanguageCommand()),
-    TO_LOGIN_PAGE_COMMAND(new ToLoginPageCommand()),
-    TO_REGISTER_PAGE_COMMAND(new ToRegistrationPageCommand()),
+    AUTHORISATION(new AuthorisationCommand()),
     TO_CREATE_MATCH_COMMAND(new ToAddMatchCommand()),
-    TO_CASH_IN_COMMAND(new ToCashInCommand()),
     TO_MESSAGES_COMMAND(new ToMessagesCommand()),
     REGISTRATION(new RegistrationCommand()),
     FILE_UPLOAD(new FileUploadCommand()),
@@ -23,7 +20,6 @@ public enum CommandType {
     MATCH_LIST(new MatchListCommand()),
     ADD_MATCH(new AddMatchCommand()),
     PLACE_BET(new PlaceBetCommand()),
-    TO_PLACE_BET_COMMAND(new ToPlaceBetCommand()),
     CASH_IN(new CashInCommand()),
     UPDATE_MATCH(new UpdateMatchDateCommand()),
     PERSONAL_CABINET(new PersonalCabinetCommand()),

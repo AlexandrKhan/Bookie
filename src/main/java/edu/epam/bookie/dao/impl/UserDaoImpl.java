@@ -18,7 +18,7 @@ public class UserDaoImpl implements UserDao {
     public static final  UserDaoImpl userDao = new UserDaoImpl();
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
-    private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES (?,?,?,?,?,?,?,?)";
+    private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role) VALUES (?,?,?,?,?,?,?)";
     private static final String SELECT_ALL_USERS = "SELECT * FROM bookie.user";
     private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM bookie.user WHERE username=?";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM bookie.user WHERE id=?";
@@ -47,7 +47,6 @@ public class UserDaoImpl implements UserDao {
             statement.setString(5, user.getPassword());
             statement.setDate(6, Date.valueOf(user.getDateOfBirth()));
             statement.setString(7, user.getRole().name());
-            statement.setString(8, user.getPassportScan());
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Can't add user");

@@ -22,7 +22,7 @@ public class ActivateAccountCommand implements Command{
         String username = (String) session.getAttribute(SessionAttribute.USERNAME);
         try {
             if (service.activateAccount(username)) {
-                return PagePath.LOGIN;
+                return PagePath.AUTHORISATION;
                 } else {
                     return PagePath.REGISTER;
                 }

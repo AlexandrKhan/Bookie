@@ -4,6 +4,6 @@
     <title>Index</title>
 </head>
 <body>
-<jsp:forward page="controller?command=to_login_page_command"/>
+<jsp:forward page="controller?command=match_list"/>
 </body>
 </html>

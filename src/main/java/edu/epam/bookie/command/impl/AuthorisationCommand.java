@@ -5,9 +5,9 @@ import edu.epam.bookie.command.PagePath;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class ToRegistrationPageCommand implements Command {
+public class AuthorisationCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
-        return PagePath.REGISTER;
+        return PagePath.AUTHORISATION;
     }
 }

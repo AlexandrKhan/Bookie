@@ -3,6 +3,7 @@ package edu.epam.bookie.command.impl;
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
+import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.BetServiceException;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.exception.UserServiceException;
@@ -11,7 +12,6 @@ import edu.epam.bookie.model.sport.Bet;
 import edu.epam.bookie.service.impl.BetServiceImpl;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import edu.epam.bookie.service.impl.UserServiceImpl;
-import edu.epam.bookie.validator.SessionAttributeName;
 import edu.epam.bookie.validator.ValidationError;
 import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
-import java.util.stream.Stream;
 
 import static edu.epam.bookie.command.RequestParameter.*;
 
@@ -38,7 +37,7 @@ public class UpdateMatchDateCommand implements Command {
         Long id = Long.valueOf(request.getParameter(MATCH_ID));
         LocalDate date = LocalDate.parse(request.getParameter(START_DATE));
         LocalTime time = LocalTime.parse(request.getParameter(START_TIME));
-        if (!date.isBefore(LocalDate.now()) && !time.isBefore(LocalTime.now().plusMinutes(60))) {
+        if (date.isAfter(LocalDate.now()) ||  (!date.isBefore(LocalDate.now()) && time.isAfter(LocalTime.now().plusMinutes(60)))) {
             try {
                 matchService.updateMatchDate(id, date, time);
                 sendMessageAboutChangedTimeToUser(id);
@@ -52,7 +51,7 @@ public class UpdateMatchDateCommand implements Command {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
             request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
-            request.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
+            request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
             page = PagePath.UPDATE_MATCH;
         }
         return page;

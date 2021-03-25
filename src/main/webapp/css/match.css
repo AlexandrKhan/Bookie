@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
 .row {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -7,11 +9,12 @@
     margin: 10px 0 10px 0;
 }
 .block {
+    background-image: url(/images/stuff/LAWN.jpg);
+    background-size: cover;
     margin: 10px auto 10px 20px;
     border-radius: 30px;
     width: 350px;
     min-height: 430px;
-    background: #fff;
     padding: 23px;
     display: -webkit-box;
     display: -ms-flexbox;
@@ -61,7 +64,7 @@ h1, h2, h3, h4, h5, h6 {
     align-self: center;
     flex: auto;
     text-align:center;
-    margin: 30px auto auto;
+    margin: 12px auto auto;
 }
 img {
     vertical-align: middle;
@@ -97,6 +100,7 @@ img {
     text-align:center;
     transition: all 0.15s;
     width: 100%;
+    border-radius: 20px;
 }
 .button2:hover{
     color: #000000;
@@ -115,4 +119,41 @@ img {
 
 .search {
     margin: 5px 0 5px 5px;
+}
+
+
+
+input[type=radio] {
+    position: absolute;
+    visibility: hidden;
+    display: none;
+}
+
+label {
+    color: #9a929e;
+    display: inline-block;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px 20px;
+    margin-bottom: 0;
+}
+
+input[type=radio]:checked + label {
+    color: #ccc8ce;
+    background: #675f6b;
+}
+
+.radio-group {
+    background: #332f35;
+    font-family: roboto, sans-serif;
+    border: solid 3px #675f6b;
+    display: inline-block;
+    margin: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.navbar {
+    -webkit-text-stroke-width: medium;
+    white-space: nowrap;
 }

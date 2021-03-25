@@ -15,25 +15,12 @@ public class MatchSorting {
     private MatchSorting() {
     }
 
-    public static List<Match> sortByTeam(List<Match> matches, Team team) {
-        List<Match> teamMatches;
-        teamMatches = matches.stream()
-                .filter(m -> m.getHomeTeam().equals(team) || m.getAwayTeam().equals(team))
-                .collect(Collectors.toList());
-        return teamMatches;
-    }
-
-    public static List<Match> sortByHomeTeam(List<Match> matches) {
-        Comparator<Match> byHomeTeam = Comparator.comparing((m) -> (m.getHomeTeam().getName()));
+    public static List<Match> sortByProgress(List<Match> matches) {
+        Comparator<Match> byHomeTeam = Comparator.comparing((m) -> (m.getMatchProgress()));
         matches.sort(byHomeTeam);
         return matches;
     }
 
-    public static List<Match> sortByAwayTeam(List<Match> matches) {
-        Comparator<Match> byAwayTeam = Comparator.comparing((m) -> (m.getAwayTeam().getName()));
-        matches.sort(byAwayTeam);
-        return matches;
-    }
 
     public static List<Match> sortByDateThenTime(List<Match> matches) {
         Comparator<Match> byDateThenTime = Comparator.comparing((m) -> (m.getStartDate()));

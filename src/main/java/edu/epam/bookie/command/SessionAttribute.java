@@ -8,7 +8,8 @@ public class SessionAttribute {
     public static final String MY_BETS = "myBets";
     public static final String TEAMS = "teams";
     public static final String RESULT = "result";
-
+    public static final String ERROR_SET = "errorSet";
+    public static final String LOGIN_MAP = "loginMap";
 
     private SessionAttribute() {
     }

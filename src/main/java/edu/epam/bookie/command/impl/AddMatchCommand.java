@@ -3,10 +3,10 @@ package edu.epam.bookie.command.impl;
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
+import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.model.sport.Team;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
-import edu.epam.bookie.validator.SessionAttributeName;
 import edu.epam.bookie.validator.ValidationError;
 import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +36,7 @@ public class AddMatchCommand implements Command {
         if (firstTeam.equals(secondTeam)) {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             errorSet.add(ValidationError.TWO_SAME_TEAMS);
-            request.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
+            request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
             request.setAttribute(RequestParameter.TEAMS, Team.values());
             logger.error("Same team");
             return PagePath.ADD_MATCH;

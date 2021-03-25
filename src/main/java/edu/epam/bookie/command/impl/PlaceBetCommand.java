@@ -13,7 +13,6 @@ import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import edu.epam.bookie.service.impl.UserServiceImpl;
-import edu.epam.bookie.validator.SessionAttributeName;
 import edu.epam.bookie.validator.ValidationError;
 import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
@@ -22,8 +21,6 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class PlaceBetCommand implements Command {
     private static final Logger logger = LogManager.getLogger(PlaceBetCommand.class);
@@ -68,7 +65,7 @@ public class PlaceBetCommand implements Command {
                     errorSet.add(ValidationError.NOT_ENOUGH_MONEY);
                     request.setAttribute(RequestParameter.RESULT, Result.values());
                     request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
-                    session.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
+                    session.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
                     return PagePath.PLACE_BET;
                 }
                 userService.placeBet(bet);

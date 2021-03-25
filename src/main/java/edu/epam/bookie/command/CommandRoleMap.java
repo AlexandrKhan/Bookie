@@ -22,7 +22,6 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.LOGIN, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.PLACE_BET, Arrays.asList(Role.ADMIN, Role.USER));
         ROLE_MAP.put(CommandType.PERSONAL_CABINET, Arrays.asList(Role.ADMIN, Role.USER));
-        ROLE_MAP.put(CommandType.TO_PLACE_BET_COMMAND, Arrays.asList(Role.ADMIN, Role.USER));
         ROLE_MAP.put(CommandType.TO_MESSAGES_COMMAND, Arrays.asList(Role.ADMIN, Role.USER));
         ROLE_MAP.put(CommandType.CASH_IN, Arrays.asList(Role.ADMIN, Role.USER));
         ROLE_MAP.put(CommandType.REGISTRATION, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
@@ -31,9 +30,7 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.HOME, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.SEARCH_MATCHES, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.LANGUAGE, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
-        ROLE_MAP.put(CommandType.TO_LOGIN_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
-        ROLE_MAP.put(CommandType.TO_REGISTER_PAGE_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
-        ROLE_MAP.put(CommandType.TO_CASH_IN_COMMAND, Arrays.asList(Role.ADMIN, Role.USER));
+        ROLE_MAP.put(CommandType.AUTHORISATION, Collections.singletonList(Role.GUEST));
         ROLE_MAP.put(CommandType.LOGOUT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.MATCH_LIST, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
     }

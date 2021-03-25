@@ -8,8 +8,6 @@ import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
-import edu.epam.bookie.validator.SessionAttributeName;
-import edu.epam.bookie.validator.ValidationError;
 import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,7 +17,6 @@ import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 public class LoginCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
@@ -48,9 +45,9 @@ public class LoginCommand implements Command {
                 }
             } else {
                 ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
-                session.setAttribute(SessionAttributeName.LOGIN_MAP, parameters);
-                request.setAttribute(SessionAttributeName.ERROR_SET, errorSet.getAllAndClear());
-                page = PagePath.LOGIN;
+                session.setAttribute(SessionAttribute.LOGIN_MAP, parameters);
+                request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
+                page = PagePath.AUTHORISATION;
             }
         } catch (UserServiceException e) {
             logger.error(e);

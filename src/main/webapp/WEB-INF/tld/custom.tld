@@ -11,15 +11,9 @@
     <uri>edu.epam.bookie.tag</uri>
     
     <function>
-        <name>sortByHomeTeam</name>
+        <name>filterByTeam</name>
         <function-class>edu.epam.bookie.tag.MatchSorting</function-class>
-        <function-signature>java.util.List sortByHomeTeam(java.util.List)</function-signature>
-    </function>
-
-    <function>
-        <name>sortByAwayTeam</name>
-        <function-class>edu.epam.bookie.tag.MatchSorting</function-class>
-        <function-signature>java.util.List sortByAwayTeam(java.util.List)</function-signature>
+        <function-signature>java.util.List sortByProgress(java.util.List)</function-signature>
     </function>
 
     <function>

@@ -7,29 +7,11 @@
 
 <html>
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-            crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-            crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-            crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+    <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">--%>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/match.css"/>
     <title>Title</title>
 </head>
-
 <body>
 <jsp:include page="/jsp/header.jsp"/>
 
@@ -77,14 +59,12 @@
                                         </div>
                                         <div class="modal-body">
                                             <label for="betAmount"></label><input type="number" name="betAmount" class="form-control"
-                                                                                  id="betAmount" step="0.01" min="0.01">
-                                            <label>
-                                                <select name="betOnResult">
-                                                    <c:forEach items="${sessionScope.result}" var="result">
-                                                        <option>${result.name}</option>
-                                                    </c:forEach>
-                                                </select>
-                                            </label>
+                                                                                  id="betAmount" step="0.01" min="5" value="5">
+                                            <div class="radio-group">
+                                                <input type="radio" id="home" name="betOnResult" value="HOME"><label for="home">Home ${match.homeCoeff}</label>
+                                                <input type="radio" id="draw" name="betOnResult" value="DRAW"><label for="draw">Draw ${match.drawCoeff}</label>
+                                                <input type="radio" id="away" name="betOnResult" value="AWAY"><label for="away">Away ${match.awayCoeff}</label>
+                                            </div>
                                         </div>
 
                                         <button type='button' class='btn btn-alert' data-dismiss='modal'>
@@ -116,7 +96,7 @@
                                             <div class="modal-body">
                                                 <label for="startDate"></label><input type="date" name="startDate"
                                                                                       class="form-control"
-                                                                                      id="startDate" >
+                                                                                      id="startDate" style="margin: 10px auto 10px auto;">
                                                 <label for="startTime"></label><input type="time" name="startTime"
                                                                                       id="startTime" >
                                             </div>
@@ -143,5 +123,11 @@
         <br>
     </c:forEach>
 </div>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

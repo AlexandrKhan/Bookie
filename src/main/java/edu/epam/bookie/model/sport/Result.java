@@ -4,7 +4,6 @@ public enum Result {
     HOME("Home"),
     DRAW("Draw"),
     AWAY("Away");
-
     private String name;
 
     Result(String name) {
@@ -21,3 +20,5 @@ public enum Result {
                 "Result = " + name;
     }
 }
+
+

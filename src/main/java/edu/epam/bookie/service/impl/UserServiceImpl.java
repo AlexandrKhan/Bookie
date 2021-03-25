@@ -74,31 +74,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> registerUser(String username, String firstName, String lastName, String email,
-                                       String password, String repeatPassword, LocalDate dateOfBirth, String scan) throws UserServiceException {
+                                       String password, String repeatPassword, LocalDate dateOfBirth) throws UserServiceException {
         Optional<User> user = Optional.empty();
         try {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             if (userDao.loginExists(username)) {
+                logger.info("Username");
                 errorSet.add(ValidationError.LOGIN_EXISTS);
                 return user;
             }
             if (userDao.emailExists(email)) {
+                logger.info("EMAIL");
                 errorSet.add(ValidationError.EMAIL_EXISTS);
                 return user;
             }
             if (!password.equals(repeatPassword)) {
+                logger.info("REPEAT");
+
                 errorSet.add(ValidationError.PASSWORDS_DONT_MATCH);
                 return user;
             }
             if (UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password)) {
                 String encryptedPassword = PasswordEncryption.encryptMessage(password);
-                User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, scan);
+                User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth);
                 userTemp.setRole(Role.USER.toString());
                 userTemp.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
                 userTemp.setMoneyBalance(BigDecimal.valueOf(0));
 
                 user = userDao.create(userTemp);
                 MailUtility.sendConfirmMessage(email, username);
+            } else {
+                logger.info("VALIDATOR");
             }
         } catch (DaoException e) {
             throw new UserServiceException(e);

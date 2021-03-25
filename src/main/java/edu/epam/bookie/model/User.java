@@ -19,14 +19,13 @@ public class User implements Entity {
     public User() {
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth, String passportScan) {
+    public User(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
-        this.passportScan = passportScan;
         this.role = Role.USER;
         this.statusType = StatusType.NOT_ACTIVATED;
     }
