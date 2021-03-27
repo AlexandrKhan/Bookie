@@ -4,7 +4,6 @@
 <%@taglib prefix="custom" uri="/WEB-INF/tld/custom.tld" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="property/text"/>
-
 <html>
 <head>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">

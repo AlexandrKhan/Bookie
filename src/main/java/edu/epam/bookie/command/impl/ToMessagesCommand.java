@@ -7,6 +7,7 @@ import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.Message;
 import edu.epam.bookie.model.User;
+import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,12 +23,13 @@ public class ToMessagesCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         List<Message> messageList;
+
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(SessionAttribute.CURRENT_USER);
         int userId = user.getId();
         try {
             messageList = service.findAllMessagesOfUser(userId);
-            request.setAttribute(RequestParameter.MESSAGES, messageList);
+            session.setAttribute(RequestParameter.MESSAGES, messageList);
         } catch (UserServiceException e) {
             logger.error(e);
         }

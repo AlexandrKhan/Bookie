@@ -48,7 +48,7 @@ img:hover {
     cursor: pointer;
 }
 
-.navbar {
-    -webkit-text-stroke-width: medium;
-    white-space: nowrap;
-}
+/*.navbar {*/
+    /*-webkit-text-stroke-width: medium;*/
+    /*white-space: nowrap;*/
+/*}*/

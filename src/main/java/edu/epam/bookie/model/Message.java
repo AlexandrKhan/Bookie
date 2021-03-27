@@ -9,15 +9,29 @@ public class Message implements Entity{
     private LocalDate date;
     private LocalTime time;
     private String message;
+    private Theme theme;
 
-    public Message(int userId, String message) {
+    public Message(int userId, String message, Theme theme) {
         this.userId = userId;
         this.date = LocalDate.now();
         this.time = LocalTime.now();
         this.message = message;
+        this.theme = theme;
     }
 
     public Message() {
+    }
+
+    public Theme getTheme() {
+        return theme;
+    }
+
+    public void setTheme(Theme theme) {
+        this.theme = theme;
+    }
+
+    public void setTheme(String theme) {
+        this.theme = Theme.valueOf(theme);
     }
 
     public void setId(int id) {

@@ -4,6 +4,7 @@ import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.Message;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.model.sport.Bet;
+import edu.epam.bookie.model.sport.Match;
 
 import javax.jws.soap.SOAPBinding;
 import javax.servlet.http.Part;
@@ -38,6 +39,8 @@ public interface UserService {
 
     boolean placeBet(Bet bet) throws UserServiceException;
     boolean addMessage(Message message) throws UserServiceException;
+
+    List<Match> findAllMatchesOnWhichUserBetByUserId(Long id) throws UserServiceException;
 
 
 }

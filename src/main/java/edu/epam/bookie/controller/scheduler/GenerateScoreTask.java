@@ -4,6 +4,7 @@ import edu.epam.bookie.exception.BetServiceException;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.Message;
+import edu.epam.bookie.model.Theme;
 import edu.epam.bookie.model.sport.Bet;
 import edu.epam.bookie.model.sport.BetStatus;
 import edu.epam.bookie.model.sport.Match;
@@ -43,7 +44,10 @@ public class GenerateScoreTask implements Runnable {
                                 try {
                                     if (b.getBetOnResult() == match.getResult()) {
                                         betService.payBets(b);
-                                        userService.addMessage(new Message(b.getUserId(), "Your bet on match: " + b.getMatchId() + " won"));
+                                        userService.addMessage(new Message(b.getUserId(), "Your bet on match: "
+                                                + match.getHomeTeam().getName() +" - "
+                                                + match.getAwayTeam().getName()
+                                                + " has won!", Theme.WON));
                                     } else {
                                         betService.betLost(b);
                                     }

@@ -3,8 +3,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="property/text"/>
-<fmt:message key="login.username.placeHolder" var="usernamePlaceHolder"/>
-<fmt:message key="login.password.placeHolder" var="passwordPlaceHolder"/>
 <!DOCTYPE html>
 <html lang=${sessionScope.lang}>
 <meta charset="utf-8">
@@ -49,20 +47,30 @@
 <div>
     <c:forEach items="${sessionScope.myBets}" var="bet">
         <a><c:out value="${bet.id}"/></a>
-        <a><c:out value="${bet.userId}"/></a>
-        <a><c:out value="${bet.matchId}"/></a>
+        <c:forEach items="${sessionScope.myMatches}" var ="match">
+            <c:if test="${match.id == bet.matchId}">
+                <a><c:out value="${match.homeTeam.name}"/></a>
+                <a><c:out value="${match.awayTeam.name}"/></a>
+                <a><c:out value="${match.homeTeamGoals} - ${match.awayTeamGoals}"/></a>
+                <a><c:out value="${match.startDate}"/></a>
+                <a><c:out value="${match.startTime}"/></a>
+                <a><c:out value="${match.result.name}"/></a>
+            </c:if>
+        </c:forEach>
+        <a><c:out value="${bet.betOnResult.name}"/></a>
+        <a><c:out value="${bet.betAmount}"/></a>
+        <a><c:out value="${bet.betCoeff}"/></a>
         <a><c:out value="${bet.betDate}"/></a>
         <a><c:out value="${bet.betTime}"/></a>
-        <a><c:out value="${bet.betAmount}"/></a>
-        <a><c:out value="${bet.betOnResult}"/></a>
         <a><c:out value="${bet.betStatus}"/></a>
-        <a><c:out value="${bet.betCoeff}"/></a>
+    <br/>
     </c:forEach>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

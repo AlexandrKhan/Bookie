@@ -23,6 +23,17 @@ public class Match implements Entity {
     public Match() {
     }
 
+    public Match(int id, Team homeTeam, Team awayTeam, int homeTeamGoals, int awayTeamGoals, LocalDate startDate, LocalTime startTime, Result result) {
+        this.id = id;
+        this.homeTeam = homeTeam;
+        this.awayTeam = awayTeam;
+        this.homeTeamGoals = homeTeamGoals;
+        this.awayTeamGoals = awayTeamGoals;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.result = result;
+    }
+
     public Match(Team homeTeam, Team awayTeam, LocalDate startDate, LocalTime startTime, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;

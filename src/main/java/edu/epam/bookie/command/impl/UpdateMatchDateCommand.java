@@ -8,7 +8,9 @@ import edu.epam.bookie.exception.BetServiceException;
 import edu.epam.bookie.exception.MatchServiceException;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.model.Message;
+import edu.epam.bookie.model.Theme;
 import edu.epam.bookie.model.sport.Bet;
+import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.service.impl.BetServiceImpl;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import edu.epam.bookie.service.impl.UserServiceImpl;
@@ -63,8 +65,13 @@ public class UpdateMatchDateCommand implements Command {
         bets.stream()
             .map(Bet::getUserId).forEach(u -> {
             try {
-                userService.addMessage(new Message(u, "Match: " + matchId + " was delayed"));
-            } catch (UserServiceException e) {
+                Match match  = matchService.findById(matchId);
+                userService.addMessage(new Message(u, "Match: " + match.getHomeTeam().getName()
+                        + " - " + match.getAwayTeam().getName()
+                        + " was delayed. New time: "
+                        + match.getStartDate() + ", "
+                        + match.getStartTime(), Theme.DELAY));
+            } catch (UserServiceException | MatchServiceException e) {
                 logger.error("Error sending messsage about time changed to user: {}", u);
             }
         });

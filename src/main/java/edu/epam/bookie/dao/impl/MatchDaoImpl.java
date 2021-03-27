@@ -28,6 +28,7 @@ public class MatchDaoImpl implements MatchDao {
     private static final String UPDATE_DATE_TIME_AT_MATCH = "UPDATE bookie.match SET start_date=?, start_time=? WHERE id=?";
     private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.id=?";
     private static final String FIND_MATCHES_BY_TEAM = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.home_team LIKE ? OR bookie.match.away_team LIKE ?";
+    private static final String FIND_MATCHES_BY_USER_ID = "SELECT DISTINCT M.id, home_team, away_team, start_date, start_time, home_team_goals, away_team_goals, result FROM bookie.match AS M JOIN bookie.match_result AS MR ON M.id = MR.id JOIN bookie.bet AS BB ON M.id = BB.match_id WHERE BB.user_id=?";
 
     private MatchDaoImpl() {
     }
@@ -45,6 +46,7 @@ public class MatchDaoImpl implements MatchDao {
             statement.setBigDecimal(6, match.getDrawCoeff());
             statement.setBigDecimal(7, match.getAwayCoeff());
             statement.execute();
+
             preparedStatement.execute();
         } catch (SQLException e) {
             logger.error("Cant create match", e);
@@ -170,6 +172,34 @@ public class MatchDaoImpl implements MatchDao {
             matches = Optional.of(matchList);
         } catch (SQLException e) {
             logger.error("Cant gind matches by team", e);
+            throw new DaoException(e);
+        }
+        return matches;
+    }
+
+    @Override
+    public Optional<List<Match>> findMatchesOnWhichUserBetByUserId(Long id) throws DaoException {
+        Optional<List<Match>> matches;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_MATCHES_BY_USER_ID)) {
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            List<Match> matchList = new ArrayList<>();
+            while (resultSet.next()) {
+                Match match = new Match();
+                match.setId(resultSet.getInt(DatabaseColumn.ID));
+                match.setFirstTeam(resultSet.getString(DatabaseColumn.HOME_TEAM));
+                match.setSecondTeam(resultSet.getString(DatabaseColumn.AWAY_TEAM));
+                match.setStartDate((resultSet.getDate(DatabaseColumn.MATCH_START_DATE).toLocalDate()));
+                match.setStartTime((resultSet.getTime(DatabaseColumn.MATCH_START_TIME).toLocalTime()));
+                match.setHomeTeamGoals(resultSet.getInt(DatabaseColumn.HOME_TEAM_GOALS));
+                match.setAwayTeamGoals(resultSet.getInt(DatabaseColumn.AWAY_TEAM_GOALS));
+                match.setResult(resultSet.getString(DatabaseColumn.MATCH_RESULT));
+                matchList.add(match);
+            }
+            matches = Optional.of(matchList);
+        } catch (SQLException e) {
+            logger.error("Cant find matches by user who bet", e);
             throw new DaoException(e);
         }
         return matches;

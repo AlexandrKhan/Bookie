@@ -1,6 +1,7 @@
 package edu.epam.bookie.service.impl;
 
 import edu.epam.bookie.dao.impl.BetDaoImpl;
+import edu.epam.bookie.dao.impl.MatchDaoImpl;
 import edu.epam.bookie.dao.impl.MessageDaoImpl;
 import edu.epam.bookie.dao.impl.UserDaoImpl;
 import edu.epam.bookie.exception.DaoException;
@@ -10,6 +11,7 @@ import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.model.sport.Bet;
+import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.service.UserService;
 import edu.epam.bookie.util.PasswordEncryption;
 import edu.epam.bookie.util.mail.MailUtility;
@@ -31,6 +33,7 @@ public class UserServiceImpl implements UserService {
     private static final UserDaoImpl userDao = UserDaoImpl.userDao;
     private static final BetDaoImpl betDao = BetDaoImpl.betDao;
     private static final MessageDaoImpl messageDao = MessageDaoImpl.messageDao;
+    private static final MatchDaoImpl matchDao = MatchDaoImpl.matchDao;
 
     private UserServiceImpl() {
     }
@@ -59,6 +62,17 @@ public class UserServiceImpl implements UserService {
             logger.error("No messages found");
         }
         return messages;
+    }
+
+    @Override
+    public List<Match> findAllMatchesOnWhichUserBetByUserId(Long id) throws UserServiceException {
+        List<Match> matches = new ArrayList<>();
+        try {
+            matches = matchDao.findMatchesOnWhichUserBetByUserId(id).get();
+        } catch (DaoException e) {
+            logger.error("No matches with bets");
+        }
+        return matches;
     }
 
     @Override
@@ -248,4 +262,6 @@ public class UserServiceImpl implements UserService {
         }
         return result;
     }
+
+
 }

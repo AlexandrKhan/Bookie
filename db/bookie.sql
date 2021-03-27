@@ -62,6 +62,7 @@ CREATE TABLE `message` (
   `date` DATE NOT NULL,
   `time` TIME NOT NULL,
   `text` VARCHAR(255) NOT NULL,
+  `theme` ENUM('WON', 'DELAY') NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE
 );

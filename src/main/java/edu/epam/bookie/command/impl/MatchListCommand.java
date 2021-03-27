@@ -26,8 +26,8 @@ public class MatchListCommand implements Command {
         try {
             matches = service.findAll();
             session.setAttribute(SessionAttribute.MATCHES, matches);
-            session.setAttribute(SessionAttribute.TEAMS, Team.values());
-            session.setAttribute(SessionAttribute.RESULT, Result.values());
+//            session.setAttribute(SessionAttribute.TEAMS, Team.values());
+//            session.setAttribute(SessionAttribute.RESULT, Result.values());
         } catch (MatchServiceException e) {
             logger.error("Cant find all matches");
         }

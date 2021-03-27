@@ -18,7 +18,7 @@ public class MessageDaoImpl implements MessageDao {
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     private static final String SELECT_ALL_MESSAGES_OF_USER = "SELECT * FROM bookie.message WHERE user_id=?";
-    private static final String ADD_MESSAGE = "INSERT INTO bookie.message(user_id, date, time, text) VALUES (?,?,?,?)";
+    private static final String ADD_MESSAGE = "INSERT INTO bookie.message(user_id, date, time, text, theme) VALUES (?,?,?,?,?)";
 
     private MessageDaoImpl() {
     }
@@ -46,6 +46,7 @@ public class MessageDaoImpl implements MessageDao {
             statement.setDate(2, Date.valueOf(message.getDate()));
             statement.setTime(3, Time.valueOf(message.getTime()));
             statement.setString(4, message.getMessage());
+            statement.setString(5, message.getTheme().name());
             statement.execute();
         } catch (SQLException e) {
             logger.error("Eror creating message", e);
@@ -68,6 +69,7 @@ public class MessageDaoImpl implements MessageDao {
                 message.setDate(resultSet.getDate(DatabaseColumn.DATE).toLocalDate());
                 message.setTime(resultSet.getTime(DatabaseColumn.TIME).toLocalTime());
                 message.setMessage(resultSet.getString(DatabaseColumn.MESSAGE));
+                message.setTheme(resultSet.getString(DatabaseColumn.THEME));
                 tempList.add(message);
             }
             messages = Optional.of(tempList);

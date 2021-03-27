@@ -17,7 +17,7 @@
         <div class="form-group">
         <label>
             <select name="homeTeam">
-                <c:forEach items="${requestScope.teams}" var="team">
+                <c:forEach items="${sessionScope.teams}" var="team">
                     <option>${team.name}</option>
                 </c:forEach>
             </select>
@@ -26,7 +26,7 @@
         <div class="form-group">
         <label>
             <select name="awayTeam">
-                <c:forEach items="${requestScope.teams}" var="team">
+                <c:forEach items="${sessionScope.teams}" var="team">
                     <option>${team.name}</option>
                 </c:forEach>
             </select>

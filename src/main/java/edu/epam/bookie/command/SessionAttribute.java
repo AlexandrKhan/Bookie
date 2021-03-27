@@ -10,6 +10,7 @@ public class SessionAttribute {
     public static final String RESULT = "result";
     public static final String ERROR_SET = "errorSet";
     public static final String LOGIN_MAP = "loginMap";
+    public static final String MY_MATCHES = "myMatches";
 
     private SessionAttribute() {
     }
