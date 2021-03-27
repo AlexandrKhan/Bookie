@@ -37,17 +37,23 @@ public class AddMatchCommand implements Command {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             errorSet.add(ValidationError.TWO_SAME_TEAMS);
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
-            request.setAttribute(RequestParameter.TEAMS, Team.values());
             logger.error("Same team");
-            return PagePath.ADD_MATCH;
+            return PagePath.ADD_MATCH.getServletPath();
+        } else if (LocalDate.parse(date).isBefore(LocalDate.now()) ||  (!LocalDate.parse(date).isBefore(LocalDate.now()) && LocalTime.parse(time).isBefore(LocalTime.now().plusMinutes(60)))) {
+            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
+            request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
+            logger.error("Bad date");
+            return PagePath.ADD_MATCH.getServletPath();
         }
+
         try {
             matchService.create(firstTeam, secondTeam, LocalDate.parse(date), LocalTime.parse(time),
                     new BigDecimal(homeCoeff), new BigDecimal(drawCoeff), new BigDecimal(awayCoeff));
         } catch (MatchServiceException e) {
             logger.error("Can't create match");
         }
-        return PagePath.MATCHES;
+        return PagePath.MATCHES.getServletPath();
     }
 
     private Team nameToTeam(String name) {

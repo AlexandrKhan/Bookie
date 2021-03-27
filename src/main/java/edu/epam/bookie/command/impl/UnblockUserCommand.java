@@ -23,6 +23,6 @@ public class UnblockUserCommand implements Command {
         } catch (UserServiceException e) {
             logger.error("Unblock user command error");
         }
-        return PagePath.ADMIN;
+        return PagePath.ADMIN.getServletPath();
     }
 }

@@ -31,6 +31,6 @@ public class ToMessagesCommand implements Command {
         } catch (UserServiceException e) {
             logger.error(e);
         }
-        return PagePath.MESSAGES;
+        return PagePath.MESSAGES.getDirectUrl();
     }
 }

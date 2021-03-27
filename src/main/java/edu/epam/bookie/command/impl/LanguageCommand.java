@@ -29,6 +29,6 @@ public class LanguageCommand implements Command {
                 session.setAttribute(LANGUAGE, RU);
             }
         }
-        return PagePath.AUTHORISATION;
+        return PagePath.AUTHORISATION.getDirectUrl();
     }
 }

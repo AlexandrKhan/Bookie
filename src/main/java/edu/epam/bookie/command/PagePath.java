@@ -1,20 +1,29 @@
 package edu.epam.bookie.command;
 
-public class PagePath {
-    public static final String HOME = "/jsp/home.jsp";
-    public static final String AUTHORISATION = "/jsp/auth.jsp";
-    public static final String REGISTER = "/jsp/register.jsp";
-    public static final String ADMIN = "/jsp/admin.jsp";
-    public static final String MATCHES = "/jsp/matchList.jsp";
-    public static final String CABINET = "/jsp/cabinet.jsp";
-    public static final String ADD_MATCH = "/jsp/addMatch.jsp";
-    public static final String CASH_IN = "/jsp/cashIn.jsp";
-    public static final String PLACE_BET = "/jsp/placeBet.jsp";
-    public static final String UPDATE_MATCH = "/jsp/modal/updateMatch.jsp";
-    public static final String ERROR_500 = "/jsp/error/500.jsp";
-    public static final String ERROR_404 = "/jsp/error/404.jsp";
-    public static final String MESSAGES = "/jsp/messages.jsp";
+public enum PagePath {
+    HOME ("/jsp/home.jsp", "/controller?command=home"),
+    AUTHORISATION ("/jsp/auth.jsp","/controller?command=authorisation"),
+    ADMIN ("/jsp/admin.jsp", "/controller?command=admin_panel"),
+    MATCHES ("/jsp/matchList.jsp", "/controller?command=match_list"),
+    CABINET ("/jsp/cabinet.jsp", "/controller?command=personal_cabinet"),
+    ADD_MATCH ("/jsp/addMatch.jsp","/controller?command=create_match"),
+    ERROR_500 ("/jsp/error/500.jsp",""),
+    ERROR_404 ("/jsp/error/404.jsp",""),
+    MESSAGES ("/jsp/messages.jsp","/controller?command=messages");
 
-    private PagePath() {
+    private final String directUrl;
+    private final String servletPath;
+
+    PagePath(String url, String servlet) {
+        this.directUrl = url;
+        this.servletPath = servlet;
+    }
+
+    public String getDirectUrl() {
+        return directUrl;
+    }
+
+    public String getServletPath() {
+        return servletPath;
     }
 }

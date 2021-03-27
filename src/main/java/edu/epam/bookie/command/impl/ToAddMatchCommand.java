@@ -11,6 +11,6 @@ public class ToAddMatchCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         request.setAttribute(RequestParameter.TEAMS, Team.values());
-        return PagePath.ADD_MATCH;
+        return PagePath.ADD_MATCH.getDirectUrl();
     }
 }

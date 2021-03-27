@@ -49,6 +49,6 @@ public class FileUploadCommand implements Command {
                 logger.error("File upload error " + e);
             }
         }
-        return PagePath.REGISTER;
+        return PagePath.CABINET.getServletPath();
     }
 }

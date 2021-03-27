@@ -8,6 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthorisationCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
-        return PagePath.AUTHORISATION;
+        return PagePath.AUTHORISATION.getDirectUrl();
     }
 }

@@ -23,6 +23,6 @@ public class BlockUserCommand implements Command {
         } catch (UserServiceException e) {
             logger.error("Block user command error");
         }
-        return PagePath.ADMIN;
+        return PagePath.ADMIN.getServletPath();
     }
 }

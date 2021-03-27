@@ -22,13 +22,11 @@ public class ActivateAccountCommand implements Command{
         String username = (String) session.getAttribute(SessionAttribute.USERNAME);
         try {
             if (service.activateAccount(username)) {
-                return PagePath.AUTHORISATION;
-                } else {
-                    return PagePath.REGISTER;
+                return PagePath.AUTHORISATION.getDirectUrl();
                 }
         } catch (UserServiceException e) {
             logger.error("Error activating account", e);
         }
-        return PagePath.HOME;
+        return PagePath.HOME.getServletPath();
     }
 }

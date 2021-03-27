@@ -2,6 +2,7 @@ package edu.epam.bookie.controller;
 
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.CommandFactory;
+import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.connection.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,8 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @WebServlet(urlPatterns = "/controller")
 public class ControllerServlet extends HttpServlet {
@@ -22,27 +21,22 @@ public class ControllerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
+        String page = processRequest(req);
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+        dispatcher.forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        processRequest(req, resp);
+        String page = processRequest(req);
+        resp.sendRedirect(page);
     }
 
-    private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private String processRequest(HttpServletRequest request) throws ServletException, IOException {
         logger.info("URI: " + request.getRequestURI() + ", content type: " + request.getContentType() + ", method: " + request.getMethod());
-
-        Optional<Command> optionalCommand = CommandFactory.defineCommand(request);
-        Command command = optionalCommand.orElseThrow(NoSuchElementException::new);
-        String path = command.execute(request);
-
-        if (path != null) {
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(path);
-            requestDispatcher.forward(request, response);
-        } else {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
-        }
+        String commandName = request.getParameter(RequestParameter.COMMAND);
+        Command command = CommandFactory.defineCommand(commandName);
+        return command.execute(request);
     }
 
     @Override

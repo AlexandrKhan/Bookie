@@ -40,12 +40,12 @@ public class RegistrationCommand implements Command {
         }
         if (user.isPresent()) {
             logger.info("New user registered: " + username);
-            page = PagePath.AUTHORISATION;
+            page = PagePath.HOME.getDirectUrl();
         } else {
             logger.info("Gotcha");
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
-            page = PagePath.AUTHORISATION;
+            page = PagePath.AUTHORISATION.getDirectUrl();
         }
         return page;
     }

@@ -18,7 +18,7 @@
                     </a>
                 </li>
                 <li class="nav-item" aria-expanded="true">
-                    <a href="${pageContext.request.contextPath}/controller?command=to_create_match_command"
+                    <a href="${pageContext.request.contextPath}/controller?command=create_match"
                        class="nav-link">
                         <fmt:message key="create.match"/>
                     </a>
@@ -35,7 +35,7 @@
                 </a>
             </li>
             <li class="nav-item" aria-expanded="true">
-                <a href="${pageContext.request.contextPath}/controller?command=to_messages_command" class="nav-link">
+                <a href="${pageContext.request.contextPath}/controller?command=messages" class="nav-link">
                     <fmt:message key="personal.messages"/>
                 </a>
             </li>

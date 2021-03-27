@@ -66,7 +66,7 @@ public class PlaceBetCommand implements Command {
                     request.setAttribute(RequestParameter.RESULT, Result.values());
                     request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
                     session.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
-                    return PagePath.PLACE_BET;
+                    return PagePath.MATCHES.getServletPath();
                 }
                 userService.placeBet(bet);
             } catch (UserServiceException e) {
@@ -76,6 +76,6 @@ public class PlaceBetCommand implements Command {
             logger.error("You are blocked");
         }
 
-        return PagePath.MATCHES;
+        return PagePath.MATCHES.getServletPath();
     }
 }

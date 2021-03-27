@@ -28,6 +28,6 @@ public class SearchMatchesByTeamCommand implements Command {
         } catch (MatchServiceException e) {
             logger.error("Error in search command", e);
         }
-        return PagePath.MATCHES;
+        return PagePath.MATCHES.getDirectUrl();
     }
 }

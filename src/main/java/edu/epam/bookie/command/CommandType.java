@@ -9,8 +9,8 @@ public enum CommandType {
     LOGIN(new LoginCommand()),
     LANGUAGE(new LanguageCommand()),
     AUTHORISATION(new AuthorisationCommand()),
-    TO_CREATE_MATCH_COMMAND(new ToAddMatchCommand()),
-    TO_MESSAGES_COMMAND(new ToMessagesCommand()),
+    CREATE_MATCH(new ToAddMatchCommand()),
+    MESSAGES(new ToMessagesCommand()),
     REGISTRATION(new RegistrationCommand()),
     FILE_UPLOAD(new FileUploadCommand()),
     ADMIN_PANEL(new AdminPanelCommand()),
@@ -23,7 +23,8 @@ public enum CommandType {
     CASH_IN(new CashInCommand()),
     UPDATE_MATCH(new UpdateMatchDateCommand()),
     PERSONAL_CABINET(new PersonalCabinetCommand()),
-    SEARCH_MATCHES(new SearchMatchesByTeamCommand());
+    SEARCH_MATCHES(new SearchMatchesByTeamCommand()),
+    INVALID_COMMAND(new InvalidCommand());
 
     CommandType(Command command) {
         this.command = command;

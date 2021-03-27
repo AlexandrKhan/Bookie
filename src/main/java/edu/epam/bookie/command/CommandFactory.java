@@ -1,5 +1,7 @@
 package edu.epam.bookie.command;
 
+import edu.epam.bookie.command.impl.InvalidCommand;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -14,19 +16,23 @@ public class CommandFactory {
         return instance;
     }
 
-    public static Optional<Command> defineCommand(HttpServletRequest request) {
-        String value = request.getParameter(RequestParameter.COMMAND);
-
-        if (value != null && !value.isEmpty()) {
-            return Stream.of(CommandType.values())
-                    .filter(e -> e.toString().equals(value.toUpperCase()))
-                    .map(CommandType::getCommand).findAny();
-        } else {
-            return Optional.empty();
+    public static Command defineCommand(String commandName) {
+       Command command;
+        try {
+            command = CommandType.valueOf(commandName.toUpperCase()).getCommand();
+        } catch (IllegalArgumentException e) {
+            command = new InvalidCommand();
         }
+        return command;
     }
 
-    public static CommandType getCommandType(String command) {
-        return CommandType.valueOf(command.toUpperCase());
+    public static CommandType getCommandType(String commandName) {
+        CommandType command;
+        try {
+            command = CommandType.valueOf(commandName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            command = CommandType.INVALID_COMMAND;
+        }
+        return command;
     }
 }

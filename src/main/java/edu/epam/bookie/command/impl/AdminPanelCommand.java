@@ -25,6 +25,6 @@ public class AdminPanelCommand implements Command {
         } catch (UserServiceException e) {
             logger.error("Cant collect all users");
         }
-        return PagePath.ADMIN;
+        return PagePath.ADMIN.getDirectUrl();
     }
 }

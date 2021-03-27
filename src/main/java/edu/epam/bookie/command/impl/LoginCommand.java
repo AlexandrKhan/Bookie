@@ -39,19 +39,19 @@ public class LoginCommand implements Command {
                 session.setAttribute(SessionAttribute.AUTHORISED, true);
                 session.setAttribute(SessionAttribute.CURRENT_USER, userTemp.get());
                 if (userTemp.get().getRole() == Role.ADMIN) {
-                    page = PagePath.ADMIN;
+                    page = PagePath.ADMIN.getDirectUrl();
                 } else {
-                    page = PagePath.HOME;
+                    page = PagePath.HOME.getDirectUrl();
                 }
             } else {
                 ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
                 session.setAttribute(SessionAttribute.LOGIN_MAP, parameters);
                 request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
-                page = PagePath.AUTHORISATION;
+                page = PagePath.AUTHORISATION.getDirectUrl();
             }
         } catch (UserServiceException e) {
             logger.error(e);
-            page = PagePath.ERROR_500;
+            page = PagePath.ERROR_500.getDirectUrl();
         }
         return page;
     }

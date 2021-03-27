@@ -33,6 +33,6 @@ public class PersonalCabinetCommand implements Command{
         } catch (BetServiceException e) {
             logger.error("Cant find all user bets");
         }
-        return PagePath.CABINET;
+        return PagePath.CABINET.getDirectUrl();
     }
 }

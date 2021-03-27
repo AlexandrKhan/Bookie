@@ -41,7 +41,7 @@ public class UpdateMatchDateCommand implements Command {
             try {
                 matchService.updateMatchDate(id, date, time);
                 sendMessageAboutChangedTimeToUser(id);
-                page = PagePath.MATCHES;
+                page = PagePath.MATCHES.getServletPath();
             } catch (MatchServiceException e) {
                 logger.error("Can't update match date", e);
             } catch (BetServiceException e) {
@@ -52,7 +52,8 @@ public class UpdateMatchDateCommand implements Command {
             errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
             request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
-            page = PagePath.UPDATE_MATCH;
+            page = PagePath.MATCHES.getDirectUrl();
+            logger.error("Validation shit on update match command");
         }
         return page;
     }

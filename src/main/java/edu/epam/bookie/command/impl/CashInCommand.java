@@ -32,8 +32,8 @@ public class CashInCommand implements Command {
                 logger.error("Error cashing in", e);
             }
         } else {
-            return PagePath.ERROR_404;
+            return PagePath.ERROR_404.getDirectUrl();
         }
-        return PagePath.HOME;
+        return PagePath.HOME.getDirectUrl();
     }
 }

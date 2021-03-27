@@ -31,6 +31,6 @@ public class MatchListCommand implements Command {
         } catch (MatchServiceException e) {
             logger.error("Cant find all matches");
         }
-        return PagePath.MATCHES;
+        return PagePath.MATCHES.getDirectUrl();
     }
 }

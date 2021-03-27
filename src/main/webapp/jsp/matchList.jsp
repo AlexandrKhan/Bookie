@@ -14,7 +14,6 @@
 </head>
 <body>
 <jsp:include page="/jsp/header.jsp"/>
-
 <div class="search">
     <div class="col-md-4">
         <form method="post" action="${pageContext.request.contextPath}/controller?command=search_matches">
@@ -42,28 +41,79 @@
                     <h1 class="score"><c:out value="${match.homeTeamGoals} - ${match.awayTeamGoals}"/></h1>
                 </c:if>
                 <c:if test="${match.matchProgress == 'NOT_STARTED'}">
+                    <c:if test="${sessionScope.user.role=='ADMIN'}">
+                        <div>
+                            <button type='button' class='button2' data-toggle='modal'
+                                    data-target='#UPDATEMATCHMODAL'>
+                                <fmt:message key="update.match"/>
+                            </button>
+                            <div class='modal fade' id='UPDATEMATCHMODAL' tabindex='-1' role='dialog'
+                                 aria-labelledby='exampleModalLabel' aria-hidden='false'>
+                                <div class='modal-dialog' role='document'>
+                                    <div class='modal-content'>
+                                        <form method="post"
+                                              action="${pageContext.request.contextPath}/controller?command=update_match">
+                                            <div class='modal-header'>
+                                                <h5 class='modal-title'><fmt:message key='update.match'/></h5>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="startDate"></label><input type="date" name="startDate"
+                                                                                      class="form-control"
+                                                                                      id="startDate"
+                                                                                      style="margin: 10px auto 10px auto;">
+                                                <label for="startTime"></label><input type="time" name="startTime"
+                                                                                      id="startTime">
+                                            </div>
 
-                    <div id="placeBet">
-                        <button type='button' class='button2' data-toggle='modal'
-                                data-target='#PLACEBETMODAL'>
+                                            <button type='button' class='btn btn-alert' data-dismiss='modal'>
+                                                <fmt:message
+                                                        key='button.close'/></button>
+                                            <input type='submit' value='<fmt:message key='button.save'/>'
+                                                   class='btn btn-primary'/>
+
+                                            <c:if test="${not empty requestScope.errorSet}">
+                                                <label style="color: red; font-size: medium"><fmt:message
+                                                        key="match.dateError"/></label>
+                                            </c:if>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </c:if>
+
+                        <button type='button'
+                                class='button2'
+                                id="plcBt"
+                                data-toggle='modal'
+                                data-target='#PLACEBETMODAL'
+                                data-matchid="${match.id}"
+                                data-home="${match.homeCoeff}"
+                                data-draw="${match.drawCoeff}"
+                                data-away="${match.awayCoeff}">
                             <fmt:message key="place.bet"/>
                         </button>
                         <div class='modal fade' id='PLACEBETMODAL' tabindex='-1' role='dialog'
                              aria-labelledby='exampleModalLabel' aria-hidden='false'>
                             <div class='modal-dialog' role='document'>
                                 <div class='modal-content'>
-                                    <form method="post"
-                                          action="${pageContext.request.contextPath}/controller?command=place_bet&matchId=${match.id}">
+                                    <form method="post" action="${pageContext.request.contextPath}/controller?command=place_bet">
                                         <div class='modal-header'>
                                             <h5 class='modal-title'><fmt:message key='place.bet'/></h5>
                                         </div>
                                         <div class="modal-body">
-                                            <label for="betAmount"></label><input type="number" name="betAmount" class="form-control"
-                                                                                  id="betAmount" step="0.01" min="5" value="5">
+                                            <input type="hidden" name="matchId" id="matchId" value="">
+                                            <label for="betAmount"></label><input type="number" name="betAmount"
+                                                                                  class="form-control"
+                                                                                  id="betAmount" step="0.01" min="5"
+                                                                                  value="5">
                                             <div class="radio-group">
-                                                <input type="radio" id="home" name="betOnResult" value="HOME"><label for="home">Home ${match.homeCoeff}</label>
-                                                <input type="radio" id="draw" name="betOnResult" value="DRAW"><label for="draw">Draw ${match.drawCoeff}</label>
-                                                <input type="radio" id="away" name="betOnResult" value="AWAY"><label for="away">Away ${match.awayCoeff}</label>
+                                                <input type="radio" id="home" name="betOnResult" value="HOME"><label
+                                                    for="home"><fmt:message key="result.home"/><p id="homeCoeff"></p></label>
+                                                <input type="radio" id="draw" name="betOnResult" value="DRAW"><label
+                                                    for="draw"><fmt:message key="result.draw"/></label>
+                                                <input type="radio" id="away" name="betOnResult" value="AWAY"><p id="drawCoeff"></p><label
+                                                    for="away"><fmt:message key="result.away"/><p id="awayCoeff"></p></label>
                                             </div>
                                         </div>
 
@@ -76,47 +126,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <c:if test="${sessionScope.user.role=='ADMIN'}">
-                        <div id="updateMatch">
-                            <button type='button' class='button2' data-toggle='modal'
-                                    data-target='#UPDATEMATCHMODAL'>
-                                <fmt:message key="update.match"/>
-                            </button>
-                            <div class='modal fade' id='UPDATEMATCHMODAL' tabindex='-1' role='dialog'
-                                 aria-labelledby='exampleModalLabel' aria-hidden='false'>
-                                <div class='modal-dialog' role='document'>
-                                    <div class='modal-content'>
-                                        <form method="post"
-                                              action="${pageContext.request.contextPath}/controller?command=update_match&matchId=${match.id}">
-                                            <div class='modal-header'>
-                                                <h5 class='modal-title'><fmt:message key='update.match'/></h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <label for="startDate"></label><input type="date" name="startDate"
-                                                                                      class="form-control"
-                                                                                      id="startDate" style="margin: 10px auto 10px auto;">
-                                                <label for="startTime"></label><input type="time" name="startTime"
-                                                                                      id="startTime" >
-                                            </div>
-
-                                            <button type='button' class='btn btn-alert' data-dismiss='modal'>
-                                                <fmt:message
-                                                        key='button.close'/></button>
-                                            <input type='submit' value='<fmt:message key='button.save'/>'
-                                                   class='btn btn-primary'/>
-
-                                            <c:if test="${not empty requestScope.errorSet}">
-                                            <label style="color: red; font-size: medium"><fmt:message
-                                                    key="match.dateError"/></label>
-                                            </c:if>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </c:if>
                 </c:if>
             </div>
         </div>
@@ -129,5 +138,18 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+    $('#PLACEBETMODAL').on('show.bs.modal', function (event) {
+        let matchId = $(event.relatedTarget).data('matchid');
+        let home = $(event.relatedTarget).data('home');
+        let draw = $(event.relatedTarget).data('draw');
+        let away = $(event.relatedTarget).data('away');
+        $(this).find('.modal-body #matchId').val(matchId);
+        $(this).find('.modal-body #homeCoeff').val(home);
+        $(this).find('.modal-body #drawCoeff').val(draw);
+        $(this).find('.modal-body #awayCoeff').val(away)
+    })
+</script>
 </body>
 </html>
+

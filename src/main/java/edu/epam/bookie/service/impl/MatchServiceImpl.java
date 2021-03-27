@@ -73,13 +73,14 @@ public class MatchServiceImpl implements MatchService {
     @Override
     public boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws MatchServiceException {
         boolean result = false;
-        if (!date.isBefore(LocalDate.now()) && !time.isBefore(LocalTime.now())) {
+        if (date.isAfter(LocalDate.now()) ||  (!date.isBefore(LocalDate.now()) && time.isAfter(LocalTime.now().plusMinutes(60)))) {
             try {
                 result = matchDao.updateDateTimeAtNotStartedMatch(id, date, time);
             } catch (DaoException e) {
                 logger.error("Can't update date at match", e);
             }
         } else {
+            logger.error("Validation shit on upodate amtch");
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
         }
