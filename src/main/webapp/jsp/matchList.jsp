@@ -36,6 +36,7 @@
                     <h5><c:out value="${match.startTime}"/></h5>
                 </div>
             </div>
+
             <div class="bottom">
                 <c:if test="${match.matchProgress == 'OVER'}">
                     <h1 class="score"><c:out value="${match.homeTeamGoals} - ${match.awayTeamGoals}"/></h1>
@@ -44,7 +45,8 @@
                     <c:if test="${sessionScope.user.role=='ADMIN'}">
                         <div>
                             <button type='button' class='button2' data-toggle='modal'
-                                    data-target='#UPDATEMATCHMODAL'>
+                                    data-target='#UPDATEMATCHMODAL'
+                            data-match="${match.id}">
                                 <fmt:message key="update.match"/>
                             </button>
                             <div class='modal fade' id='UPDATEMATCHMODAL' tabindex='-1' role='dialog'
@@ -57,6 +59,7 @@
                                                 <h5 class='modal-title'><fmt:message key='update.match'/></h5>
                                             </div>
                                             <div class="modal-body">
+                                                <input type="hidden" name="matchId" id="match" value="">
                                                 <label for="startDate"></label><input type="date" name="startDate"
                                                                                       class="form-control"
                                                                                       id="startDate"
@@ -138,6 +141,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+    $('#UPDATEMATCHMODAL').on('show.bs.modal', function (event) {
+        let matchUpdateId = $(event.relatedTarget).data('match');
+        $(this).find('.modal-body #match').val(matchUpdateId);
+    })
+</script>
 <script type="text/javascript">
     $('#PLACEBETMODAL').on('show.bs.modal', function (event) {
         let matchId = $(event.relatedTarget).data('matchid');
