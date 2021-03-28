@@ -14,37 +14,6 @@
 </head>
 <body>
 <jsp:include page="/jsp/header.jsp"/>
-<div id="cashIn">
-    <button type='button' class='btn-cashin' data-toggle='modal'
-            data-target='#CASHINMODAL'>
-        <fmt:message key="cash.in"/>
-    </button>
-
-    <div class='modal fade' id='CASHINMODAL' tabindex='-1' role='dialog'
-         aria-labelledby='exampleModalLabel' aria-hidden='false'>
-        <div class='modal-dialog' role='document'>
-            <div class='modal-content'>
-                <form method="post"
-                      action="${pageContext.request.contextPath}/controller?command=cash_in">
-                    <div class='modal-header'>
-                        <h5 class='modal-title'><fmt:message key='cash.in'/></h5>
-                    </div>
-                    <div class="modal-body">
-                        <label for="cashInSum"></label><input type="number" name="cashInSum"
-                                                              class="form-control"
-                                                              id="cashInSum" step="0.01" min="5" value="5">
-                    </div>
-
-                    <button type='button' class='btn btn-alert' data-dismiss='modal'>
-                        <fmt:message
-                                key='button.close'/></button>
-                    <input type='submit' value='<fmt:message key='button.save'/>'
-                           class='btn btn-primary'/>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
     <div class="container">
         <ul class="responsive-table">
             <li class="table-header">
@@ -58,13 +27,13 @@
             </li>
             <c:forEach items="${sessionScope.myBets}" var="bet">
                 <c:if test="${bet.betStatus == 'NOT_STARTED'}">
-                    <li class="table-row">
+                    <li class="table-row" style="background: linear-gradient(0deg, rgb(222 232 226), rgb(190 204 192));">
                 </c:if>
                 <c:if test="${bet.betStatus == 'WON'}">
-                    <li class="table-row" style="background-color: #c5e0aa;">
+                    <li class="table-row" style="background: linear-gradient(0deg, rgb(51 128 81), rgb(146 214 160))">
                 </c:if>
                 <c:if test="${bet.betStatus == 'LOST'}">
-                    <li class="table-row" style="background-color: #e8c3c3;">
+                    <li class="table-row" style="background: linear-gradient(0deg, rgb(212 83 83), rgb(208 153 153));">
                 </c:if>
                 <div class="col col-1" data-label="Bet id">#<c:out value="${bet.id}"/></div>
                 <c:forEach items="${sessionScope.myMatches}" var ="match">
@@ -81,23 +50,6 @@
             </c:forEach>
         </ul>
     </div>
-    <%--<c:forEach items="${sessionScope.myBets}" var="bet">--%>
-        <%--<a><c:out value="${bet.id}"/></a>--%>
-        <%--<c:forEach items="${sessionScope.myMatches}" var ="match">--%>
-            <%--<c:if test="${match.id == bet.matchId}">--%>
-                <%--<a><c:out value="${match.homeTeam.name}"/></a>--%>
-                <%--<a><c:out value="${match.awayTeam.name}"/></a>--%>
-                <%--<a><c:out value="${match.homeTeamGoals} - ${match.awayTeamGoals}"/></a>--%>
-                <%--<a><c:out value="${match.startDate}"/></a>--%>
-                <%--<a><c:out value="${match.startTime}"/></a>--%>
-            <%--</c:if>--%>
-        <%--</c:forEach>--%>
-        <%--<a><c:out value="${bet.betOnResult.name}"/></a>--%>
-        <%--<a><c:out value="${bet.betAmount}"/></a>--%>
-        <%--<a><c:out value="${bet.betCoeff}"/></a>--%>
-    <%--<br/>--%>
-    <%--</c:forEach>--%>
-<%--</div>--%>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
@@ -106,6 +58,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 <style>
+    body {
+        background-color: black;
+    }
     .container {
         max-width: 90%;
         margin-left: auto;
@@ -115,19 +70,8 @@
         margin-top: 20px;
     }
 
-    .btn-cashin {
-        font-family: inherit;
-        font-size: 30px;
-        line-height: inherit;
-        border-radius: 50px;
-        margin: 10px 50% 10px 5%;
-        width: 90%;
-        height: 80px;
-        align-items: center;
-        font-weight: 900;
-        background: -webkit-linear-gradient(
-                135deg
-                , rgb(78 214 139) 27%, rgb(71 138 94) 86%);
+    .modal-content {
+        height: 210px;
     }
 
     .responsive-table li {
@@ -138,10 +82,11 @@
         margin-bottom: 1px;
     }
     .responsive-table .table-header {
-        background-color: #e9eaea;
-        font-size: 14px;
+        background-color: black;
         text-transform: uppercase;
         letter-spacing: 0.03em;
+        color: white;
+        font-size: 16px;
     }
     .responsive-table .table-row {
         background-color: #ffffff;

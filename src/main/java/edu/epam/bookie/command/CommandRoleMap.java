@@ -18,6 +18,7 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.CREATE_MATCH, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.ADD_MATCH, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.BLOCK_USER, Collections.singletonList(Role.ADMIN));
+        ROLE_MAP.put(CommandType.VERIFY_ACCOUNT, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.UNBLOCK_USER, Collections.singletonList(Role.ADMIN));
         ROLE_MAP.put(CommandType.LOGIN, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.PLACE_BET, Arrays.asList(Role.ADMIN, Role.USER));

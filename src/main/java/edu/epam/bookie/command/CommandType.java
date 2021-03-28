@@ -24,7 +24,8 @@ public enum CommandType {
     UPDATE_MATCH(new UpdateMatchDateCommand()),
     PERSONAL_CABINET(new PersonalCabinetCommand()),
     SEARCH_MATCHES(new SearchMatchesByTeamCommand()),
-    INVALID_COMMAND(new InvalidCommand());
+    INVALID_COMMAND(new InvalidCommand()),
+    VERIFY_ACCOUNT(new VerifyAccountCommand());
 
     CommandType(Command command) {
         this.command = command;

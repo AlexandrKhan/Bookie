@@ -15,11 +15,14 @@ public class User implements Entity {
     private BigDecimal moneyBalance;
     private String passportScan;
     private StatusType statusType;
+    private String token;
+
+
 
     public User() {
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth) {
+    public User(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth, String token) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -28,8 +31,16 @@ public class User implements Entity {
         this.dateOfBirth = dateOfBirth;
         this.role = Role.USER;
         this.statusType = StatusType.NOT_ACTIVATED;
+        this.token = token;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public int getId() {
         return id;

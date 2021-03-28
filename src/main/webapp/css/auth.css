@@ -3,13 +3,14 @@
 .form-body {
     position: relative;
     min-height: 100vh;
-    background-color: #e1e8ee;
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: "Fira Sans", Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /*background-position-x: right;*/
+    background: black url(https://static-wp-tor15-prd.torcedores.com/wp-content/uploads/2019/12/premier-league.png) no-repeat left center;
 }
 
 .form-structor {
@@ -29,7 +30,7 @@
     bottom: 0;
     left: 0;
     background-size: cover;
-    background: url("https://www.liveabout.com/thmb/mRzowskq5hrOrtqAiwUmATcn0Hg=/1500x1000/filters:no_upscale():max_bytes(150000):strip_icc()/LionelMessiBarcelona-5898d9fe3df78caebca7ac0d.jpg") no-repeat left bottom;
+    background: linear-gradient(0deg, rgb(0 0 0), rgb(214 134 185))
 }
 .form-structor .signup {
     position: absolute;
@@ -98,8 +99,8 @@
     color: rgba(0, 0, 0, 0.4);
 }
 .form-structor .signup .submit-btn {
-    background-color: rgba(0, 0, 0, 0.4);
-    color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(160 118 147, 0.8);
+    color: black;
     border: 0;
     border-radius: 15px;
     display: block;
@@ -189,7 +190,7 @@
     color: rgba(0, 0, 0, 0.4);
 }
 .form-structor .login .center .submit-btn {
-    background-color: #6b92a4;
+    background-color: #6e4171;
     color: rgba(255, 255, 255, 0.7);
     border: 0;
     border-radius: 15px;

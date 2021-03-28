@@ -27,10 +27,11 @@ public interface UserService {
     Optional<User> findUserById(int id) throws UserServiceException;
 
     boolean activateAccount(String username) throws UserServiceException;
+    boolean verifyAccount(int id) throws UserServiceException;
 
     Optional<String> findEmailById(String id) throws UserServiceException;
 
-    boolean blockUser(int username) throws UserServiceException;
+    boolean blockUser(int username, int days, String message) throws UserServiceException;
 
     boolean unblockUser(int username) throws UserServiceException;
 

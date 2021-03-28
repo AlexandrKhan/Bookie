@@ -18,18 +18,19 @@ public class UserDaoImpl implements UserDao {
     public static final  UserDaoImpl userDao = new UserDaoImpl();
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
-    private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role) VALUES (?,?,?,?,?,?,?)";
+    private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, token) VALUES (?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL_USERS = "SELECT * FROM bookie.user";
     private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM bookie.user WHERE username=?";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM bookie.user WHERE id=?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM bookie.user WHERE id=?";
     private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "SELECT * FROM bookie.user WHERE username=? AND password=?";
     private static final String SELECT_EMAIL_BY_ID = "SELECT email FROM bookie.user WHERE id=?";
-    private static final String ACTIVATE_ACCOUNT = "UPDATE bookie.user SET status='ACTIVE' WHERE username=?";
+    private static final String ACTIVATE_ACCOUNT = "UPDATE bookie.user SET status='ACTIVATED' WHERE token=?";
+    private static final String VERIFY_ACCOUNT = "UPDATE bookie.user SET status='VERIFIED' WHERE id=?";
     private static final String EMAIL_EXISTS = "SELECT * FROM bookie.user WHERE email=?";
     private static final String USERNAME_EXISTS = "SELECT * FROM bookie.user WHERE username=?";
     private static final String BLOCK_USER = "UPDATE bookie.user SET status='BLOCKED' WHERE id=?";
-    private static final String UNBLOCK_USER = "UPDATE bookie.user SET status='ACTIVE' WHERE id=?";
+    private static final String UNBLOCK_USER = "UPDATE bookie.user SET status='VERIFIED' WHERE id=?";
     private static final String CASH_IN = "UPDATE bookie.user SET money_balance=money_balance + ? WHERE id=?";
     private static final String WITHDRAW_MONEY = "UPDATE bookie.user SET money_balance=money_balance - ? WHERE id=?";
 
@@ -47,6 +48,7 @@ public class UserDaoImpl implements UserDao {
             statement.setString(5, user.getPassword());
             statement.setDate(6, Date.valueOf(user.getDateOfBirth()));
             statement.setString(7, user.getRole().name());
+            statement.setString(8, user.getToken());
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("Can't add user");
@@ -74,6 +76,7 @@ public class UserDaoImpl implements UserDao {
                 user.setRole(resultSet.getString(DatabaseColumn.ROLE));
                 user.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
                 user.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
+                user.setToken(resultSet.getString(DatabaseColumn.TOKEN));
                 userList.add(user);
             }
             users = Optional.of(userList);
@@ -102,6 +105,8 @@ public class UserDaoImpl implements UserDao {
                 userTemp.setPassword(resultSet.getString(DatabaseColumn.PASSWORD));
                 userTemp.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
                 userTemp.setRole(resultSet.getString(DatabaseColumn.ROLE));
+                userTemp.setToken(resultSet.getString(DatabaseColumn.TOKEN));
+
                 user = Optional.of(userTemp);
             }
         } catch (SQLException e) {
@@ -133,6 +138,7 @@ public class UserDaoImpl implements UserDao {
                 userTemp.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
                 userTemp.setStatusType(resultSet.getString(DatabaseColumn.USER_STATUS));
                 userTemp.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
+                userTemp.setToken(resultSet.getString(DatabaseColumn.TOKEN));
 
                 user = Optional.of(userTemp);
             }
@@ -161,14 +167,28 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public boolean activateAccount(String username) throws DaoException {
+    public boolean activateAccount(String token) throws DaoException {
         boolean result;
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(ACTIVATE_ACCOUNT)) {
-            statement.setString(1, username);
+            statement.setString(1, token);
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error activating account");
+            throw new DaoException(e);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean verifyAccount(int id) throws DaoException {
+        boolean result;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(VERIFY_ACCOUNT)) {
+            statement.setInt(1, id);
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error blocking user");
             throw new DaoException(e);
         }
         return result;
@@ -285,6 +305,8 @@ public class UserDaoImpl implements UserDao {
                 userTemp.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
                 userTemp.setStatusType(resultSet.getString(DatabaseColumn.USER_STATUS));
                 userTemp.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
+                userTemp.setToken(resultSet.getString(DatabaseColumn.TOKEN));
+
             }
             user = Optional.of(userTemp);
         } catch (SQLException e) {

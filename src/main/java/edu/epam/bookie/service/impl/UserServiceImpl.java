@@ -6,10 +6,7 @@ import edu.epam.bookie.dao.impl.MessageDaoImpl;
 import edu.epam.bookie.dao.impl.UserDaoImpl;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.exception.UserServiceException;
-import edu.epam.bookie.model.Message;
-import edu.epam.bookie.model.Role;
-import edu.epam.bookie.model.StatusType;
-import edu.epam.bookie.model.User;
+import edu.epam.bookie.model.*;
 import edu.epam.bookie.model.sport.Bet;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.service.UserService;
@@ -26,6 +23,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class UserServiceImpl implements UserService {
     public static final UserServiceImpl userService = new UserServiceImpl();
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
     private static final BetDaoImpl betDao = BetDaoImpl.betDao;
     private static final MessageDaoImpl messageDao = MessageDaoImpl.messageDao;
     private static final MatchDaoImpl matchDao = MatchDaoImpl.matchDao;
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(8);
+
+    private static final String UNBAN_MESSAGE = "You are unbanned! Please comply to our rules in order to avoid future bans";
 
     private UserServiceImpl() {
     }
@@ -109,14 +113,15 @@ public class UserServiceImpl implements UserService {
                 return user;
             }
             if (UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password)) {
+                String token = String.valueOf(UUID.randomUUID());
                 String encryptedPassword = PasswordEncryption.encryptMessage(password);
-                User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth);
+                User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, token);
                 userTemp.setRole(Role.USER.toString());
                 userTemp.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
                 userTemp.setMoneyBalance(BigDecimal.valueOf(0));
 
                 user = userDao.create(userTemp);
-                MailUtility.sendConfirmMessage(email, username);
+                MailUtility.sendConfirmMessage(email, token);
             } else {
                 logger.info("VALIDATOR");
             }
@@ -156,17 +161,28 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean activateAccount(String username) throws UserServiceException {
+    public boolean activateAccount(String token) throws UserServiceException {
         boolean result = false;
         try {
-            result = userDao.activateAccount(username);
+            result = userDao.activateAccount(token);
             if (result) {
-                logger.info("Account {} is activated", username);
+                logger.info("Account is activated");
             } else {
-                logger.info("Cant find {} account", username);
+                logger.info("Cant find account");
             }
         } catch (DaoException e) {
             logger.error("Service activation account error");
+        }
+        return result;
+    }
+
+    @Override
+    public boolean verifyAccount(int id) throws UserServiceException {
+        boolean result = false;
+        try {
+            result = userDao.verifyAccount(id);
+        } catch (DaoException e) {
+            logger.error("Cant verify account");
         }
         return result;
     }
@@ -183,12 +199,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean blockUser(int id) throws UserServiceException {
+    public boolean blockUser(int id, int days, String message) throws UserServiceException {
         boolean result = false;
         try {
             result = userDao.blockUser(id);
             if (result) {
+                messageDao.create(new Message(id, message, Theme.BAN));
                 logger.info("User {} is blocked", id);
+                scheduler.schedule(() -> {
+                    try {
+                        unblockUser(id);
+                        messageDao.create(new Message(id, UNBAN_MESSAGE, Theme.UNBAN));
+                        logger.info("auto unblock user");
+                    } catch (UserServiceException | DaoException e) {
+                        logger.error("Error in scheduled unblocking");
+                    }
+                }, days, TimeUnit.SECONDS);
             } else {
                 logger.info("User {} is not found for blocking", id);
             }

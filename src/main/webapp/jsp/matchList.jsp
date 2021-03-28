@@ -4,13 +4,13 @@
 <%@taglib prefix="custom" uri="/WEB-INF/tld/custom.tld" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="property/text"/>
+<fmt:message key="result.home" var="resultHome"/>
+<c:set var="res" value="${resultHome}"/>
 <html>
-<head>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">--%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/match.css"/>
-    <title>Title</title>
-</head>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+<%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">--%>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/match.css"/>
+<title>Title</title>
 <body>
 <jsp:include page="/jsp/header.jsp"/>
 <div class="search">
@@ -42,6 +42,7 @@
                 </c:if>
                 <c:if test="${match.matchProgress == 'NOT_STARTED'}">
                     <c:if test="${sessionScope.user.role=='ADMIN'}">
+
                         <div>
                             <button type='button' class='button2' data-toggle='modal'
                                     data-target='#UPDATEMATCHMODAL'
@@ -110,12 +111,12 @@
                                                                                   id="betAmount" step="0.01" min="5"
                                                                                   value="5">
                                             <div class="radio-group">
-                                                <input type="radio" id="home" name="betOnResult" value="HOME"><label
-                                                    for="home"><fmt:message key="result.home"/><p id="homeCoeff"></p></label>
-                                                <input type="radio" id="draw" name="betOnResult" value="DRAW"><label
-                                                    for="draw"><fmt:message key="result.draw"/></label>
-                                                <input type="radio" id="away" name="betOnResult" value="AWAY"><p id="drawCoeff"></p><label
-                                                    for="away"><fmt:message key="result.away"/><p id="awayCoeff"></p></label>
+                                                <input type="radio" id="home" name="betOnResult" value="HOME"><label id="homeCoeff"
+                                                    for="home">Home</label>
+                                                <input type="radio" id="draw" name="betOnResult" value="DRAW"><label id="drawCoeff"
+                                                    for="draw">Draw</label>
+                                                <input type="radio" id="away" name="betOnResult" value="AWAY"><label id="awayCoeff"
+                                                    for="away">Away</label>
                                             </div>
                                         </div>
 
@@ -152,10 +153,12 @@
         let home = $(event.relatedTarget).data('home');
         let draw = $(event.relatedTarget).data('draw');
         let away = $(event.relatedTarget).data('away');
+
         $(this).find('.modal-body #matchId').val(matchId);
-        $(this).find('.modal-body #homeCoeff').val(home);
-        $(this).find('.modal-body #drawCoeff').val(draw);
-        $(this).find('.modal-body #awayCoeff').val(away)
+        $(this).find('.radio-group #homeCoeff').text('Home ' + home);
+
+        $(this).find('.radio-group #drawCoeff').text('Draw ' + draw);
+        $(this).find('.radio-group #awayCoeff').text('Away ' + away);
     })
 </script>
 </body>

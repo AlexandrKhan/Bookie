@@ -3,30 +3,25 @@ package edu.epam.bookie.command.impl;
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
-import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.UserServiceException;
 import edu.epam.bookie.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
-public class ActivateAccountCommand implements Command{
-    public static final Logger logger = LogManager.getLogger(ActivateAccountCommand.class);
+public class VerifyAccountCommand implements Command {
+    public static final Logger logger = LogManager.getLogger(VerifyAccountCommand.class);
     private UserServiceImpl service = UserServiceImpl.userService;
-
 
     @Override
     public String execute(HttpServletRequest request) {
-        String token = request.getParameter(RequestParameter.TOKEN);
+        String id = request.getParameter(RequestParameter.ID);
         try {
-            if (service.activateAccount(token)) {
-                return PagePath.AUTHORISATION.getDirectUrl();
-                }
+            service.verifyAccount(Integer.parseInt(id));
         } catch (UserServiceException e) {
-            logger.error("Error activating account", e);
+            logger.error("Eror verifying user");
         }
-        return PagePath.HOME.getServletPath();
+        return PagePath.ADMIN.getServletPath();
     }
 }

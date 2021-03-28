@@ -39,7 +39,7 @@ public class PlaceBetCommand implements Command {
         Bet bet = new Bet();
         Match match;
 
-        if (user.getStatusType().equals(StatusType.ACTIVE)) {
+        if (user.getStatusType().equals(StatusType.VERIFIED)) {
             try {
                 match = matchService.findById(Long.valueOf(request.getParameter(RequestParameter.MATCH_ID)));
                 bet = new Bet(userId, matchId, betAmount, betOnResult);

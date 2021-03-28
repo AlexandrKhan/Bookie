@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -39,6 +40,7 @@ public class RegistrationCommand implements Command {
             logger.error("Register error", e);
         }
         if (user.isPresent()) {
+            request.setAttribute(RequestParameter.TOKEN, user.get().getToken());
             logger.info("New user registered: " + username);
             page = PagePath.HOME.getDirectUrl();
         } else {

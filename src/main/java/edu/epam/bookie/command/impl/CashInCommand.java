@@ -24,7 +24,7 @@ public class CashInCommand implements Command {
         HttpSession session = request.getSession();
         BigDecimal money = new BigDecimal(request.getParameter(RequestParameter.CASH_IN_SUM));
         User user = (User) session.getAttribute(SessionAttribute.CURRENT_USER);
-        if (user.getStatusType() == StatusType.ACTIVE) {
+        if (user.getStatusType() == StatusType.VERIFIED) {
             try {
                 int userId = user.getId();
                 service.cashIn(userId, money);

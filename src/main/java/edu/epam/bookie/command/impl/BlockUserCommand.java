@@ -14,12 +14,17 @@ public class BlockUserCommand implements Command {
     public static final Logger logger = LogManager.getLogger(BlockUserCommand.class);
     private UserServiceImpl service = UserServiceImpl.userService;
 
+
     @Override
     public String execute(HttpServletRequest request) {
         String id = request.getParameter(RequestParameter.ID);
+        String days = request.getParameter(RequestParameter.DAYS);
+        String message = request.getParameter(RequestParameter.MESSAGE);
         try {
             int userId = Integer.parseInt(id);
-            service.blockUser(userId);
+            int daysOfBan = Integer.parseInt(days);
+            service.blockUser(userId, daysOfBan, message);
+            logger.info("Command block executed");
         } catch (UserServiceException e) {
             logger.error("Block user command error");
         }

@@ -2,7 +2,9 @@ package edu.epam.bookie.model;
 
 public enum Theme {
     WON("Won"),
-    DELAY("Delay");
+    DELAY("Delay"),
+    BAN("Ban"),
+    UNBAN("Unban");
 
     String name;
 

@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width">
 </head>
 <div>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
             <c:if test="${sessionScope.user.role=='ADMIN'}">
@@ -34,6 +34,7 @@
                     <fmt:message key="personal.cabinet"/>
                 </a>
             </li>
+
             <li class="nav-item" aria-expanded="true">
                 <a href="${pageContext.request.contextPath}/controller?command=messages" class="nav-link">
                     <fmt:message key="personal.messages"/>
@@ -45,6 +46,39 @@
                 <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=match_list">
                     <fmt:message key="match.list"/>
                 </a>
+            </li>
+            <li>
+            <div id="cashIn">
+                <a type='button' class='nav-link' aria-expanded="true" data-toggle='modal'
+                        data-target='#CASHINMODAL'>
+                    <fmt:message key="cash.in"/>
+                </a>
+
+                <div class='modal fade' id='CASHINMODAL' tabindex='-1' role='dialog'
+                     aria-labelledby='exampleModalLabel' aria-hidden='false'>
+                    <div class='modal-dialog' role='document'>
+                        <div class='modal-content'>
+                            <form method="post"
+                                  action="${pageContext.request.contextPath}/controller?command=cash_in">
+                                <div class='modal-header'>
+                                    <h5 class='modal-title'><fmt:message key='cash.in'/></h5>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="cashInSum"></label><input type="number" name="cashInSum"
+                                                                          class="form-control"
+                                                                          id="cashInSum" step="0.01" min="5" value="5">
+                                </div>
+
+                                <button type='button' class='btn btn-alert' data-dismiss='modal'>
+                                    <fmt:message
+                                            key='button.close'/></button>
+                                <input type='submit' value='<fmt:message key='button.save'/>'
+                                       class='btn btn-primary'/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             </li>
             <li class="nav-item dropdown" id="language" aria-expanded="true">
                 <a class="nav-link dropdown-toggle" role="button" id="dropdownMenuButton"
@@ -98,5 +132,14 @@
         -webkit-text-stroke-width: medium;
         white-space: nowrap;
     }
+    .modal-content {
+        height: 210px;
+    }
 </style>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<%--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>--%>
+<%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>--%>
 </html>
