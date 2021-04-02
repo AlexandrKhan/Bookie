@@ -4,8 +4,7 @@ import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
-import edu.epam.bookie.exception.UserServiceException;
-import edu.epam.bookie.model.Role;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
 import edu.epam.bookie.validator.ValidationErrorSet;
@@ -38,18 +37,14 @@ public class LoginCommand implements Command {
             if (userTemp.isPresent()) {
                 session.setAttribute(SessionAttribute.AUTHORISED, true);
                 session.setAttribute(SessionAttribute.CURRENT_USER, userTemp.get());
-                if (userTemp.get().getRole() == Role.ADMIN) {
-                    page = PagePath.ADMIN.getDirectUrl();
-                } else {
-                    page = PagePath.HOME.getDirectUrl();
-                }
+                page = PagePath.HOME.getDirectUrl();
             } else {
                 ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
                 session.setAttribute(SessionAttribute.LOGIN_MAP, parameters);
                 request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
                 page = PagePath.AUTHORISATION.getDirectUrl();
             }
-        } catch (UserServiceException e) {
+        } catch (ServiceException e) {
             logger.error(e);
             page = PagePath.ERROR_500.getDirectUrl();
         }

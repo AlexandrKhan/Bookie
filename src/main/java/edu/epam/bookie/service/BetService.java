@@ -1,13 +1,13 @@
 package edu.epam.bookie.service;
 
-import edu.epam.bookie.exception.BetServiceException;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.sport.Bet;
 
 import java.util.List;
 
 public interface BetService {
-    List<Bet> selectBetsByMatchId(long id) throws BetServiceException;
-    List<Bet> selectBetsByUserId(long id) throws BetServiceException;
-    boolean payBets(Bet bet) throws BetServiceException;
-    boolean betLost(Bet bet) throws BetServiceException;
+    List<Bet> selectBetsByMatchId(long id) throws ServiceException;
+    List<Bet> selectBetsByUserId(long id) throws ServiceException;
+    boolean payBets(Bet bet) throws ServiceException;
+    boolean betLost(Bet bet) throws ServiceException;
 }

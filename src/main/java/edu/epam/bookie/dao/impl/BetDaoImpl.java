@@ -30,6 +30,25 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
+    public Optional<Bet> create(Bet bet) throws DaoException {
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(PLACE_BET)) {
+            statement.setInt(1, bet.getUserId());
+            statement.setInt(2, bet.getMatchId());
+            statement.setDate(3, Date.valueOf(bet.getBetDate()));
+            statement.setTime(4, Time.valueOf(bet.getBetTime()));
+            statement.setBigDecimal(5, bet.getBetAmount());
+            statement.setString(6, bet.getBetOnResult().name());
+            statement.setBigDecimal(7, bet.getBetCoeff());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("Error placing bet", e);
+            throw new DaoException(e);
+        }
+        return Optional.of(bet);
+    }
+
+    @Override
     public boolean payBets(Bet bet) throws DaoException {
         boolean result;
         try (Connection connection = pool.getConnection();
@@ -68,15 +87,7 @@ public class BetDaoImpl implements BetDao {
             List<Bet> betsTemp = new ArrayList<>();
             while (resultSet.next()) {
                 Bet bet = new Bet();
-                bet.setId(resultSet.getInt(DatabaseColumn.ID));
-                bet.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
-                bet.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
-                bet.setBetDate(resultSet.getDate(DatabaseColumn.BET_DATE).toLocalDate());
-                bet.setBetTime(resultSet.getTime(DatabaseColumn.BET_TIME).toLocalTime());
-                bet.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
-                bet.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
-                bet.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
-                bet.setBetCoeff(resultSet.getBigDecimal(DatabaseColumn.BET_COEFF));
+                setBetFields(resultSet, bet);
                 betsTemp.add(bet);
             }
             bets = Optional.of(betsTemp);
@@ -97,15 +108,7 @@ public class BetDaoImpl implements BetDao {
             List<Bet> betsTemp = new ArrayList<>();
             while (resultSet.next()) {
                 Bet bet = new Bet();
-                bet.setId(resultSet.getInt(DatabaseColumn.ID));
-                bet.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
-                bet.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
-                bet.setBetDate(resultSet.getDate(DatabaseColumn.BET_DATE).toLocalDate());
-                bet.setBetTime(resultSet.getTime(DatabaseColumn.BET_TIME).toLocalTime());
-                bet.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
-                bet.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
-                bet.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
-                bet.setBetCoeff(resultSet.getBigDecimal(DatabaseColumn.BET_COEFF));
+                setBetFields(resultSet, bet);
                 betsTemp.add(bet);
             }
             bets = Optional.of(betsTemp);
@@ -117,25 +120,6 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
-    public Optional<Bet> create(Bet bet) throws DaoException {
-        try (Connection connection = pool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(PLACE_BET)) {
-            statement.setInt(1, bet.getUserId());
-            statement.setInt(2, bet.getMatchId());
-            statement.setDate(3, Date.valueOf(bet.getBetDate()));
-            statement.setTime(4, Time.valueOf(bet.getBetTime()));
-            statement.setBigDecimal(5, bet.getBetAmount());
-            statement.setString(6, bet.getBetOnResult().name());
-            statement.setBigDecimal(7, bet.getBetCoeff());
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error placing bet", e);
-            throw new DaoException(e);
-        }
-        return Optional.of(bet);
-    }
-
-    @Override
     public Optional<List<Bet>> findAll() throws DaoException {
         Optional<List<Bet>> bets;
         try (Connection connection = pool.getConnection();
@@ -143,7 +127,9 @@ public class BetDaoImpl implements BetDao {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_BETS);
             List<Bet> betsTemp = new ArrayList<>();
             while (resultSet.next()) {
-                setBetFields(resultSet, betsTemp);
+                Bet bet = new Bet();
+                setBetFields(resultSet, bet);
+                betsTemp.add(bet);
             }
             bets = Optional.of(betsTemp);
 
@@ -163,14 +149,7 @@ public class BetDaoImpl implements BetDao {
             ResultSet resultSet = statement.executeQuery(SELECT_BET_BY_ID);
             Bet betTemp = new Bet();
             while (resultSet.next()) {
-                betTemp.setId(resultSet.getInt(DatabaseColumn.ID));
-                betTemp.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
-                betTemp.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
-                betTemp.setBetDate(resultSet.getDate(DatabaseColumn.BET_DATE).toLocalDate());
-                betTemp.setBetTime(resultSet.getTime(DatabaseColumn.BET_TIME).toLocalTime());
-                betTemp.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
-                betTemp.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
-                betTemp.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
+                setBetFields(resultSet, betTemp);
             }
             bet = Optional.of(betTemp);
         } catch (SQLException e) {
@@ -185,9 +164,7 @@ public class BetDaoImpl implements BetDao {
         throw new UnsupportedOperationException();
     }
 
-
-    private void setBetFields(ResultSet resultSet, List<Bet> betsTemp) throws SQLException {
-        Bet bet = new Bet();
+    private void setBetFields(ResultSet resultSet, Bet bet) throws SQLException {
         bet.setId(resultSet.getInt(DatabaseColumn.ID));
         bet.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
         bet.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
@@ -196,7 +173,7 @@ public class BetDaoImpl implements BetDao {
         bet.setBetAmount(resultSet.getBigDecimal(DatabaseColumn.BET_AMOUNT));
         bet.setBetOnResult(resultSet.getString(DatabaseColumn.BET_ON_RESULT));
         bet.setBetStatus(resultSet.getString(DatabaseColumn.BET_STATUS));
-        betsTemp.add(bet);
+        bet.setBetCoeff(resultSet.getBigDecimal(DatabaseColumn.BET_COEFF));
     }
 
 }

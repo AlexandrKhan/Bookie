@@ -18,7 +18,6 @@ public class User implements Entity {
     private String token;
 
 
-
     public User() {
     }
 

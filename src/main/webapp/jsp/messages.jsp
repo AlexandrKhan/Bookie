@@ -18,25 +18,25 @@
     <c:if test="${message.theme == 'WON'}">
         <div class="message-green">
             <p class="message-content"><c:out value="${message.message}"/></p>
-            <div class="message-timestamp-right"><c:out value="${message.date}, ${message.time}"/></div>
+            <div class="message-timestamp-right"><c:out value="${custom:formatLocalDateTime(message.date, message.time)}"/></div>
         </div>
     </c:if>
     <c:if test="${message.theme == 'DELAY'}">
         <div class="message-orange">
             <p class="message-content"><c:out value="${message.message}"/></p>
-            <div class="message-timestamp-right"><c:out value="${message.date}, ${message.time}"/></div>
+            <div class="message-timestamp-right"><c:out value="${custom:formatLocalDateTime(message.date, message.time)}"/></div>
         </div>
     </c:if>
         <c:if test="${message.theme == 'BAN'}">
             <div class="message-red">
                 <p class="message-content"><c:out value="${message.message}"/></p>
-                <div class="message-timestamp-right"><c:out value="${message.date}, ${message.time}"/></div>
+                <div class="message-timestamp-right"><c:out value="${custom:formatLocalDateTime(message.date, message.time)}"/></div>
             </div>
         </c:if>
         <c:if test="${message.theme == 'UNBAN'}">
             <div class="message-blue">
                 <p class="message-content"><c:out value="${message.message}"/></p>
-                <div class="message-timestamp-right"><c:out value="${message.date}, ${message.time}"/></div>
+                <div class="message-timestamp-right"><c:out value="${custom:formatLocalDateTime(message.date, message.time)}"/></div>
             </div>
         </c:if>
     </c:forEach>

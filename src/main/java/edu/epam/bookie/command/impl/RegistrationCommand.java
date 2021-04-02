@@ -4,7 +4,7 @@ import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
-import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
 import edu.epam.bookie.validator.ValidationErrorSet;
@@ -12,7 +12,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -36,7 +35,7 @@ public class RegistrationCommand implements Command {
 
         try {
             user = userService.registerUser(username, firstName, lastName, email, password, repeatPassword, dateOfBirth);
-        } catch (UserServiceException e) {
+        } catch (ServiceException e) {
             logger.error("Register error", e);
         }
         if (user.isPresent()) {
@@ -44,7 +43,6 @@ public class RegistrationCommand implements Command {
             logger.info("New user registered: " + username);
             page = PagePath.HOME.getDirectUrl();
         } else {
-            logger.info("Gotcha");
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
             page = PagePath.AUTHORISATION.getDirectUrl();

@@ -9,17 +9,34 @@
     <tlib-version>1.0</tlib-version>
     <short-name>customTag</short-name>
     <uri>edu.epam.bookie.tag</uri>
-    
+
     <function>
-        <name>filterByTeam</name>
-        <function-class>edu.epam.bookie.tag.MatchSorting</function-class>
-        <function-signature>java.util.List sortByProgress(java.util.List)</function-signature>
+        <name>filterNotVerifiedUsers</name>
+        <function-class>edu.epam.bookie.tag.UserSorting</function-class>
+        <function-signature>java.util.List selectNotVerifiedUsers(java.util.List)</function-signature>
     </function>
 
     <function>
-        <name>sortByDateThenTime</name>
+        <name>filterBannedUsers</name>
+        <function-class>edu.epam.bookie.tag.UserSorting</function-class>
+        <function-signature>java.util.List selectBannedUsers(java.util.List)</function-signature>
+    </function>
+
+    <function>
+        <name>filterNotStartedMatches</name>
+        <function-class>edu.epam.bookie.tag.MatchSorting</function-class>
+        <function-signature>java.util.List selectNotStartedMatches(java.util.List)</function-signature>
+    </function>
+
+    <function>
+        <name>sortMatchesByDateThenTime</name>
         <function-class>edu.epam.bookie.tag.MatchSorting</function-class>
         <function-signature>java.util.List sortByDateThenTime(java.util.List)</function-signature>
     </function>
 
+    <function>
+        <name>formatLocalDateTime</name>
+        <function-class>edu.epam.bookie.tag.DateFormatTag</function-class>
+        <function-signature>java.lang.String formatDateAndTime(java.time.LocalDate,java.time.LocalTime)</function-signature>
+    </function>
 </taglib>

@@ -38,7 +38,7 @@
                 <input type="text" name="username" id="username" class="input" placeholder=<fmt:message key="auth.username"/> required pattern="[a-zA-Z0-9]{5,20}"/>
                 <input type="password" name="password" id="password" class="input" placeholder=<fmt:message key="auth.password"/> required pattern="[a-zA-Z0-9@#$%!]{8,20}"/>
             </div>
-            <button type="submit" class="submit-btn"><fmt:message key="login.login"/></button>
+            <button type="submit" class="submit-btn"><fmt:message key="log.in"/></button>
                 <c:if test="${not empty requestScope.errorSet}">
                     <label style="color: red; font-size: medium">ERRRORORORORO</label>
                 </c:if>

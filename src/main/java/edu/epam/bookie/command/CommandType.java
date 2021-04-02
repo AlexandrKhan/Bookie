@@ -25,6 +25,7 @@ public enum CommandType {
     PERSONAL_CABINET(new PersonalCabinetCommand()),
     SEARCH_MATCHES(new SearchMatchesByTeamCommand()),
     INVALID_COMMAND(new InvalidCommand()),
+    SINGLE_MATCH(new SingleMatchCommand()),
     VERIFY_ACCOUNT(new VerifyAccountCommand());
 
     CommandType(Command command) {

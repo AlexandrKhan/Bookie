@@ -3,6 +3,9 @@ package edu.epam.bookie.command.impl;
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
+import edu.epam.bookie.command.SessionAttribute;
+import edu.epam.bookie.model.User;
+import edu.epam.bookie.service.impl.UserServiceImpl;
 import edu.epam.bookie.util.FileNameGenerator;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
@@ -13,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.List;
 
@@ -21,9 +25,12 @@ public class FileUploadCommand implements Command {
     private static final String FILE_TYPE = "image/jpg, image/png, image/gif, image/jpeg";
     private static final FileItemFactory FILE_FACTORY = new DiskFileItemFactory();
     private static final ServletFileUpload FILE_UPLOAD = new ServletFileUpload(FILE_FACTORY);
+    private static final UserServiceImpl userService = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute(SessionAttribute.CURRENT_USER);
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (isMultipart) {
             FILE_UPLOAD.setFileSizeMax(1024 * 1024 * 5);
@@ -40,8 +47,9 @@ public class FileUploadCommand implements Command {
                         request.getSession().setAttribute(RequestParameter.PASSPORT_SCAN, fileName);
                         try {
                             item.write(path);
+                            userService.uploadScan(fileName, user.getId());
                         } catch (Exception e) {
-                            logger.error("File write error");
+                            logger.error("File write error", e);
                         }
                     }
                 }

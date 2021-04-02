@@ -1,7 +1,7 @@
 package edu.epam.bookie.service.impl;
 
 import edu.epam.bookie.dao.impl.BetDaoImpl;
-import edu.epam.bookie.exception.BetServiceException;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.model.sport.Bet;
 import edu.epam.bookie.service.BetService;
@@ -21,7 +21,7 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<Bet> selectBetsByMatchId(long id) throws BetServiceException {
+    public List<Bet> selectBetsByMatchId(long id) throws ServiceException {
         Optional<List<Bet>> optional = Optional.empty();
         List<Bet> bets = new ArrayList<>();
         try {
@@ -38,7 +38,7 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<Bet> selectBetsByUserId(long id) throws BetServiceException {
+    public List<Bet> selectBetsByUserId(long id) throws ServiceException {
         Optional<List<Bet>> optional = Optional.empty();
         List<Bet> bets = new ArrayList<>();
         try {
@@ -55,7 +55,7 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public boolean payBets(Bet bet) throws BetServiceException {
+    public boolean payBets(Bet bet) throws ServiceException {
         boolean result = false;
         try {
             result = betDao.payBets(bet);
@@ -66,7 +66,7 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public boolean betLost(Bet bet) throws BetServiceException {
+    public boolean betLost(Bet bet) throws ServiceException {
         boolean result = false;
         try {
             result = betDao.betLost(bet);

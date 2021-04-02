@@ -1,6 +1,5 @@
 package edu.epam.bookie.controller;
 
-import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.model.sport.Team;
@@ -19,13 +18,14 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionCreated(HttpSessionEvent se) {
         HttpSession session = se.getSession();
-        session.setAttribute(RequestParameter.TEAMS, Team.values());
+        session.setAttribute(SessionAttribute.TEAMS, Team.values());
         session.setAttribute(SessionAttribute.RESULT, Result.values());
         logger.info("Session created");
     }
 
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-
+        HttpSession session = se.getSession();
+        session.invalidate();
     }
 }

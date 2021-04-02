@@ -4,7 +4,7 @@ import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
-import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
@@ -27,8 +27,11 @@ public class CashInCommand implements Command {
         if (user.getStatusType() == StatusType.VERIFIED) {
             try {
                 int userId = user.getId();
+                BigDecimal currentAmount = user.getMoneyBalance();
                 service.cashIn(userId, money);
-            } catch (UserServiceException e) {
+                user.setMoneyBalance(currentAmount.add(money));
+                session.setAttribute(SessionAttribute.CURRENT_USER, user);
+            } catch (ServiceException e) {
                 logger.error("Error cashing in", e);
             }
         } else {

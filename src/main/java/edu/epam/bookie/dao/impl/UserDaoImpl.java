@@ -20,6 +20,7 @@ public class UserDaoImpl implements UserDao {
 
     private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, token) VALUES (?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL_USERS = "SELECT * FROM bookie.user";
+    private static final String SELECT_ALL_NOT_VERIFIED_USERS = "SELECT * FROM bookie.user WHERE status='ACTIVATED'";
     private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM bookie.user WHERE username=?";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM bookie.user WHERE id=?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM bookie.user WHERE id=?";
@@ -33,6 +34,7 @@ public class UserDaoImpl implements UserDao {
     private static final String UNBLOCK_USER = "UPDATE bookie.user SET status='VERIFIED' WHERE id=?";
     private static final String CASH_IN = "UPDATE bookie.user SET money_balance=money_balance + ? WHERE id=?";
     private static final String WITHDRAW_MONEY = "UPDATE bookie.user SET money_balance=money_balance - ? WHERE id=?";
+    private static final String UPLOAD_SCAN = "UPDATE bookie.user SET passport_scan=? WHERE id=?";
 
     private UserDaoImpl() {
     }
@@ -67,16 +69,7 @@ public class UserDaoImpl implements UserDao {
             List<User> userList = new ArrayList<>();
             while (resultSet.next()) {
                 User user = new User();
-                user.setId(resultSet.getInt(DatabaseColumn.ID));
-                user.setUsername(resultSet.getString(DatabaseColumn.USERNAME));
-                user.setFirstName(resultSet.getString(DatabaseColumn.FIRST_NAME));
-                user.setLastName(resultSet.getString(DatabaseColumn.LAST_NAME));
-                user.setEmail(resultSet.getString(DatabaseColumn.EMAIL));
-                user.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
-                user.setRole(resultSet.getString(DatabaseColumn.ROLE));
-                user.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
-                user.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
-                user.setToken(resultSet.getString(DatabaseColumn.TOKEN));
+                setUserFields(resultSet, user);
                 userList.add(user);
             }
             users = Optional.of(userList);
@@ -98,15 +91,7 @@ public class UserDaoImpl implements UserDao {
 
             if (resultSet.next()) {
                 User userTemp = new User();
-                userTemp.setUsername(resultSet.getString(DatabaseColumn.USERNAME));
-                userTemp.setFirstName(resultSet.getString(DatabaseColumn.FIRST_NAME));
-                userTemp.setLastName(resultSet.getString(DatabaseColumn.LAST_NAME));
-                userTemp.setEmail(resultSet.getString(DatabaseColumn.EMAIL));
-                userTemp.setPassword(resultSet.getString(DatabaseColumn.PASSWORD));
-                userTemp.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
-                userTemp.setRole(resultSet.getString(DatabaseColumn.ROLE));
-                userTemp.setToken(resultSet.getString(DatabaseColumn.TOKEN));
-
+                setUserFields(resultSet, userTemp);
                 user = Optional.of(userTemp);
             }
         } catch (SQLException e) {
@@ -127,19 +112,8 @@ public class UserDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 User userTemp = new User();
-                userTemp.setId(resultSet.getInt(DatabaseColumn.ID));
-                userTemp.setUsername(resultSet.getString(DatabaseColumn.USERNAME));
-                userTemp.setFirstName(resultSet.getString(DatabaseColumn.FIRST_NAME));
-                userTemp.setLastName(resultSet.getString(DatabaseColumn.LAST_NAME));
-                userTemp.setEmail(resultSet.getString(DatabaseColumn.EMAIL));
+                setUserFields(resultSet, userTemp);
                 userTemp.setPassword(resultSet.getString(DatabaseColumn.PASSWORD));
-                userTemp.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
-                userTemp.setRole(resultSet.getString(DatabaseColumn.ROLE));
-                userTemp.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
-                userTemp.setStatusType(resultSet.getString(DatabaseColumn.USER_STATUS));
-                userTemp.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
-                userTemp.setToken(resultSet.getString(DatabaseColumn.TOKEN));
-
                 user = Optional.of(userTemp);
             }
         } catch (SQLException e) {
@@ -287,6 +261,21 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
+    public boolean uploadScan(String scan, int id) throws DaoException {
+        boolean result;
+        try (Connection connection = pool.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPLOAD_SCAN)) {
+            statement.setString(1, scan);
+            statement.setInt(2, id);
+            result = statement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            logger.error("Error uploading scan to: {}", id, e);
+            throw new DaoException(e);
+        }
+        return result;
+    }
+
+    @Override
     public Optional<User> findById(long id) throws DaoException {
         Optional<User> user;
         try (Connection connection = pool.getConnection();
@@ -294,19 +283,8 @@ public class UserDaoImpl implements UserDao {
             ResultSet resultSet = statement.executeQuery(SELECT_USER_BY_ID);
             User userTemp = new User();
             while (resultSet.next()) {
-                userTemp.setId(resultSet.getInt(DatabaseColumn.ID));
-                userTemp.setUsername(resultSet.getString(DatabaseColumn.USERNAME));
-                userTemp.setFirstName(resultSet.getString(DatabaseColumn.FIRST_NAME));
-                userTemp.setLastName(resultSet.getString(DatabaseColumn.LAST_NAME));
-                userTemp.setEmail(resultSet.getString(DatabaseColumn.EMAIL));
+                setUserFields(resultSet, userTemp);
                 userTemp.setPassword(resultSet.getString(DatabaseColumn.PASSWORD));
-                userTemp.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
-                userTemp.setRole(resultSet.getString(DatabaseColumn.ROLE));
-                userTemp.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
-                userTemp.setStatusType(resultSet.getString(DatabaseColumn.USER_STATUS));
-                userTemp.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
-                userTemp.setToken(resultSet.getString(DatabaseColumn.TOKEN));
-
             }
             user = Optional.of(userTemp);
         } catch (SQLException e) {
@@ -328,5 +306,19 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException(e);
         }
         return result;
+    }
+
+    private void setUserFields(ResultSet resultSet, User user) throws SQLException {
+        user.setId(resultSet.getInt(DatabaseColumn.ID));
+        user.setUsername(resultSet.getString(DatabaseColumn.USERNAME));
+        user.setFirstName(resultSet.getString(DatabaseColumn.FIRST_NAME));
+        user.setLastName(resultSet.getString(DatabaseColumn.LAST_NAME));
+        user.setEmail(resultSet.getString(DatabaseColumn.EMAIL));
+        user.setDateOfBirth(resultSet.getDate(DatabaseColumn.DATE_OF_BIRTH).toLocalDate());
+        user.setRole(resultSet.getString(DatabaseColumn.ROLE));
+        user.setMoneyBalance(resultSet.getBigDecimal(DatabaseColumn.MONEY_BALANCE));
+        user.setPassportScan(resultSet.getString(DatabaseColumn.PASSPORT_SCAN));
+        user.setStatusType(resultSet.getString(DatabaseColumn.USER_STATUS));
+        user.setToken(resultSet.getString(DatabaseColumn.TOKEN));
     }
 }

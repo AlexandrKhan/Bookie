@@ -36,4 +36,5 @@ class DatabaseColumn {
     static final String MESSAGE = "text";
     static final String THEME = "theme";
     static final String TOKEN = "token";
+    static final String COMMENT = "comment";
 }

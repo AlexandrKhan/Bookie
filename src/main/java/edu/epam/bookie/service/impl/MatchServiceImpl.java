@@ -2,7 +2,8 @@ package edu.epam.bookie.service.impl;
 
 import edu.epam.bookie.dao.impl.MatchDaoImpl;
 import edu.epam.bookie.exception.DaoException;
-import edu.epam.bookie.exception.MatchServiceException;
+import edu.epam.bookie.exception.ServiceException;
+import edu.epam.bookie.model.Comment;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.model.sport.Team;
@@ -26,7 +27,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public List<Match> findAll() throws MatchServiceException {
+    public List<Match> findAll() throws ServiceException {
         Optional<List<Match>> matchList = Optional.empty();
         List<Match> matches = new ArrayList<>();
         try {
@@ -41,7 +42,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match findById(Long id) throws MatchServiceException {
+    public Match findById(Long id) throws ServiceException {
         Optional<Match> matchTemp = Optional.empty();
         Match match = new Match();
         try {
@@ -56,22 +57,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public List<Match> findAllNotStartedMatches() throws MatchServiceException {
-        Optional<List<Match>> matchList = Optional.empty();
-        List<Match> matches = new ArrayList<>();
-        try {
-            matchList = matchDao.findAllNotStartedMatches();
-        } catch (DaoException e) {
-            logger.error("Cant find all not started matches");
-        }
-        if (matchList.isPresent()) {
-            matches = matchList.get();
-        }
-        return matches;
-    }
-
-    @Override
-    public boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws MatchServiceException {
+    public boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws ServiceException {
         boolean result = false;
         if (date.isAfter(LocalDate.now()) ||  (!date.isBefore(LocalDate.now()) && time.isAfter(LocalTime.now().plusMinutes(60)))) {
             try {
@@ -88,7 +74,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public List<Match> findMatchesByTeam(String team) throws MatchServiceException {
+    public List<Match> findMatchesByTeam(String team) throws ServiceException {
         Optional<List<Match>> matchList = Optional.empty();
         List<Match> matches = new ArrayList<>();
         try {
@@ -103,7 +89,22 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws MatchServiceException {
+    public List<Comment> findCommentsForMatch(Long id) throws ServiceException {
+        Optional<List<Comment>> commentList = Optional.empty();
+        List<Comment> comments = new ArrayList<>();
+        try {
+            commentList = matchDao.findCommentsForMatch(id);
+        } catch (DaoException e) {
+            logger.error("Cant get commments for match", e);
+        }
+        if (commentList.isPresent()) {
+            comments = commentList.get();
+        }
+        return comments;
+    }
+
+    @Override
+    public Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws ServiceException {
         Match matchTemp = new Match(first, second, date, time, homeCoeff, drawCoeff, awayCoeff);
         Optional<Match> match = Optional.empty();
         try {
@@ -115,18 +116,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public boolean deleteById(Long id) throws MatchServiceException {
-        boolean result = false;
-        try {
-            result = matchDao.deleteById(id);
-        } catch (DaoException e) {
-            logger.error("Cant delete match by id: " + id);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean setGoalsResultAndOverMatchById(Long id) throws MatchServiceException {
+    public boolean setGoalsResultAndOverMatchById(Long id) throws ServiceException {
         boolean result = false;
         int firstTeamGoal = (int) (6.0 * Math.random());
         int secondTeamGoal = (int) (6.0 * Math.random());

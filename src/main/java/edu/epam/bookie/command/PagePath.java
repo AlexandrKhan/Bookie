@@ -5,6 +5,7 @@ public enum PagePath {
     AUTHORISATION ("/jsp/auth.jsp","/controller?command=authorisation"),
     ADMIN ("/jsp/admin.jsp", "/controller?command=admin_panel"),
     MATCHES ("/jsp/matchList.jsp", "/controller?command=match_list"),
+    MATCH ("/jsp/match.jsp", "/controller?command=single_match"),
     CABINET ("/jsp/cabinet.jsp", "/controller?command=personal_cabinet"),
     ADD_MATCH ("/jsp/addMatch.jsp","/controller?command=create_match"),
     ERROR_500 ("/jsp/error/500.jsp",""),

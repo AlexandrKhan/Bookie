@@ -1,8 +1,6 @@
 package edu.epam.bookie.controller.scheduler;
 
-import edu.epam.bookie.exception.BetServiceException;
-import edu.epam.bookie.exception.MatchServiceException;
-import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.Message;
 import edu.epam.bookie.model.Theme;
 import edu.epam.bookie.model.sport.Bet;
@@ -51,13 +49,13 @@ public class GenerateScoreTask implements Runnable {
                                     } else {
                                         betService.betLost(b);
                                     }
-                                } catch (BetServiceException | UserServiceException e) {
-                                    e.printStackTrace();
+                                } catch (ServiceException e) {
+                                    logger.error("Paying bets exception", e);
                                 }
                             });
                     todayMatchStartTimeMap.remove(matchId);
-                } catch (MatchServiceException| BetServiceException e) {
-                    logger.error("Match service ex", e);
+                } catch (ServiceException e) {
+                    logger.error("Setting goals exception", e);
                 }
             }
         });

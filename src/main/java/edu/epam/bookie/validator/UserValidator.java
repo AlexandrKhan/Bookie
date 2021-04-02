@@ -32,4 +32,8 @@ public class UserValidator {
     public static boolean legalAge(LocalDate date) {
         return date != null && date.plusYears(18).isAfter(LocalDate.now());
     }
+
+    public static boolean passwordsMatch(String pass, String repeat) {
+        return pass.equals(repeat);
+    }
 }

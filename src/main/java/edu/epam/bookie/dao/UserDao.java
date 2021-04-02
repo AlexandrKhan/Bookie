@@ -4,6 +4,7 @@ import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.model.User;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 public interface UserDao extends BaseDao<User> {
@@ -18,4 +19,6 @@ public interface UserDao extends BaseDao<User> {
     boolean unblockUser(int id) throws DaoException;
     boolean cashIn(int id, BigDecimal money) throws DaoException;
     boolean withdrawMoney(int id, BigDecimal money) throws DaoException;
+    boolean uploadScan(String scan, int id) throws DaoException;
+//    Optional<List<User>> findAllNotVerifiedUsers() throws DaoException;
 }

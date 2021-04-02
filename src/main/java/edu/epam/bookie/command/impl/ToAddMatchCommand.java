@@ -11,8 +11,6 @@ import javax.servlet.http.HttpSession;
 public class ToAddMatchCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
-//        HttpSession session = request.getSession();
-//        session.setAttribute(RequestParameter.TEAMS, Team.values());
         return PagePath.ADD_MATCH.getDirectUrl();
     }
 }

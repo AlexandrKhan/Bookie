@@ -32,6 +32,7 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.HOME, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.SEARCH_MATCHES, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.LANGUAGE, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
+        ROLE_MAP.put(CommandType.SINGLE_MATCH, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.AUTHORISATION, Collections.singletonList(Role.GUEST));
         ROLE_MAP.put(CommandType.LOGOUT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.MATCH_LIST, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));

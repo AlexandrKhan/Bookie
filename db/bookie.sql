@@ -32,6 +32,18 @@ CREATE TABLE `match` (
   PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `match_comments` (
+  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+  `match_id` BIGINT(20) NOT NULL,
+  `user_id` BIGINT(20) NOT NULL,
+  `comment` VARCHAR(255) NOT NULL,
+  `date` DATE NOT NULL,
+  `time` TIME NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (match_id) REFERENCES bookie.match(id) ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE `match_result` (
   `id` BIGINT(20),
   `home_team_goals` INT(10) NOT NULL DEFAULT 0,
@@ -67,21 +79,6 @@ CREATE TABLE `message` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE
 );
-
-# CREATE TABLE `express_bet` (
-#   `id` BIGINT(20) NOT NULL,
-#   `user_id` BIGINT(20) NOT NULL,
-#   `match_id` BIGINT(20) NOT NULL,
-#   `bet_date` DATE NOT NULL,
-#   `bet_time` TIME NOT NULL,
-#   `bet_amount` DECIMAL(7,2) NOT NULL,
-#   `bet_on_result` ENUM('HOME', 'DRAW', 'AWAY') DEFAULT NULL,
-#   `bet_status` ENUM('NOT_STARTED', 'WON', 'LOST') DEFAULT 'NOT_STARTED',
-#   `bet_coeff` DECIMAL(4,2) NOT NULL,
-#   PRIMARY KEY (`id`),
-#   FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE,
-#   FOREIGN KEY (match_id) REFERENCES bookie.match(id) ON DELETE CASCADE ON UPDATE CASCADE
-# );
 
 INSERT INTO user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES
   ('admin', 'Alexandr', 'Khan', 'alexandrhan22@gmail.com', 'AYXS9InR{knQyJKe', '1995-06-28', 'ADMIN', 'pass.jpg');

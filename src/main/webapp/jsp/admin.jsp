@@ -1,23 +1,52 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="custom" uri="/WEB-INF/tld/custom.tld" %>
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="property/text"/>
+<c:set var="users" value="${sessionScope.users}"/>
+
 <html>
-<head>
-    <%--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">--%>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
-    <%--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">--%>
-    <title>Title</title>
-</head>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+<title>Title</title>
+
+<c:if test="${not empty param.filter}">
+    <c:choose>
+        <c:when test="${param.filter == 'banned'}">
+            <c:set var="users" value="${custom:filterBannedUsers(users)}"/>
+        </c:when>
+        <c:when test="${param.filter == 'not_verified'}">
+            <c:set var="users" value="${custom:filterNotVerifiedUsers(users)}"/>
+        </c:when>
+    </c:choose>
+</c:if>
 <body>
 <jsp:include page="/jsp/header.jsp"/>
 <h1>List of users</h1>
-<c:forEach items="${sessionScope.users}" var="user">
-    <h1><c:out value="${user.username}"/></h1>
+
+<form action="${pageContext.request.contextPath}/controller?command=${param.command}">
+    <input type="hidden" name="command" value="${param.command}"/>
+    <c:if test="${not empty param.text}">
+        <input type="hidden" name="text" value="${param.text}"/>"/>
+    </c:if>
+    <button type="submit" name="filter" value="banned">Banned</button>
+</form>
+
+<form action="${pageContext.request.contextPath}/controller?command=${param.command}">
+    <input type="hidden" name="command" value="${param.command}"/>
+    <c:if test="${not empty param.text}">
+        <input type="hidden" name="text" value="${param.text}"/>"/>
+    </c:if>
+    <button type="submit" name="filter" value="not_verified">Not verified</button>
+</form>
+
+
+<c:forEach items="${users}" var="user">
+    <h1><c:out value="${user.firstName} ${user.lastName}"/></h1>
+    <h1><c:out value="${user.dateOfBirth}"/></h1>
     <img src="${pageContext.request.contextPath}/uploads/${user.passportScan}" width="100" height="100"
-         alt="${user.username}" class="img-thumbnail">
+         alt="${user.firstName} ${user.lastName}" class="img-thumbnail">
     <div id="myModal" class="modal-scan">
         <span class="close">&times;</span>
         <img class="modal-content-scan" id="img01"
@@ -29,12 +58,6 @@
             <fmt:message key="verify.account"/>
         </button>
     </form>
-
-    <%--<form method="post" action="${pageContext.request.contextPath}/controller?command=block_user&id=${user.id}">--%>
-    <%--<button type="submit" class="btn btn-primary">--%>
-    <%--<fmt:message key="block.user"/>--%>
-    <%--</button>--%>
-    <%--</form>--%>
 
     <div>
         <button type='button' class='btn btn-primary' data-toggle='modal'
@@ -53,26 +76,26 @@
                         <div class="modal-body">
                             <input type="hidden" name="id" id="id" value="">
                             <label for="message"></label><input type="text" name="message"
-                                                                  class="form-control"
-                                                                  id="message"
-                                                                  style="margin: 10px auto 10px auto;">
-                            <label for="days"></label><input type="number" name="days" id="days" step="1" min="1" value="1">
+                                                                class="form-control"
+                                                                id="message"
+                                                                style="margin: 10px auto 10px auto;">
+                            <label for="days"></label><input type="number" name="days" id="days" step="1" min="1"
+                                                             value="1">
                         </div>
                         <button type='button' class='btn btn-alert' data-dismiss='modal'>
                             <fmt:message key='button.close'/></button>
                         <input type='submit' value='<fmt:message key='button.save' />' class='btn btn-primary'/>
-                    </form>
 
-                    <button type='button' class='btn btn-alert' data-dismiss='modal'>
-                        <fmt:message
-                                key='button.close'/></button>
-                    <input type='submit' value='<fmt:message key='button.save'/>'
-                           class='btn btn-primary'/>
+                        <button type='button' class='btn btn-alert' data-dismiss='modal'>
+                            <fmt:message
+                                    key='button.close'/></button>
+                        <input type='submit' value='<fmt:message key='button.save'/>'
+                               class='btn btn-primary'/>
 
-                    <c:if test="${not empty requestScope.errorSet}">
-                        <label style="color: red; font-size: medium"><fmt:message
-                                key="match.dateError"/></label>
-                    </c:if>
+                        <c:if test="${not empty requestScope.errorSet}">
+                            <label style="color: red; font-size: medium"><fmt:message
+                                    key="match.dateError"/></label>
+                        </c:if>
                     </form>
                 </div>
             </div>

@@ -4,8 +4,7 @@ import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
-import edu.epam.bookie.exception.MatchServiceException;
-import edu.epam.bookie.exception.UserServiceException;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.model.sport.Bet;
@@ -34,6 +33,7 @@ public class PlaceBetCommand implements Command {
 
         int userId = user.getId();
         int matchId = Integer.valueOf(request.getParameter(RequestParameter.MATCH_ID));
+        BigDecimal money = user.getMoneyBalance();
         BigDecimal betAmount = new BigDecimal(request.getParameter(RequestParameter.BET_AMOUNT));
         Result betOnResult = Result.valueOf(request.getParameter(RequestParameter.BET_ON_RESULT).toUpperCase());
         Bet bet = new Bet();
@@ -54,12 +54,12 @@ public class PlaceBetCommand implements Command {
                         bet.setBetCoeff(match.getDrawCoeff());
                         break;
                 }
-            } catch (MatchServiceException e) {
+            } catch (ServiceException e) {
                 logger.error("Error getting match by id", e);
             }
 
             try {
-                if (betAmount.compareTo(user.getMoneyBalance()) > 0) {
+                if (betAmount.compareTo(money) > 0) {
                     logger.info("Not enough money for bet");
                     ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
                     errorSet.add(ValidationError.NOT_ENOUGH_MONEY);
@@ -69,7 +69,9 @@ public class PlaceBetCommand implements Command {
                     return PagePath.MATCHES.getServletPath();
                 }
                 userService.placeBet(bet);
-            } catch (UserServiceException e) {
+                user.setMoneyBalance(money.subtract(betAmount));
+                session.setAttribute(SessionAttribute.CURRENT_USER, user);
+            } catch (ServiceException e) {
                 logger.error(e);
             }
         } else {

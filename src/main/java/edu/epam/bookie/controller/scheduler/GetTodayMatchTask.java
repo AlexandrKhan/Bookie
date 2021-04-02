@@ -1,7 +1,8 @@
 package edu.epam.bookie.controller.scheduler;
 
 import static edu.epam.bookie.controller.scheduler.MatchContextListener.todayMatchStartTimeMap;
-import edu.epam.bookie.exception.MatchServiceException;
+
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.MatchProgress;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
@@ -19,16 +20,13 @@ public class GetTodayMatchTask implements Runnable {
     public void run() {
         try {
             List<Match> matchList = service.findAll();
-
             for (Match match : matchList) {
-                if (checkIfMatchIsTodayAndNotOver(match)) {
-                    if (!todayMatchStartTimeMap.containsKey(match.getId())) {
+                if (checkIfMatchIsTodayAndNotOver(match) && !(todayMatchStartTimeMap.containsKey(match.getId()))) {
                         todayMatchStartTimeMap.put(match.getId(), match.getStartTime());
                         logger.info("Added match with id {} to todayMap, start time at: {}", match.getId(), match.getStartTime());
-                    }
                 }
             }
-        } catch (MatchServiceException e) {
+        } catch (ServiceException e) {
             logger.error("Error finding today matches: " + e);
         }
     }

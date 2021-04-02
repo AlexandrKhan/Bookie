@@ -1,7 +1,7 @@
 package edu.epam.bookie.model;
 
 public enum StatusType {
-    ACTIVED,
+    ACTIVATED,
     BLOCKED,
     NOT_ACTIVATED,
     VERIFIED

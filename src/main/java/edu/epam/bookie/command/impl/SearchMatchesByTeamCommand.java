@@ -4,7 +4,7 @@ import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.command.SessionAttribute;
-import edu.epam.bookie.exception.MatchServiceException;
+import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import org.apache.logging.log4j.LogManager;
@@ -25,7 +25,7 @@ public class SearchMatchesByTeamCommand implements Command {
         try {
             matches = service.findMatchesByTeam(request.getParameter(RequestParameter.TEAM_NAME).toUpperCase());
             session.setAttribute(SessionAttribute.MATCHES, matches);
-        } catch (MatchServiceException e) {
+        } catch (ServiceException e) {
             logger.error("Error in search command", e);
         }
         return PagePath.MATCHES.getDirectUrl();

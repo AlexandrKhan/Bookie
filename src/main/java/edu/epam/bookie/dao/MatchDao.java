@@ -1,6 +1,7 @@
 package edu.epam.bookie.dao;
 
 import edu.epam.bookie.exception.DaoException;
+import edu.epam.bookie.model.Comment;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.MatchProgress;
 import edu.epam.bookie.model.sport.Result;
@@ -16,4 +17,5 @@ public interface MatchDao extends BaseDao<Match> {
     boolean updateDateTimeAtNotStartedMatch(Long matchId, LocalDate date, LocalTime time) throws DaoException;
     Optional<List<Match>> findMatchesByTeam(String team) throws DaoException;
     Optional<List<Match>> findMatchesOnWhichUserBetByUserId(Long id) throws DaoException;
+    Optional<List<Comment>> findCommentsForMatch(Long id) throws DaoException;
 }
