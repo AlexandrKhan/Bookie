@@ -4,6 +4,14 @@ By Alexandr Khan
 ## Description:
 Application for sport bets, providing functionality of betting on different outcomes of the match
 
+## How it works:
+* Register
+* Activate via email
+* Wait for admin to verify you
+* Cash in
+* Place bet on match (3 outcomes: Home, Draw, Away)
+* After match is over, if your bet has won you will get paid
+
 ## Features:
 * Patterns: Singleton, Command, Proxy, Factory
 * Servlet
