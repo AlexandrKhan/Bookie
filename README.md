@@ -7,6 +7,7 @@ Application for sport bets, providing functionality of betting on different outc
 ## How it works:
 * Register
 * Activate via email
+* Provide passport scan
 * Wait for admin to verify you
 * Cash in
 * Place bet on match (3 outcomes: Home, Draw, Away)
