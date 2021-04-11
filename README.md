@@ -22,10 +22,11 @@ Application for sport bets, providing functionality of betting on different outc
 
 ## User status notes:
 * After registration user status becomes NOT ACTIVATED
-* Once he verifies his account via email status changes to ACTIVATED
-* After that user must provide passport scan for admin to verify account
-* Until account is verified user can't cash in & place bets 
+* Once he activates his account via email status changes to ACTIVATED
+* After that user must provide passport scan for admin to VERIFY account
+* Until account is verified user can not cash in & place bets 
 
+## Role functional:
 Function | ADMIN | USER | GUEST
 ---------| --------------|----------------|---------------
 Log in |   |   | *
