@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<taglib
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-jsptaglibrary_2_1.xsd"
+        version="2.1">
+
+    <display-name>Custom tag</display-name>
+    <tlib-version>1.0</tlib-version>
+    <short-name>customTag</short-name>
+    <uri>edu.epam.bookie.tag</uri>
+
+    <function>
+        <name>filterNotVerifiedUsers</name>
+        <function-class>edu.epam.bookie.tag.UserSorting</function-class>
+        <function-signature>java.util.List selectNotVerifiedUsers(java.util.List)</function-signature>
+    </function>
+
+    <function>
+        <name>filterBannedUsers</name>
+        <function-class>edu.epam.bookie.tag.UserSorting</function-class>
+        <function-signature>java.util.List selectBannedUsers(java.util.List)</function-signature>
+    </function>
+
+    <function>
+        <name>filterNotStartedMatches</name>
+        <function-class>edu.epam.bookie.tag.MatchSorting</function-class>
+        <function-signature>java.util.List selectNotStartedMatches(java.util.List)</function-signature>
+    </function>
+
+    <function>
+        <name>sortMatchesByDateThenTime</name>
+        <function-class>edu.epam.bookie.tag.MatchSorting</function-class>
+        <function-signature>java.util.List sortByDateThenTime(java.util.List)</function-signature>
+    </function>
+
+    <function>
+        <name>formatLocalDateTime</name>
+        <function-class>edu.epam.bookie.tag.DateFormatTag</function-class>
+        <function-signature>java.lang.String formatDateAndTime(java.time.LocalDate,java.time.LocalTime)</function-signature>
+    </function>
+</taglib>
