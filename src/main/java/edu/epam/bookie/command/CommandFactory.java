@@ -16,6 +16,12 @@ public class CommandFactory {
         return instance;
     }
 
+    /**
+     * Gets command by name
+     *
+     * @param commandName command name
+     * @return Command
+     */
     public static Command defineCommand(String commandName) {
        Command command;
         try {
@@ -26,6 +32,12 @@ public class CommandFactory {
         return command;
     }
 
+    /**
+     * Gets command type by name
+     *
+     * @param commandName commandName
+     * @return Command
+     */
     public static CommandType getCommandType(String commandName) {
         CommandType command;
         try {

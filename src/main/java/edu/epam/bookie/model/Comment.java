@@ -3,6 +3,9 @@ package edu.epam.bookie.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Comment on match page
+ */
 public class Comment implements Entity {
     private int id;
     private int matchId;

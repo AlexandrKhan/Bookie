@@ -6,6 +6,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Football match
+ */
 public class Match implements Entity {
     private int id;
     private Team homeTeam;
@@ -48,7 +51,12 @@ public class Match implements Entity {
         this.result = Result.DRAW;
     }
 
-
+    /**
+     * homeCoeff, drawCoeff, awayCoeff represent the coefficients for bets on this match
+     * ex. if homeCoeff is 3 and your bet is 100, potential win would be 300 (including the bet amount)
+     *
+     * @return coefficient for match
+     */
     public BigDecimal getHomeCoeff() {
         return homeCoeff;
     }
@@ -73,6 +81,11 @@ public class Match implements Entity {
         this.awayCoeff = awayCoeff;
     }
 
+    /**
+     * Goals scored by home team
+     *
+     * @return goals
+     */
     public int getHomeTeamGoals() {
         return homeTeamGoals;
     }
@@ -80,7 +93,11 @@ public class Match implements Entity {
     public void setHomeTeamGoals(int firstTeamGoals) {
         this.homeTeamGoals = firstTeamGoals;
     }
-
+    /**
+     * Goals scored by away team
+     *
+     * @return goals
+     */
     public int getAwayTeamGoals() {
         return awayTeamGoals;
     }
@@ -88,7 +105,11 @@ public class Match implements Entity {
     public void setAwayTeamGoals(int awayTeamGoals) {
         this.awayTeamGoals = awayTeamGoals;
     }
-
+    /**
+     * Shows whether the match is started/over
+     *
+     * @return progress
+     */
     public MatchProgress getMatchProgress() {
         return matchProgress;
     }
@@ -100,6 +121,7 @@ public class Match implements Entity {
     public void setMatchProgress(String matchProgress) {
         this.matchProgress = MatchProgress.valueOf(matchProgress);
     }
+
     public int getId() {
         return id;
     }
@@ -147,7 +169,11 @@ public class Match implements Entity {
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
-
+    /**
+     * Result of the match (home win, draw, away win)
+     *
+     * @return result
+     */
     public Result getResult() {
         return result;
     }

@@ -1,5 +1,8 @@
 package edu.epam.bookie.model;
 
+/**
+ * Theme of message sent to user
+ */
 public enum Theme {
     WON("Won"),
     DELAY("Delay"),

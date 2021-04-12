@@ -7,7 +7,6 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-
     <title>Title</title>
 </head>
 <body>
@@ -33,7 +32,7 @@
         </label>
         </div>
         <div class="form-group">
-            <label for="startDate"></label><input type="date" name="startDate" class="form-control" id="startDate" >
+            <label for="startDate"></label><input type="date" name="startDate" class="form-control" id="startDate" required>
         </div>
         <div class="form-group">
         <label for="startTime"></label><input type="time" name="startTime" id="startTime" required>

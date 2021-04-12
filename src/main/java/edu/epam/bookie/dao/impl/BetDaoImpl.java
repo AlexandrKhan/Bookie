@@ -24,7 +24,6 @@ public class BetDaoImpl implements BetDao {
     private static final String PAY_BETS_ON_BET_ID = "UPDATE bookie.user, bookie.bet SET money_balance = money_balance + ?, bet_status='WON' WHERE bookie.bet.id=? AND bookie.user.id=bookie.bet.user_id";
     private static final String SET_BET_STATUS_LOST = "UPDATE bookie.bet SET bet_status='LOST' WHERE id=?";
     private static final String SELECT_ALL_BETS_OF_USER = "SELECT * FROM bookie.bet WHERE user_id=?";
-    private static final String SELECT_ALL_BETS_OF_DATE = "SELECT * FROM bookie.bet WHERE bet_date=?";
 
     private BetDaoImpl() {
     }

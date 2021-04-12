@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Command sends user to page with his messages
+ */
 public class ToMessagesCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ToMessagesCommand.class);
     private final UserServiceImpl service = UserServiceImpl.userService;

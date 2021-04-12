@@ -9,6 +9,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Schedules 2 tasks
+ * 1) Get all today matches
+ * 2) When match time = LocalTime.now() -> generate random score
+ */
+
 @WebListener
 public class MatchContextListener implements ServletContextListener {
     private ScheduledExecutorService scheduler;

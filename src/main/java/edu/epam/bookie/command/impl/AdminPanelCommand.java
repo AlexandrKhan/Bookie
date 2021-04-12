@@ -12,6 +12,10 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+
+/**
+ * Command leading to admin page (List of users)
+ */
 public class AdminPanelCommand implements Command {
     private Logger logger = LogManager.getLogger(AdminPanelCommand.class);
     private static final UserServiceImpl service = UserServiceImpl.userService;

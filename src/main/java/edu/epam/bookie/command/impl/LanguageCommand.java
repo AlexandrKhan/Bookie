@@ -7,6 +7,9 @@ import edu.epam.bookie.command.RequestParameter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Command for switching localization
+ */
 public class LanguageCommand implements Command {
     private static final String RU = "ru";
     private static final String EN = "en";

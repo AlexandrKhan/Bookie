@@ -23,7 +23,6 @@ public class MatchDaoImpl implements MatchDao {
     private static final String SELECT_ALL_MATCHES = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id";
     private static final String ADD_MATCH = "INSERT INTO bookie.match(home_team, away_team, start_date, start_time, home_coeff, draw_coeff, away_coeff) VALUES (?,?,?,?,?,?,?)";
     private static final String ADD_DEFAULT_MATCH_PROGRESS = "INSERT INTO bookie.match_result(id, home_team_goals, away_team_goals, result, match_progress) VALUES (LAST_INSERT_ID(), 0, 0, 'DRAW', 'NOT_STARTED')";
-    private static final String SELECT_ALL_NOT_STARTED_MATCHES = "SELECT * FROM bookie.match WHERE bookie.match_result.match_progress='NOT_STARTED'";
     private static final String DELETE_MATCH_BY_ID = "DELETE FROM bookie.match WHERE id=?";
     private static final String SET_GOALS_RESULT_AND_OVER_MATCH_BY_ID = "UPDATE bookie.match_result SET home_team_goals=?, away_team_goals=?, result=?, match_progress='OVER' WHERE id=?";
     private static final String UPDATE_DATE_TIME_AT_MATCH = "UPDATE bookie.match SET start_date=?, start_time=? WHERE id=?";
@@ -130,26 +129,6 @@ public class MatchDaoImpl implements MatchDao {
             throw new DaoException(e);
         }
         return match;
-    }
-
-    @Override
-    public Optional<List<Match>> findAllNotStartedMatches() throws DaoException {
-        Optional<List<Match>> matches;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_ALL_NOT_STARTED_MATCHES)) {
-            ResultSet resultSet = statement.executeQuery(SELECT_ALL_NOT_STARTED_MATCHES);
-            List<Match> matchList = new ArrayList<>();
-            while (resultSet.next()) {
-                Match match = new Match();
-                setNotStartedMatchFields(resultSet, match);
-                matchList.add(match);
-            }
-            matches = Optional.of(matchList);
-        } catch (SQLException e) {
-            logger.error("Cant find all not started matches", e);
-            throw new DaoException(e);
-        }
-        return matches;
     }
 
 

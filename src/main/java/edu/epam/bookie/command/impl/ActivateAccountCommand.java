@@ -10,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Command activating user after he follows the link send by mail
+ */
 public class ActivateAccountCommand implements Command{
     public static final Logger logger = LogManager.getLogger(ActivateAccountCommand.class);
     private UserServiceImpl service = UserServiceImpl.userService;
@@ -25,6 +28,6 @@ public class ActivateAccountCommand implements Command{
         } catch (ServiceException e) {
             logger.error("Error activating account", e);
         }
-        return PagePath.HOME.getServletPath();
+        return PagePath.MATCHES.getServletPath();
     }
 }

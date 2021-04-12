@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Command sends user to the list of all matches
+ */
 public class MatchListCommand implements Command {
     private static final Logger logger = LogManager.getLogger(MatchListCommand.class);
     private final MatchServiceImpl service = MatchServiceImpl.matchService;

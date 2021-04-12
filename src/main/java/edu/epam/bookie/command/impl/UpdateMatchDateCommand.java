@@ -19,6 +19,9 @@ import java.time.LocalTime;
 
 import static edu.epam.bookie.command.RequestParameter.*;
 
+/**
+ * Command to update match date and time
+ */
 public class UpdateMatchDateCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UpdateMatchDateCommand.class);
     private MatchServiceImpl matchService = MatchServiceImpl.matchService;

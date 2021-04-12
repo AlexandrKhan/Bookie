@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+/**
+ * Command allows to search matches by team name
+ */
 public class SearchMatchesByTeamCommand implements Command {
     private static final Logger logger = LogManager.getLogger(SearchMatchesByTeamCommand.class);
     private final MatchServiceImpl service = MatchServiceImpl.matchService;

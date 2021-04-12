@@ -14,8 +14,11 @@ import java.util.List;
 
 public class GetTodayMatchTask implements Runnable {
     private static final Logger logger = LogManager.getLogger(GetTodayMatchTask.class);
-    private static final MatchServiceImpl service = MatchServiceImpl.matchService;
+    private MatchServiceImpl service = MatchServiceImpl.matchService;
 
+    /**
+     * Add today matches to todayMatchStartTimeMap
+     */
     @Override
     public void run() {
         try {
@@ -31,6 +34,12 @@ public class GetTodayMatchTask implements Runnable {
         }
     }
 
+    /**
+     * Check that match in list is today
+     *
+     * @param match match
+     * @return boolean
+     */
     private boolean checkIfMatchIsTodayAndNotOver(Match match) {
         return (!match.getMatchProgress().equals(MatchProgress.valueOf("OVER"))
                 && match.getStartDate().isEqual(LocalDate.now()));

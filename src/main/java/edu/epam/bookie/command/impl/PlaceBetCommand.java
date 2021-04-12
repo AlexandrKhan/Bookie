@@ -63,11 +63,11 @@ public class PlaceBetCommand implements Command {
                     logger.info("Not enough money for bet");
                     ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
                     errorSet.add(ValidationError.NOT_ENOUGH_MONEY);
-                    request.setAttribute(RequestParameter.RESULT, Result.values());
                     request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
                     session.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
                     return PagePath.MATCHES.getServletPath();
                 }
+
                 userService.placeBet(bet);
                 user.setMoneyBalance(money.subtract(betAmount));
                 session.setAttribute(SessionAttribute.CURRENT_USER, user);

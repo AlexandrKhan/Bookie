@@ -2,6 +2,15 @@ package edu.epam.bookie.command;
 
 import javax.servlet.http.HttpServletRequest;
 
-public interface Command{
+/**
+ * Interface for command
+ */
+public interface Command {
+    /**
+     * Primary method of each command
+     *
+     * @param request httprequest
+     * @return path to page
+     */
     String execute(HttpServletRequest request);
 }

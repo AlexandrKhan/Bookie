@@ -1,16 +1,16 @@
 /*body {*/
-    /*font-family: "lato", sans-serif;*/
+/*font-family: "lato", sans-serif;*/
 /*}*/
 
 
 
 /*h2 {*/
-    /*font-size: 26px;*/
-    /*margin: 20px 0;*/
-    /*text-align: center;*/
+/*font-size: 26px;*/
+/*margin: 20px 0;*/
+/*text-align: center;*/
 /*}*/
 /*h2 small {*/
-    /*font-size: 0.5em;*/
+/*font-size: 0.5em;*/
 /*}*/
 .container {
     max-width: 90%;
@@ -38,24 +38,27 @@
     box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.1);
 }
 .responsive-table .col-1 {
-    flex-basis: 5%;
+    flex-basis: 7%;
 }
 .responsive-table .col-2 {
-    flex-basis: 35%;
+    flex-basis: 10%;
 }
 .responsive-table .col-3 {
-    flex-basis: 10%;
+    flex-basis: 15%;
 }
 .responsive-table .col-4 {
     flex-basis: 20%;
 }
 .responsive-table .col-5 {
-    flex-basis: 10%;
+    flex-basis: 13%;
 }
 .responsive-table .col-6 {
-    flex-basis: 10%;
+    flex-basis: 15%;
 }
 .responsive-table .col-7 {
+    flex-basis: 10%;
+}
+.responsive-table .col-8 {
     flex-basis: 10%;
 }
 

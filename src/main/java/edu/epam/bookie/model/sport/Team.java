@@ -1,6 +1,8 @@
 package edu.epam.bookie.model.sport;
 
-
+/**
+ * Football teams
+ */
 public enum Team {
     MANCHESTER_CITY("Manchester City"),
     MANCHESTER_UNITED("Manchester United"),
@@ -24,6 +26,8 @@ public enum Team {
     SHEFFIELD_UNITED("Sheffield United");
 
     private String name;
+    private static final String WHITESPACE = "\\s";
+    private static final String UNDERLINE = "_";
 
     Team(String name) {
         this.name = name;
@@ -31,6 +35,10 @@ public enum Team {
 
     public String getName() {
         return this.name;
+    }
+
+    public static Team getValue(String name) {
+        return Team.valueOf(name.toUpperCase().replaceAll(WHITESPACE, UNDERLINE));
     }
 
     @Override

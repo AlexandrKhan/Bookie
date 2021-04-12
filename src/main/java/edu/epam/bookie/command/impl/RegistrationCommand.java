@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.Optional;
 
+/**
+ * Command for registration of new users
+ */
 public class RegistrationCommand implements Command {
     private static final Logger logger = LogManager.getLogger(RegistrationCommand.class);
     private static final UserServiceImpl userService = UserServiceImpl.userService;
@@ -41,7 +44,7 @@ public class RegistrationCommand implements Command {
         if (user.isPresent()) {
             request.setAttribute(RequestParameter.TOKEN, user.get().getToken());
             logger.info("New user registered: " + username);
-            page = PagePath.HOME.getDirectUrl();
+            page = PagePath.MATCHES.getDirectUrl();
         } else {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());

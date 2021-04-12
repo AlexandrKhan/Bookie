@@ -10,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Command to unblock user
+ */
 public class UnblockUserCommand implements Command {
     public static final Logger logger = LogManager.getLogger(BlockUserCommand.class);
     private UserServiceImpl service = UserServiceImpl.userService;

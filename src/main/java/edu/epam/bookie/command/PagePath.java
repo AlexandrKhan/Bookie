@@ -1,11 +1,15 @@
 package edu.epam.bookie.command;
 
+/**
+ * Enum of paths to page, can be:
+ * 1) directUrl to jsp page
+ * 2) servletPath executing servlet command
+ */
+
 public enum PagePath {
-    HOME ("/jsp/home.jsp", "/controller?command=home"),
     AUTHORISATION ("/jsp/auth.jsp","/controller?command=authorisation"),
     ADMIN ("/jsp/admin.jsp", "/controller?command=admin_panel"),
     MATCHES ("/jsp/matchList.jsp", "/controller?command=match_list"),
-    MATCH ("/jsp/match.jsp", "/controller?command=single_match"),
     CABINET ("/jsp/cabinet.jsp", "/controller?command=personal_cabinet"),
     ADD_MATCH ("/jsp/addMatch.jsp","/controller?command=create_match"),
     ERROR_500 ("/jsp/error/500.jsp",""),
@@ -20,10 +24,20 @@ public enum PagePath {
         this.servletPath = servlet;
     }
 
+    /**
+     * Get direct url
+     *
+     * @return direct url
+     */
     public String getDirectUrl() {
         return directUrl;
     }
 
+    /**
+     * Get servlet path
+     *
+     * @return servlet path
+     */
     public String getServletPath() {
         return servletPath;
     }

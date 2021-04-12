@@ -7,6 +7,10 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 
+/**
+ * Map of command as key and role of user as value, allowing execution of this command only to users with declared roles
+ */
+
 public class CommandRoleMap {
     private static CommandRoleMap INSTANCE = new CommandRoleMap();
     private static final EnumMap<CommandType, List<Role>> ROLE_MAP;
@@ -29,10 +33,8 @@ public class CommandRoleMap {
         ROLE_MAP.put(CommandType.ACTIVATE_ACCOUNT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.INVALID_COMMAND, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.FILE_UPLOAD, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
-        ROLE_MAP.put(CommandType.HOME, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.SEARCH_MATCHES, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.LANGUAGE, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
-        ROLE_MAP.put(CommandType.SINGLE_MATCH, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.AUTHORISATION, Collections.singletonList(Role.GUEST));
         ROLE_MAP.put(CommandType.LOGOUT, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));
         ROLE_MAP.put(CommandType.MATCH_LIST, Arrays.asList(Role.ADMIN, Role.USER, Role.GUEST));

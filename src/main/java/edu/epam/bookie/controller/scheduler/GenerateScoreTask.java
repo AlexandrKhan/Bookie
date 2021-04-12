@@ -17,22 +17,22 @@ import java.util.List;
 
 import static edu.epam.bookie.controller.scheduler.MatchContextListener.todayMatchStartTimeMap;
 
-@SuppressWarnings("DanglingJavadoc")
 public class GenerateScoreTask implements Runnable {
     private static final Logger logger = LogManager.getLogger(GenerateScoreTask.class);
     private MatchServiceImpl matchService = MatchServiceImpl.matchService;
     private BetServiceImpl betService = BetServiceImpl.betService;
     private UserServiceImpl userService = UserServiceImpl.userService;
+    private final String WIN_MESSAGE = "Your bet on match: %s - %s has won!";
 
     /**
-     * Generate score, end match and notify user
+     *
      */
     @Override
     public void run() {
         todayMatchStartTimeMap.forEach((matchId, startTime) -> {
             if (LocalTime.now().isAfter(startTime)) {
                 try {
-                    matchService.setGoalsResultAndOverMatchById(Long.valueOf(matchId));
+                    matchService.generateScoreResultAndEndMatchById(Long.valueOf(matchId));
                     logger.info("Generated score for match id = {}", matchId);
                     Match match = matchService.findById(Long.valueOf(matchId));
                     List<Bet> matchBets = betService.selectBetsByMatchId(matchId);
@@ -42,10 +42,10 @@ public class GenerateScoreTask implements Runnable {
                                 try {
                                     if (b.getBetOnResult() == match.getResult()) {
                                         betService.payBets(b);
-                                        userService.addMessage(new Message(b.getUserId(), "Your bet on match: "
-                                                + match.getHomeTeam().getName() +" - "
-                                                + match.getAwayTeam().getName()
-                                                + " has won!", Theme.WON));
+                                        userService.sendMessage(new Message(b.getUserId(), String.format(WIN_MESSAGE,
+                                                match.getHomeTeam().getName(),
+                                                match.getAwayTeam().getName()),
+                                                Theme.WON));
                                     } else {
                                         betService.betLost(b);
                                     }

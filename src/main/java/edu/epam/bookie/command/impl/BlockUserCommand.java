@@ -10,10 +10,12 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Command to block user
+ */
 public class BlockUserCommand implements Command {
     public static final Logger logger = LogManager.getLogger(BlockUserCommand.class);
     private UserServiceImpl service = UserServiceImpl.userService;
-
 
     @Override
     public String execute(HttpServletRequest request) {

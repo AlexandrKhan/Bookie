@@ -18,6 +18,9 @@ import java.util.List;
 
 import static edu.epam.bookie.command.SessionAttribute.CURRENT_USER;
 
+/**
+ * Command sends user to his cabinet (bets history list)
+ */
 public class PersonalCabinetCommand implements Command{
     private static final Logger logger = LogManager.getLogger(PersonalCabinetCommand.class);
     private final BetServiceImpl service = BetServiceImpl.betService;

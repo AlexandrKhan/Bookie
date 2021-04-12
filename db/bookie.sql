@@ -32,18 +32,6 @@ CREATE TABLE `match` (
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `match_comments` (
-  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `match_id` BIGINT(20) NOT NULL,
-  `user_id` BIGINT(20) NOT NULL,
-  `comment` VARCHAR(255) NOT NULL,
-  `date` DATE NOT NULL,
-  `time` TIME NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (match_id) REFERENCES bookie.match(id) ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE ON UPDATE CASCADE
-);
-
 CREATE TABLE `match_result` (
   `id` BIGINT(20),
   `home_team_goals` INT(10) NOT NULL DEFAULT 0,

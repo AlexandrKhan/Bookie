@@ -38,7 +38,7 @@
         <c:if test="${not empty param.text}">
             <input type="hidden" name="text" value="${param.text}"/>"/>
         </c:if>
-        <button type="submit" name="filter" value="not_started">NOT STARTED</button>
+        <button type="submit" class='btn btn-alert' name="filter" value="not_started" style="color: white"><fmt:message key='not.started'/></button>
     </form>
     </div>
     <div class="button-flex">
@@ -47,7 +47,7 @@
         <c:if test="${not empty param.text}">
             <input type="hidden" name="text" value="${param.text}"/>"/>
         </c:if>
-        <button type="submit" name="filter" value="by_date">SORT BY DATE</button>
+        <button type="submit" class='btn btn-alert' name="filter" value="by_date" style="color: white"><fmt:message key='sort.date'/></button>
     </form>
     </div>
 </div>
@@ -56,7 +56,7 @@
     <c:forEach items="${matches}" var="match">
         <div class="block" >
             <div style="height:80px" class="top">
-                <div class="middle" onclick="location.href='${pageContext.request.contextPath}/controller?command=single_match&matchId=${match.id}'" style="cursor:pointer">
+                <div class="middle">
                     <img src="${pageContext.request.contextPath}/images/EPL_teams/${match.homeTeam}.png">
                     <img src="${pageContext.request.contextPath}/images/EPL_teams/${match.awayTeam}.png">
                 </div>
@@ -81,7 +81,7 @@
                             <div class='modal fade' id='UPDATEMATCHMODAL' tabindex='-1' role='dialog'
                                  aria-labelledby='exampleModalLabel' aria-hidden='false'>
                                 <div class='modal-dialog' role='document'>
-                                    <div class='modal-content'>
+                                    <div class='modal-content' style="height: 240px">
                                         <form method="post"
                                               action="${pageContext.request.contextPath}/controller?command=update_match">
                                             <div class='modal-header'>
@@ -97,7 +97,7 @@
                                                                                       id="startTime">
                                             </div>
 
-                                            <button type='button' class='btn btn-alert' data-dismiss='modal'>
+                                            <button type='button' class='btn btn-secondary' data-dismiss='modal'>
                                                 <fmt:message
                                                         key='button.close'/></button>
                                             <input type='submit' value='<fmt:message key='button.save'/>'
@@ -128,7 +128,7 @@
                     <div class='modal fade' id='PLACEBETMODAL' tabindex='-1' role='dialog'
                          aria-labelledby='exampleModalLabel' aria-hidden='false'>
                         <div class='modal-dialog' role='document'>
-                            <div class='modal-content'>
+                            <div class='modal-content' style="height: 280px">
                                 <form method="post"
                                       action="${pageContext.request.contextPath}/controller?command=place_bet">
                                     <div class='modal-header'>
@@ -153,7 +153,7 @@
                                         </div>
                                     </div>
 
-                                    <button type='button' class='btn btn-alert' data-dismiss='modal'>
+                                    <button type='button' class='btn btn-secondary' data-dismiss='modal'>
                                         <fmt:message
                                                 key='button.close'/></button>
                                     <input type='submit' value='<fmt:message key='button.save'/>'

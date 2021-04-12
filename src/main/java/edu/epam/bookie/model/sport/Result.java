@@ -1,5 +1,8 @@
 package edu.epam.bookie.model.sport;
 
+/**
+ * Result of the match
+ */
 public enum Result {
     HOME("Home"),
     DRAW("Draw"),

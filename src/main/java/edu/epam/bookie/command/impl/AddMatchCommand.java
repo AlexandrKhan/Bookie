@@ -7,7 +7,6 @@ import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.sport.Team;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
-import edu.epam.bookie.util.CurseWordsSet;
 import edu.epam.bookie.validator.MatchValidator;
 import edu.epam.bookie.validator.ValidationError;
 import edu.epam.bookie.validator.ValidationErrorSet;
@@ -19,16 +18,18 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Command for creating new match
+ */
 public class AddMatchCommand implements Command {
     private static final Logger logger = LogManager.getLogger(AddMatchCommand.class);
     private static final MatchServiceImpl matchService = MatchServiceImpl.matchService;
-    private static final String WHITESPACE = "\\s";
-    private static final String UNDERLINE = "_";
+    private static final ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
 
     @Override
     public String execute(HttpServletRequest request) {
-        Team firstTeam = nameToTeam(request.getParameter(RequestParameter.HOME_TEAM));
-        Team secondTeam = nameToTeam(request.getParameter(RequestParameter.AWAY_TEAM));
+        Team firstTeam = Team.getValue(request.getParameter(RequestParameter.HOME_TEAM));
+        Team secondTeam = Team.getValue(request.getParameter(RequestParameter.AWAY_TEAM));
         String date = request.getParameter(RequestParameter.START_DATE);
         String time = request.getParameter(RequestParameter.START_TIME);
         String homeCoeff = request.getParameter(RequestParameter.HOME_COEFF);
@@ -36,13 +37,11 @@ public class AddMatchCommand implements Command {
         String awayCoeff = request.getParameter(RequestParameter.AWAY_COEFF);
 
         if (!MatchValidator.areDifferentTeams(firstTeam, secondTeam)) {
-            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
             logger.error("Bad date");
             return PagePath.ADD_MATCH.getServletPath();
         } else if (!MatchValidator.isValidTimeForMatchUpdate(LocalDate.parse(date), LocalTime.parse(time))) {
-            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             errorSet.add(ValidationError.TWO_SAME_TEAMS);
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
             logger.error("Same team");
@@ -53,12 +52,8 @@ public class AddMatchCommand implements Command {
             matchService.create(firstTeam, secondTeam, LocalDate.parse(date), LocalTime.parse(time),
                     new BigDecimal(homeCoeff), new BigDecimal(drawCoeff), new BigDecimal(awayCoeff));
         } catch (ServiceException e) {
-            logger.error("Can't create match");
+            logger.error(errorSet.getAllAndClear());
         }
         return PagePath.MATCHES.getServletPath();
-    }
-
-    private Team nameToTeam(String name) {
-        return Team.valueOf(name.toUpperCase().replaceAll(WHITESPACE, UNDERLINE));
     }
 }

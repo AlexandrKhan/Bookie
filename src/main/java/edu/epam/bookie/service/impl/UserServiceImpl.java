@@ -20,10 +20,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private static final MatchDaoImpl matchDao = MatchDaoImpl.matchDao;
     private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(8);
     private static final String UNBAN_MESSAGE = "You are unbanned! Please comply to our rules in order to avoid future bans";
+    private static final String DELAY_MESSAGE = "Match: %s - %s was delayed. New time: %s, %s";
 
     private UserServiceImpl() {
     }
@@ -64,6 +62,7 @@ public class UserServiceImpl implements UserService {
         List<Message> messages = new ArrayList<>();
         try {
             messages = messageDao.findAllMessagesOfUser(id).orElse(new ArrayList<>());
+            Collections.reverse(messages);
         } catch (DaoException e) {
             logger.error("No messages found");
         }
@@ -75,21 +74,11 @@ public class UserServiceImpl implements UserService {
         List<Match> matches = new ArrayList<>();
         try {
             matches = matchDao.findMatchesOnWhichUserBetByUserId(id).orElse(new ArrayList<>());
+            Collections.reverse(matches);
         } catch (DaoException e) {
             logger.error("No matches with bets");
         }
         return matches;
-    }
-
-    @Override
-    public boolean checkUser(String username, String password) throws ServiceException {
-        try {
-            Optional<User> optionalUser = userDao.findUserByUsername(username);
-            return optionalUser.filter(user -> user.getUsername().equals(username) && user.getPassword().equals(password)).isPresent();
-        } catch (DaoException e) {
-            logger.error(e);
-            throw new ServiceException(e);
-        }
     }
 
     @Override
@@ -156,17 +145,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(int id) throws ServiceException {
-        Optional<User> user = Optional.empty();
-        try {
-            user = userDao.findById(id);
-        } catch (DaoException e) {
-            logger.error("Cant find user by id");
-        }
-        return user;
-    }
-
-    @Override
     public boolean activateAccount(String token) throws ServiceException {
         boolean result = false;
         try {
@@ -191,17 +169,6 @@ public class UserServiceImpl implements UserService {
             logger.error("Cant verify account");
         }
         return result;
-    }
-
-    @Override
-    public Optional<String> findEmailById(String id) throws ServiceException {
-        Optional<String> email = Optional.empty();
-        try {
-            email = userDao.findEmailById(Integer.parseInt(id));
-        } catch (DaoException e) {
-            logger.error("Service cant find email by id");
-        }
-        return email;
     }
 
     @Override
@@ -251,23 +218,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean withdrawMoney(int id, BigDecimal money) throws ServiceException {
-        boolean result = false;
-        try {
-            result = userDao.withdrawMoney(id, money);
-            logger.info("User with id: {} withdrawed {} money", id, money);
-        } catch (DaoException e) {
-            logger.error("Error withdrawing money in", e);
-        }
-        return result;
-    }
-
-    @Override
     public boolean placeBet(Bet bet) throws ServiceException {
         boolean result = false;
         try {
             betDao.create(bet);
-            result = (userDao.withdrawMoney(bet.getUserId(), bet.getBetAmount()));
+            userDao.withdrawMoney(bet.getUserId(), bet.getBetAmount());
+            result = true;
             logger.info("Placed bet with id: {}, money: {}", bet.getMatchId(), bet.getBetAmount());
         } catch (DaoException e) {
             logger.error("Error placing bet", e);
@@ -276,7 +232,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean addMessage(Message message) throws ServiceException {
+    public boolean sendMessage(Message message) throws ServiceException {
         boolean result = false;
         try {
             messageDao.create(message);
@@ -304,16 +260,17 @@ public class UserServiceImpl implements UserService {
         bets.stream()
             .map(Bet::getUserId)
             .distinct()
-            .forEach(u -> {
+            .forEach(id -> {
             try {
                 Match match  = matchService.findById(matchId);
-                userService.addMessage(new Message(u, "Match: " + match.getHomeTeam().getName()
-                        + " - " + match.getAwayTeam().getName()
-                        + " was delayed. New time: "
-                        + match.getStartDate() + ", "
-                        + match.getStartTime(), Theme.DELAY));
+                userService.sendMessage(new Message(id, String.format(DELAY_MESSAGE,
+                        match.getHomeTeam().getName(),
+                        match.getAwayTeam().getName(),
+                        match.getStartDate(),
+                        match.getStartTime()),
+                        Theme.DELAY));
             } catch (ServiceException e) {
-                logger.error("Error sending messsage about time changed to user: {}", u);
+                logger.error("Error sending messsage about time changed to user: {}", id);
             }
         });
     }

@@ -10,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Command to verify user
+ */
 public class VerifyAccountCommand implements Command {
     public static final Logger logger = LogManager.getLogger(VerifyAccountCommand.class);
     private UserServiceImpl service = UserServiceImpl.userService;

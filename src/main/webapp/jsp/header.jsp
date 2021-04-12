@@ -25,11 +25,6 @@
                     </li>
                 </c:if>
                 <li class="nav-item" aria-expanded="true">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=home">
-                        <fmt:message key="header.homePage"/>
-                    </a>
-                </li>
-                <li class="nav-item" aria-expanded="true">
                     <a class="nav-link" href="${pageContext.request.contextPath}/controller?command=match_list">
                         <fmt:message key="match.list"/>
                     </a>
@@ -65,7 +60,7 @@
                                             <label for="cashInSum"></label><input type="number" name="cashInSum"
                                                                                   class="form-control"
                                                                                   id="cashInSum" step="0.01" min="5"
-                                                                                  value="5">
+                                                                                  value="5" required>
                                         </div>
 
                                         <button type='button' class='btn btn-alert' data-dismiss='modal'>

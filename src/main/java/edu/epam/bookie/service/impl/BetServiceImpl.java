@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,7 @@ public class BetServiceImpl implements BetService {
         }
         if (optional.isPresent()) {
             bets = optional.get();
+            Collections.reverse(bets);
         } else {
             logger.info("No bets found for user");
         }

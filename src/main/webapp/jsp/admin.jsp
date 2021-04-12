@@ -8,6 +8,7 @@
 
 <html>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
+<link rel=stylesheet href="${pageContext.request.contextPath}/css/admin.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 <title>Title</title>
 
@@ -23,7 +24,6 @@
 </c:if>
 <body>
 <jsp:include page="/jsp/header.jsp"/>
-<h1>List of users</h1>
 
 <form action="${pageContext.request.contextPath}/controller?command=${param.command}">
     <input type="hidden" name="command" value="${param.command}"/>
@@ -41,75 +41,107 @@
     <button type="submit" name="filter" value="not_verified">Not verified</button>
 </form>
 
+<div class="container">
+    <ul class="responsive-table">
+        <li class="table-header">
+            <div class="col col-1">User id</div>
+            <div class="col col-2">Username</div>
+            <div class="col col-3">Name</div>
+            <div class="col col-4">Email</div>
+            <div class="col col-5">Date of birth</div>
+            <div class="col col-6">Passport</div>
+            <div class="col col-7">Status</div>
+            <div class="col col-8">Action</div>
+        </li>
+        <c:forEach items="${users}" var="user">
+            <c:if test="${user.statusType == 'VERIFIED'}">
+                <li class="table-row" style="background: linear-gradient(0deg, rgb(97 177 129), rgb(162 206 168));">
+            </c:if>
+            <c:if test="${user.statusType == 'NOT_ACTIVATED'}">
+                <li class="table-row" style="background: linear-gradient(0deg, rgb(155 156 152), rgb(189 191 171))">
+            </c:if>
+            <c:if test="${user.statusType == 'ACTIVATED'}">
+                <li class="table-row" style="background: linear-gradient(0deg, rgb(218 239 138), rgb(212 218 161));">
+            </c:if>
+            <c:if test="${user.statusType == 'BLOCKED'}">
+                <li class="table-row" style="background: linear-gradient(0deg, rgb(210 50 63), rgb(191 95 95));">
+            </c:if>
 
-<c:forEach items="${users}" var="user">
-    <h1><c:out value="${user.firstName} ${user.lastName}"/></h1>
-    <h1><c:out value="${user.dateOfBirth}"/></h1>
-    <img src="${pageContext.request.contextPath}/uploads/${user.passportScan}" width="100" height="100"
-         alt="${user.firstName} ${user.lastName}" class="img-thumbnail">
-    <div id="myModal" class="modal-scan">
-        <span class="close">&times;</span>
-        <img class="modal-content-scan" id="img01"
-             src="${pageContext.request.contextPath}/uploads/${user.passportScan}">
-        <div id="caption"></div>
-    </div>
-    <form method="post" action="${pageContext.request.contextPath}/controller?command=verify_account&id=${user.id}">
-        <button type="submit" class="btn btn-primary">
-            <fmt:message key="verify.account"/>
-        </button>
-    </form>
+            <div class="col col-1" data-label="User id">#<c:out value="${user.id}"/></div>
+            <div class="col col-2" data-label="Username"><c:out value="${user.username}"/></div>
+            <div class="col col-3" data-label="Name"><c:out value="${user.firstName} ${user.lastName}"/></div>
+            <div class="col col-4" data-label="Email"><c:out value="${user.email}"/></div>
+            <div class="col col-5" data-label="Date of birth"><c:out value="${user.dateOfBirth}"/></div>
+            <div class="col col-6" data-label="Passport">
+                <img src="${pageContext.request.contextPath}/uploads/${user.passportScan}" width="10%" height="10%"
+                   alt="${user.firstName} ${user.lastName}" class="img-thumbnail">
+                <div id="myModal" class="modal-scan">
+                    <span class="close">&times;</span>
+                    <img class="modal-content-scan" id="img01"
+                         src="${pageContext.request.contextPath}/uploads/${user.passportScan}">
+                    <div id="caption"></div>
+                </div></div>
+            <div class="col col-7" data-label="Status"><c:out value="${user.statusType}"/></div>
+            <div class="col col-8" data-label="Action">
+                <c:if test="${user.statusType == 'VERIFIED'}">
+                    <div>
+                        <button type='button' class='btn btn-primary' data-toggle='modal'
+                                data-target='#BLOCKUSERMODAL'
+                                data-id="${user.id}">
+                            <fmt:message key="block.user"/>
+                        </button>
+                        <div class='modal fade' id='BLOCKUSERMODAL' tabindex='-1' role='dialog'
+                             aria-labelledby='exampleModalLabel' aria-hidden='false'>
+                            <div class='modal-dialog' role='document'>
+                                <div class='modal-content' style="height: 250px">
+                                    <form method="post" action="${pageContext.request.contextPath}/controller?command=block_user">
+                                        <div class='modal-header'>
+                                            <h5 class='modal-title'><fmt:message key='block.user'/></h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="id" id="id" value="">
+                                            <label for="message"></label><input type="text" name="message"
+                                                                                class="form-control"
+                                                                                id="message"
+                                                                                placeholder="<fmt:message key="ban.reason"/>"
+                                                                                style="margin: 10px auto 10px auto;"
+                                                                                required>
+                                            <label for="days"></label><input type="number" name="days" id="days" step="1" min="1"
+                                                                             value="1" required>
+                                        </div>
+                                        <button type='button' class='btn btn-secondary' data-dismiss='modal'>
+                                            <fmt:message key='button.close'/></button>
+                                        <input type='submit' value='<fmt:message key='button.save' />' class='btn btn-primary'/>
 
-    <div>
-        <button type='button' class='btn btn-primary' data-toggle='modal'
-                data-target='#BLOCKUSERMODAL'
-                data-id="${user.id}">
-            <fmt:message key="block.user"/>
-        </button>
-        <div class='modal fade' id='BLOCKUSERMODAL' tabindex='-1' role='dialog'
-             aria-labelledby='exampleModalLabel' aria-hidden='false'>
-            <div class='modal-dialog' role='document'>
-                <div class='modal-content'>
-                    <form method="post" action="${pageContext.request.contextPath}/controller?command=block_user">
-                        <div class='modal-header'>
-                            <h5 class='modal-title'><fmt:message key='block.user'/></h5>
+                                        <c:if test="${not empty requestScope.errorSet}">
+                                            <label style="color: red; font-size: medium"><fmt:message
+                                                    key="match.dateError"/></label>
+                                        </c:if>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <input type="hidden" name="id" id="id" value="">
-                            <label for="message"></label><input type="text" name="message"
-                                                                class="form-control"
-                                                                id="message"
-                                                                style="margin: 10px auto 10px auto;">
-                            <label for="days"></label><input type="number" name="days" id="days" step="1" min="1"
-                                                             value="1">
-                        </div>
-                        <button type='button' class='btn btn-alert' data-dismiss='modal'>
-                            <fmt:message key='button.close'/></button>
-                        <input type='submit' value='<fmt:message key='button.save' />' class='btn btn-primary'/>
-
-                        <button type='button' class='btn btn-alert' data-dismiss='modal'>
-                            <fmt:message
-                                    key='button.close'/></button>
-                        <input type='submit' value='<fmt:message key='button.save'/>'
-                               class='btn btn-primary'/>
-
-                        <c:if test="${not empty requestScope.errorSet}">
-                            <label style="color: red; font-size: medium"><fmt:message
-                                    key="match.dateError"/></label>
-                        </c:if>
+                    </div>
+                </c:if>
+                <c:if test="${user.statusType == 'BLOCKED'}">
+                    <form method="post" action="${pageContext.request.contextPath}/controller?command=unblock_user&id=${user.id}">
+                        <button type="submit" class="btn btn-primary">
+                            <fmt:message key="unblock.user"/>
+                        </button>
                     </form>
-                </div>
+                </c:if>
+                <c:if test="${user.statusType == 'ACTIVATED'}">
+                    <form method="post" action="${pageContext.request.contextPath}/controller?command=verify_account&id=${user.id}">
+                        <button type="submit" class="btn btn-primary">
+                            <fmt:message key="verify.account"/>
+                        </button>
+                    </form>
+                </c:if>
             </div>
-        </div>
-    </div>
-
-
-    <form method="post" action="${pageContext.request.contextPath}/controller?command=unblock_user&id=${user.id}">
-        <button type="submit" class="btn btn-primary">
-            <fmt:message key="unblock.user"/>
-        </button>
-    </form>
-
-</c:forEach>
+            </li>
+        </c:forEach>
+    </ul>
+</div>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>

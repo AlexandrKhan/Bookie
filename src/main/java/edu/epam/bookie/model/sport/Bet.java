@@ -7,6 +7,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * User bet on match
+ */
 public class Bet implements Entity {
     private int id;
     private int userId;

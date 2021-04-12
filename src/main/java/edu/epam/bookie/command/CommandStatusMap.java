@@ -1,12 +1,15 @@
 package edu.epam.bookie.command;
 
-import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.StatusType;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+
+/**
+ * Map of command as key and status of user as value, allowing execution of this command only to users with declared status
+ */
 
 public class CommandStatusMap {
     private static CommandStatusMap INSTANCE = new CommandStatusMap();
@@ -32,13 +35,11 @@ public class CommandStatusMap {
         STATUS_MAP.put(CommandType.LOGIN, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
         STATUS_MAP.put(CommandType.REGISTRATION, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
         STATUS_MAP.put(CommandType.INVALID_COMMAND, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
-        STATUS_MAP.put(CommandType.HOME, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
         STATUS_MAP.put(CommandType.SEARCH_MATCHES, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
         STATUS_MAP.put(CommandType.LANGUAGE, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
         STATUS_MAP.put(CommandType.AUTHORISATION, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
         STATUS_MAP.put(CommandType.LOGOUT, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
         STATUS_MAP.put(CommandType.MATCH_LIST, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
-        STATUS_MAP.put(CommandType.SINGLE_MATCH, Arrays.asList(StatusType.ACTIVATED, StatusType.BLOCKED, StatusType.NOT_ACTIVATED, StatusType.VERIFIED));
     }
 
     private CommandStatusMap() {

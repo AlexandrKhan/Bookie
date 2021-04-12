@@ -17,6 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Command for user log in
+ */
 public class LoginCommand implements Command {
     private static final Logger logger = LogManager.getLogger(LoginCommand.class);
     private static final UserServiceImpl userService = UserServiceImpl.userService;
@@ -37,7 +40,7 @@ public class LoginCommand implements Command {
             if (userTemp.isPresent()) {
                 session.setAttribute(SessionAttribute.AUTHORISED, true);
                 session.setAttribute(SessionAttribute.CURRENT_USER, userTemp.get());
-                page = PagePath.HOME.getDirectUrl();
+                page = PagePath.MATCHES.getServletPath();
             } else {
                 ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
                 session.setAttribute(SessionAttribute.LOGIN_MAP, parameters);

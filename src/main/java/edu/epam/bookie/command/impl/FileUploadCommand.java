@@ -20,6 +20,9 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Command for uploading file (passport scan)
+ */
 public class FileUploadCommand implements Command {
     private static final Logger logger = LogManager.getLogger(FileUploadCommand.class);
     private static final String FILE_TYPE = "image/jpg, image/png, image/gif, image/jpeg";

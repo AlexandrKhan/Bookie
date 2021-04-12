@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 
+/**
+ * Command to add money to user (through direct cash in by user or by win)
+ */
 public class CashInCommand implements Command {
     private static final Logger logger = LogManager.getLogger(CashInCommand.class);
     private UserServiceImpl service = UserServiceImpl.userService;
@@ -37,6 +40,6 @@ public class CashInCommand implements Command {
         } else {
             return PagePath.ERROR_404.getDirectUrl();
         }
-        return PagePath.HOME.getDirectUrl();
+        return PagePath.MATCHES.getServletPath();
     }
 }

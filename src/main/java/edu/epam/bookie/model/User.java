@@ -33,6 +33,11 @@ public class User implements Entity {
         this.token = token;
     }
 
+    /**
+     * Token for account activation and password change
+     *
+     * @return token
+     */
     public String getToken() {
         return token;
     }
@@ -61,6 +66,11 @@ public class User implements Entity {
         this.statusType = statusType;
     }
 
+    /**
+     * Passport scan is required for account verification
+     *
+     * @return passport scan name
+     */
     public String getPassportScan() {
         return passportScan;
     }

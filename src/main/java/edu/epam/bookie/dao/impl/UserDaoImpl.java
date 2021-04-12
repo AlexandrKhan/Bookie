@@ -20,7 +20,6 @@ public class UserDaoImpl implements UserDao {
 
     private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, token) VALUES (?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL_USERS = "SELECT * FROM bookie.user";
-    private static final String SELECT_ALL_NOT_VERIFIED_USERS = "SELECT * FROM bookie.user WHERE status='ACTIVATED'";
     private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM bookie.user WHERE username=?";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM bookie.user WHERE id=?";
     private static final String DELETE_USER_BY_ID = "DELETE FROM bookie.user WHERE id=?";

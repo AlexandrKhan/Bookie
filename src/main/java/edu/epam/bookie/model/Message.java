@@ -1,8 +1,14 @@
 package edu.epam.bookie.model;
 
+import edu.epam.bookie.model.sport.Bet;
+import edu.epam.bookie.model.sport.Match;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+/**
+ * Messages from app to user (ban, unban, match delay, bet win)
+ */
 public class Message implements Entity{
     private int id;
     private int userId;

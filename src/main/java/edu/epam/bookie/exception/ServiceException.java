@@ -1,6 +1,9 @@
 package edu.epam.bookie.exception;
 
 public class ServiceException extends Exception{
+    /**
+     * Exception thrown by service methods
+     */
     public ServiceException() {
         super();
     }

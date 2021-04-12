@@ -1,5 +1,8 @@
 package edu.epam.bookie.command;
 
+/**
+ * Parameters that are used in request
+ */
 public class RequestParameter {
     public static final String ID = "id";
     public static final String COMMAND = "command";
@@ -12,7 +15,6 @@ public class RequestParameter {
     public static final String EMAIL = "email";
     public static final String DATE_OF_BIRTH = "dateOfBirth";
     public static final String PASSPORT_SCAN = "passportScan";
-    public static final String PASSPORT_SCAN_NAME = "passportScanName";
     public static final String USERS = "users";
 
     public static final String HOME_TEAM = "homeTeam";

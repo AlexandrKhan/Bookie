@@ -116,7 +116,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public boolean setGoalsResultAndOverMatchById(Long id) throws ServiceException {
+    public boolean generateScoreResultAndEndMatchById(Long id) throws ServiceException {
         boolean result = false;
         int firstTeamGoal = (int) (6.0 * Math.random());
         int secondTeamGoal = (int) (6.0 * Math.random());

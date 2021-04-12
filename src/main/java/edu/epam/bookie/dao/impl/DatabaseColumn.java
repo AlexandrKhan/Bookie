@@ -1,6 +1,10 @@
 package edu.epam.bookie.dao.impl;
 
 class DatabaseColumn {
+    /**
+     * Columns from all tables of application database 'bookie'
+     */
+
     static final String ID = "id";
     static final String USERNAME = "username";
     static final String FIRST_NAME = "first_name";
