@@ -1,17 +1,4 @@
-/*body {*/
-/*font-family: "lato", sans-serif;*/
-/*}*/
 
-
-
-/*h2 {*/
-/*font-size: 26px;*/
-/*margin: 20px 0;*/
-/*text-align: center;*/
-/*}*/
-/*h2 small {*/
-/*font-size: 0.5em;*/
-/*}*/
 .container {
     max-width: 90%;
     margin-left: auto;
@@ -32,13 +19,16 @@
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    text-align: center;
 }
 .responsive-table .table-row {
     background-color: #ffffff;
     box-shadow: 0 0 9px 0 rgba(0, 0, 0, 0.1);
+    text-align: center;
+
 }
 .responsive-table .col-1 {
-    flex-basis: 7%;
+    flex-basis: 5%;
 }
 .responsive-table .col-2 {
     flex-basis: 10%;
@@ -50,16 +40,13 @@
     flex-basis: 20%;
 }
 .responsive-table .col-5 {
-    flex-basis: 13%;
+    flex-basis: 15%;
 }
 .responsive-table .col-6 {
     flex-basis: 15%;
 }
 .responsive-table .col-7 {
-    flex-basis: 10%;
-}
-.responsive-table .col-8 {
-    flex-basis: 10%;
+    flex-basis: 20%;
 }
 
 @media all and (max-width: 767px) {

@@ -20,7 +20,7 @@ import java.math.BigDecimal;
  */
 public class CashInCommand implements Command {
     private static final Logger logger = LogManager.getLogger(CashInCommand.class);
-    private UserServiceImpl service = UserServiceImpl.userService;
+    private final UserServiceImpl service = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {

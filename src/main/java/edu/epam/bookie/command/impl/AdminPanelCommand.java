@@ -17,8 +17,9 @@ import java.util.List;
  * Command leading to admin page (List of users)
  */
 public class AdminPanelCommand implements Command {
-    private Logger logger = LogManager.getLogger(AdminPanelCommand.class);
+    private final Logger logger = LogManager.getLogger(AdminPanelCommand.class);
     private static final UserServiceImpl service = UserServiceImpl.userService;
+
     @Override
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();

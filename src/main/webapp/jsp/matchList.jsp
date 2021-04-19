@@ -57,8 +57,8 @@
         <div class="block" >
             <div style="height:80px" class="top">
                 <div class="middle">
-                    <img src="${pageContext.request.contextPath}/images/EPL_teams/${match.homeTeam}.png">
-                    <img src="${pageContext.request.contextPath}/images/EPL_teams/${match.awayTeam}.png">
+                    <img src="${pageContext.request.contextPath}/images/teams/${match.homeTeam}.png">
+                    <img src="${pageContext.request.contextPath}/images/teams/${match.awayTeam}.png">
                 </div>
                 <div class="l-middle">
                     <h4><c:out value="${custom:formatLocalDateTime(match.startDate, match.startTime)}"/></h4>
@@ -139,9 +139,9 @@
                                         <label for="betAmount"></label><input type="number" name="betAmount"
                                                                               class="form-control"
                                                                               id="betAmount" step="0.01" min="5"
-                                                                              value="5">
+                                                                              value="5" required>
                                         <div class="radio-group">
-                                            <input type="radio" id="home" name="betOnResult" value="HOME"><label
+                                            <input type="radio" id="home" name="betOnResult" value="HOME" required><label
                                                 id="homeCoeff"
                                                 for="home">Home</label>
                                             <input type="radio" id="draw" name="betOnResult" value="DRAW"><label
@@ -174,26 +174,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-<script type="text/javascript">
-    $('#UPDATEMATCHMODAL').on('show.bs.modal', function (event) {
-        let matchUpdateId = $(event.relatedTarget).data('match');
-        $(this).find('.modal-body #match').val(matchUpdateId);
-    })
-</script>
-<script type="text/javascript">
-    $('#PLACEBETMODAL').on('show.bs.modal', function (event) {
-        let matchId = $(event.relatedTarget).data('matchid');
-        let home = $(event.relatedTarget).data('home');
-        let draw = $(event.relatedTarget).data('draw');
-        let away = $(event.relatedTarget).data('away');
-
-        $(this).find('.modal-body #matchId').val(matchId);
-        $(this).find('.radio-group #homeCoeff').text('Home ' + home);
-
-        $(this).find('.radio-group #drawCoeff').text('Draw ' + draw);
-        $(this).find('.radio-group #awayCoeff').text('Away ' + away);
-    })
-</script>
+<script src="${pageContext.request.contextPath}/js/matchList.js" type="text/javascript"></script>
 </body>
 </html>
 

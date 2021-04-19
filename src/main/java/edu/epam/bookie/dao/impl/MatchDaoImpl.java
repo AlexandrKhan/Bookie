@@ -36,7 +36,8 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public Optional<Match> create(Match match) throws DaoException {
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
+        Connection connection = ConnectionPool.getInstance().getConnection();
+        try (
              PreparedStatement statement = connection.prepareStatement(ADD_MATCH);
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_DEFAULT_MATCH_PROGRESS)) {
             statement.setString(1, match.getHomeTeam().name());
@@ -50,6 +51,7 @@ public class MatchDaoImpl implements MatchDao {
             statement.execute();
             preparedStatement.execute();
         } catch (SQLException e) {
+            rollback(connection);
             logger.error("Cant create match", e);
             throw new DaoException(e);
         }

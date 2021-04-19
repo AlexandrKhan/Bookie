@@ -18,7 +18,7 @@
                         </a>
                     </li>
                     <li class="nav-item" aria-expanded="true">
-                        <a href="${pageContext.request.contextPath}/controller?command=create_match"
+                        <a href="${pageContext.request.contextPath}/jsp/addMatch.jsp"
                            class="nav-link">
                             <fmt:message key="create.match"/>
                         </a>
@@ -100,7 +100,7 @@
                         <c:when test="${sessionScope.authorised}">
                             <li class="nav-item" aria-expanded="true">
                                 <a href="#"
-                                   class="nav-link m-2 menu-item ">${sessionScope.user.firstName} ${sessionScope.user.lastName}</a>
+                                   class="nav-link m-2 menu-item ">${sessionScope.user.firstName} ${sessionScope.user.lastName}    $${sessionScope.user.moneyBalance}</a>
                             </li>
                             <c:if test="${sessionScope.user.statusType=='ACTIVATED'}">
                                 <li class="nav-item" aria-expanded="true" style="background-color: #b33d3d;
@@ -172,6 +172,4 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<%--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>--%>
-<%--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>--%>
 </html>

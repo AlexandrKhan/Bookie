@@ -23,7 +23,7 @@ public class VerifyAccountCommand implements Command {
         try {
             service.verifyAccount(Integer.parseInt(id));
         } catch (ServiceException e) {
-            logger.error("Eror verifying user");
+            logger.error("Error verifying user");
         }
         return PagePath.ADMIN.getServletPath();
     }

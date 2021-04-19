@@ -32,7 +32,7 @@ public class PlaceBetCommand implements Command {
         User user = (User) session.getAttribute(SessionAttribute.CURRENT_USER);
 
         int userId = user.getId();
-        int matchId = Integer.valueOf(request.getParameter(RequestParameter.MATCH_ID));
+        int matchId = Integer.parseInt(request.getParameter(RequestParameter.MATCH_ID));
         BigDecimal money = user.getMoneyBalance();
         BigDecimal betAmount = new BigDecimal(request.getParameter(RequestParameter.BET_AMOUNT));
         Result betOnResult = Result.valueOf(request.getParameter(RequestParameter.BET_ON_RESULT).toUpperCase());

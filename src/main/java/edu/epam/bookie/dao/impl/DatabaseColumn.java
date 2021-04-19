@@ -15,7 +15,7 @@ class DatabaseColumn {
     static final String ROLE = "role";
     static final String USER_STATUS = "status";
     static final String PASSPORT_SCAN = "passport_scan";
-    static final String MONEY_BALANCE = "money_balance";
+    static final String MONEY_BALANCE = "money";
     static final String HOME_TEAM = "home_team";
     static final String AWAY_TEAM = "away_team";
     static final String MATCH_START_TIME = "start_time";

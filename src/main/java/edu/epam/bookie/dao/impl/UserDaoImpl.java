@@ -31,8 +31,8 @@ public class UserDaoImpl implements UserDao {
     private static final String USERNAME_EXISTS = "SELECT * FROM bookie.user WHERE username=?";
     private static final String BLOCK_USER = "UPDATE bookie.user SET status='BLOCKED' WHERE id=?";
     private static final String UNBLOCK_USER = "UPDATE bookie.user SET status='VERIFIED' WHERE id=?";
-    private static final String CASH_IN = "UPDATE bookie.user SET money_balance=money_balance + ? WHERE id=?";
-    private static final String WITHDRAW_MONEY = "UPDATE bookie.user SET money_balance=money_balance - ? WHERE id=?";
+    private static final String CASH_IN = "UPDATE bookie.user SET money=money + ? WHERE id=?";
+    private static final String WITHDRAW_MONEY = "UPDATE bookie.user SET money=money - ? WHERE id=?";
     private static final String UPLOAD_SCAN = "UPDATE bookie.user SET passport_scan=? WHERE id=?";
 
     private UserDaoImpl() {

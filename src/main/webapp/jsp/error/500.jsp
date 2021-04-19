@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
+<link rel=stylesheet href="${pageContext.request.contextPath}/css/error.css">
 <head>
-    <title>Title</title>
+    <title>500</title>
 </head>
-<body>
-<h1>500</h1>
+<body class="body">
+<p class="p">500</p>
 </body>
 </html>
