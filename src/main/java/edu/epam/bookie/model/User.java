@@ -33,6 +33,21 @@ public class User implements Entity {
         this.token = token;
     }
 
+    public User(int id, String username, String password, String firstName, String lastName, String email, Role role, LocalDate dateOfBirth, BigDecimal moneyBalance, String passportScan, StatusType statusType, String token) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.role = role;
+        this.dateOfBirth = dateOfBirth;
+        this.moneyBalance = moneyBalance;
+        this.passportScan = passportScan;
+        this.statusType = statusType;
+        this.token = token;
+    }
+
     /**
      * Token for account activation and password change
      *
@@ -66,11 +81,6 @@ public class User implements Entity {
         this.statusType = statusType;
     }
 
-    /**
-     * Passport scan is required for account verification
-     *
-     * @return passport scan name
-     */
     public String getPassportScan() {
         return passportScan;
     }

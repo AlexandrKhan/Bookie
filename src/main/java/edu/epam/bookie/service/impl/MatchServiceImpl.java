@@ -95,7 +95,7 @@ public class MatchServiceImpl implements MatchService {
         try {
             commentList = matchDao.findCommentsForMatch(id);
         } catch (DaoException e) {
-            logger.error("Cant get commments for match", e);
+            logger.error("Can't get comments for match", e);
         }
         if (commentList.isPresent()) {
             comments = commentList.get();
