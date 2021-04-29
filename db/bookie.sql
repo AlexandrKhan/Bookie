@@ -68,5 +68,5 @@ CREATE TABLE `message` (
   FOREIGN KEY (user_id) REFERENCES bookie.user(id) ON DELETE CASCADE
 );
 
-INSERT INTO user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan) VALUES
-  ('admin', 'Alexandr', 'Khan', 'alexandrhan22@gmail.com', 'AYXS9InR{knQyJKe', '1995-06-28', 'ADMIN', 'pass.jpg');
+INSERT INTO user (username, first_name, last_name, email, password, date_of_birth, role, passport_scan, token, status) VALUES
+  ('admin', 'Alexandr', 'Khan', 'alexandrhan22@gmail.com', 'AYXS9InR{knQyJKe', '1995-06-28', 'ADMIN', 'pass.jpg', '1', 'VERIFIED');

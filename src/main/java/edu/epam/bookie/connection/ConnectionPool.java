@@ -44,13 +44,14 @@ public class ConnectionPool {
 
         freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         releasedConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
+
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
                 Connection connection = DriverManager.getConnection(url, properties);
                 ProxyConnection proxyConnection = new ProxyConnection(connection);
                 freeConnection.add(proxyConnection);
             } catch (SQLException e) {
-                logger.error("Can'r create connection", e);
+                logger.error("Can't create connection", e);
             }
         }
     }

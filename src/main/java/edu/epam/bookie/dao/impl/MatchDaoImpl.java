@@ -151,7 +151,7 @@ public class MatchDaoImpl implements MatchDao {
             }
             matches = Optional.of(matchList);
         } catch (SQLException e) {
-            logger.error("Cant gind matches by team", e);
+            logger.error("Can't find matches by team", e);
             throw new DaoException(e);
         }
         return matches;

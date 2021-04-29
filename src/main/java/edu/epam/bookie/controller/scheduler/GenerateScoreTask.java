@@ -19,9 +19,9 @@ import static edu.epam.bookie.controller.scheduler.MatchContextListener.todayMat
 
 public class GenerateScoreTask implements Runnable {
     private static final Logger logger = LogManager.getLogger(GenerateScoreTask.class);
-    private MatchServiceImpl matchService = MatchServiceImpl.matchService;
-    private BetServiceImpl betService = BetServiceImpl.betService;
-    private UserServiceImpl userService = UserServiceImpl.userService;
+    private final MatchServiceImpl matchService = MatchServiceImpl.matchService;
+    private final BetServiceImpl betService = BetServiceImpl.betService;
+    private final UserServiceImpl userService = UserServiceImpl.userService;
     private final String WIN_MESSAGE = "Your bet on match: %s - %s has won!";
 
     /**
@@ -32,8 +32,9 @@ public class GenerateScoreTask implements Runnable {
         todayMatchStartTimeMap.forEach((matchId, startTime) -> {
             if (LocalTime.now().isAfter(startTime)) {
                 try {
-                    matchService.generateScoreResultAndEndMatchById(Long.valueOf(matchId));
+                    matchService.generateScore(Long.valueOf(matchId));
                     logger.info("Generated score for match id = {}", matchId);
+
                     Match match = matchService.findById(Long.valueOf(matchId));
                     List<Bet> matchBets = betService.selectBetsByMatchId(matchId);
                     matchBets.stream()

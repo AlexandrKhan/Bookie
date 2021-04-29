@@ -10,11 +10,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 public class GetTodayMatchTask implements Runnable {
     private static final Logger logger = LogManager.getLogger(GetTodayMatchTask.class);
-    private MatchServiceImpl service = MatchServiceImpl.matchService;
+    private final MatchServiceImpl service = MatchServiceImpl.matchService;
 
     /**
      * Add today matches to todayMatchStartTimeMap
@@ -24,9 +25,19 @@ public class GetTodayMatchTask implements Runnable {
         try {
             List<Match> matchList = service.findAll();
             for (Match match : matchList) {
-                if (checkIfMatchIsTodayAndNotOver(match) && !(todayMatchStartTimeMap.containsKey(match.getId()))) {
-                        todayMatchStartTimeMap.put(match.getId(), match.getStartTime());
-                        logger.info("Added match with id {} to todayMap, start time at: {}", match.getId(), match.getStartTime());
+                int id = match.getId();
+                LocalTime time = match.getStartTime();
+
+                if (matchTodayAndNotOver(match)) {
+                    if (todayMatchStartTimeMap.containsKey(id)) {
+                        if (todayMatchStartTimeMap.get(id).compareTo(time) != 0) {
+                            todayMatchStartTimeMap.put(id, time);
+                            logger.info("Added match with id {} to todayMap, start time at: {}", id, time);
+                        }
+                    } else {
+                        todayMatchStartTimeMap.put(id, time);
+                        logger.info("Added match with id {} to todayMap, start time at: {}", id, time);
+                    }
                 }
             }
         } catch (ServiceException e) {
@@ -40,7 +51,7 @@ public class GetTodayMatchTask implements Runnable {
      * @param match match
      * @return boolean
      */
-    private boolean checkIfMatchIsTodayAndNotOver(Match match) {
+    private boolean matchTodayAndNotOver(Match match) {
         return (!match.getMatchProgress().equals(MatchProgress.valueOf("OVER"))
                 && match.getStartDate().isEqual(LocalDate.now()));
     }

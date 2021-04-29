@@ -26,7 +26,7 @@ public interface MatchService {
      * @return boolean
      * @throws ServiceException service exception
      */
-    boolean generateScoreResultAndEndMatchById(Long id) throws ServiceException;
+    boolean generateScore(Long id) throws ServiceException;
 
     boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws ServiceException;
 

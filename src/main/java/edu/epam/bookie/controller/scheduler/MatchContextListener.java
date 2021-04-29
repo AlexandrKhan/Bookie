@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Schedules 2 tasks
  * 1) Get all today matches
- * 2) When match time = LocalTime.now() -> generate random score
+ * 2) When match time == LocalTime.now() -> generate random score
  */
 
 @WebListener

@@ -24,8 +24,8 @@ import static edu.epam.bookie.command.RequestParameter.*;
  */
 public class UpdateMatchDateCommand implements Command {
     private static final Logger logger = LogManager.getLogger(UpdateMatchDateCommand.class);
-    private MatchServiceImpl matchService = MatchServiceImpl.matchService;
-    private UserServiceImpl userService = UserServiceImpl.userService;
+    private final MatchServiceImpl matchService = MatchServiceImpl.matchService;
+    private final UserServiceImpl userService = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -48,7 +48,7 @@ public class UpdateMatchDateCommand implements Command {
             request.setAttribute(RequestParameter.MATCH_ID, request.getParameter(RequestParameter.MATCH_ID));
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
             page = PagePath.MATCHES.getDirectUrl();
-            logger.error("Validation shit on update match command");
+            logger.error("Validation error on update match command");
         }
         return page;
     }

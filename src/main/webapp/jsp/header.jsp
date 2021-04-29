@@ -6,6 +6,7 @@
 <html lang="${sessionScope.lang}">
 <head>
     <meta name="viewport" content="width=device-width">
+    <title></title>
 </head>
 <div>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -60,7 +61,7 @@
                                             <label for="cashInSum"></label><input type="number" name="cashInSum"
                                                                                   class="form-control"
                                                                                   id="cashInSum" step="0.01" min="5"
-                                                                                  value="5" required>
+                                                                                  max="9999" value="5" required>
                                         </div>
 
                                         <button type='button' class='btn btn-alert' data-dismiss='modal'>

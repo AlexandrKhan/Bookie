@@ -89,7 +89,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public List<Comment> findCommentsForMatch(Long id) throws ServiceException {
+    public List<Comment> findCommentsForMatch(Long id) {
         Optional<List<Comment>> commentList = Optional.empty();
         List<Comment> comments = new ArrayList<>();
         try {
@@ -116,7 +116,7 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public boolean generateScoreResultAndEndMatchById(Long id) throws ServiceException {
+    public boolean generateScore(Long id) throws ServiceException {
         boolean result = false;
         int firstTeamGoal = (int) (6.0 * Math.random());
         int secondTeamGoal = (int) (6.0 * Math.random());
@@ -132,6 +132,7 @@ public class MatchServiceImpl implements MatchService {
     private Result calculateResult(int firstTeamGoal, int secondTeamGoal) {
         int goalDifference = firstTeamGoal - secondTeamGoal;
         Result matchResult;
+
         if (goalDifference > 0) {
             matchResult = Result.HOME;
         } else if (goalDifference < 0) {

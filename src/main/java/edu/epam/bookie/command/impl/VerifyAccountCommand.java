@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class VerifyAccountCommand implements Command {
     public static final Logger logger = LogManager.getLogger(VerifyAccountCommand.class);
-    private UserServiceImpl service = UserServiceImpl.userService;
+    private final UserServiceImpl service = UserServiceImpl.userService;
 
     @Override
     public String execute(HttpServletRequest request) {

@@ -15,8 +15,10 @@ public class MatchValidator {
         return LocalDate.now().plusMonths(1).isBefore(date);
     }
 
-    public static boolean correctCoeff(BigDecimal coeff) {
-        return coeff != null && coeff.compareTo(new BigDecimal(100)) < 0;
+    public static boolean correctCoeff(BigDecimal home, BigDecimal draw, BigDecimal away) {
+        return home != null && home.compareTo(new BigDecimal(100)) < 0 &&
+        draw != null && draw.compareTo(new BigDecimal(100)) < 0 &&
+        away != null && away.compareTo(new BigDecimal(100)) < 0;
     }
 
     public static boolean isValidTimeForMatchUpdate(LocalDate date, LocalTime time) {

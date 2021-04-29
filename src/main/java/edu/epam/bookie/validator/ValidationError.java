@@ -13,5 +13,6 @@ public enum ValidationError {
     BAD_DATE_FOR_MATCH,
     PASSWORDS_DONT_MATCH,
     NOT_ENOUGH_MONEY,
-    TWO_SAME_TEAMS
+    TWO_SAME_TEAMS,
+    BAD_COEFF
 }
