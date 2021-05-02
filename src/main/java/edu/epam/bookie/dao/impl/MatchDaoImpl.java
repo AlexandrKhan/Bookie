@@ -4,10 +4,13 @@ import edu.epam.bookie.connection.ConnectionPool;
 import edu.epam.bookie.dao.MatchDao;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.model.sport.Match;
+import edu.epam.bookie.model.sport.MatchProgress;
 import edu.epam.bookie.model.sport.Result;
+import edu.epam.bookie.model.sport.Team;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -98,9 +101,7 @@ public class MatchDaoImpl implements MatchDao {
             ResultSet resultSet = statement.executeQuery(SELECT_ALL_MATCHES);
             List<Match> matchList = new ArrayList<>();
             while (resultSet.next()) {
-                Match match = new Match();
-                setNotStartedMatchFields(resultSet, match);
-                setOverMatchFields(resultSet, match);
+                Match match = setMatchFields(resultSet);
                 matchList.add(match);
             }
             matches = Optional.of(matchList);
@@ -113,17 +114,17 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public Optional<Match> findById(int id) throws DaoException {
-        Optional<Match> match;
+        Optional<Match> match = Optional.empty();
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_MATCH_BY_ID)) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
-            Match matchTemp = new Match();
-            while (resultSet.next()) {
-                setNotStartedMatchFields(resultSet, matchTemp);
-                setOverMatchFields(resultSet, matchTemp);
+
+            if (resultSet.next()) {
+                Match matchTemp = setMatchFields(resultSet);
+                match = Optional.of(matchTemp);
             }
-            match = Optional.of(matchTemp);
+
         } catch (SQLException e) {
             logger.error("Cant select match by id: {}", id, e);
             throw new DaoException(e);
@@ -142,9 +143,7 @@ public class MatchDaoImpl implements MatchDao {
             ResultSet resultSet = statement.executeQuery();
             List<Match> matchList = new ArrayList<>();
             while (resultSet.next()) {
-                Match match = new Match();
-                setNotStartedMatchFields(resultSet, match);
-                setOverMatchFields(resultSet, match);
+                Match match = setMatchFields(resultSet);
                 matchList.add(match);
             }
             matches = Optional.of(matchList);
@@ -164,9 +163,7 @@ public class MatchDaoImpl implements MatchDao {
             ResultSet resultSet = statement.executeQuery();
             List<Match> matchList = new ArrayList<>();
             while (resultSet.next()) {
-                Match match = new Match();
-                setNotStartedMatchFields(resultSet, match);
-                setOverMatchFields(resultSet, match);
+                Match match = setMatchFields(resultSet);
                 matchList.add(match);
             }
             matches = Optional.of(matchList);
@@ -177,21 +174,33 @@ public class MatchDaoImpl implements MatchDao {
         return matches;
     }
 
-    private void setNotStartedMatchFields(ResultSet resultSet, Match match) throws SQLException {
-        match.setId(resultSet.getInt(DatabaseColumn.ID));
-        match.setFirstTeam(resultSet.getString(DatabaseColumn.HOME_TEAM));
-        match.setSecondTeam(resultSet.getString(DatabaseColumn.AWAY_TEAM));
-        match.setStartDate((resultSet.getDate(DatabaseColumn.MATCH_START_DATE).toLocalDate()));
-        match.setStartTime((resultSet.getTime(DatabaseColumn.MATCH_START_TIME).toLocalTime()));
-        match.setHomeCoeff(resultSet.getBigDecimal(DatabaseColumn.HOME_COEFF));
-        match.setDrawCoeff(resultSet.getBigDecimal(DatabaseColumn.DRAW_COEFF));
-        match.setAwayCoeff(resultSet.getBigDecimal(DatabaseColumn.AWAY_COEFF));
-    }
+    private Match setMatchFields(ResultSet resultSet) throws SQLException {
+        int id = resultSet.getInt(DatabaseColumn.ID);
+        Team homeTeam = Team.valueOf(resultSet.getString(DatabaseColumn.HOME_TEAM));
+        Team awayTeam = Team.valueOf(resultSet.getString(DatabaseColumn.AWAY_TEAM));
+        LocalDate matchDate = resultSet.getDate(DatabaseColumn.MATCH_START_DATE).toLocalDate();
+        LocalTime matchTime = resultSet.getTime(DatabaseColumn.MATCH_START_TIME).toLocalTime();
+        BigDecimal homeCoeff = resultSet.getBigDecimal(DatabaseColumn.HOME_COEFF);
+        BigDecimal drawCoeff = resultSet.getBigDecimal(DatabaseColumn.DRAW_COEFF);
+        BigDecimal awayCoeff = resultSet.getBigDecimal(DatabaseColumn.AWAY_COEFF);
+        int homeGoals = resultSet.getInt(DatabaseColumn.HOME_TEAM_GOALS);
+        int awayGoals = resultSet.getInt(DatabaseColumn.AWAY_TEAM_GOALS);
+        Result result = Result.valueOf(resultSet.getString(DatabaseColumn.MATCH_RESULT));
+        MatchProgress progress = MatchProgress.valueOf(resultSet.getString(DatabaseColumn.MATCH_PROGRESS));
 
-    private void setOverMatchFields(ResultSet resultSet, Match match) throws SQLException {
-        match.setHomeTeamGoals(resultSet.getInt(DatabaseColumn.HOME_TEAM_GOALS));
-        match.setAwayTeamGoals(resultSet.getInt(DatabaseColumn.AWAY_TEAM_GOALS));
-        match.setResult(resultSet.getString(DatabaseColumn.MATCH_RESULT));
-        match.setMatchProgress(resultSet.getString(DatabaseColumn.MATCH_PROGRESS));
+        return new Match.MatchBuilder()
+                .withId(id)
+                .withHomeTeam(homeTeam)
+                .withAwayTeam(awayTeam)
+                .withStartDate(matchDate)
+                .withStartTime(matchTime)
+                .withHomeCoeff(homeCoeff)
+                .withDrawCoeff(drawCoeff)
+                .withAwayCoeff(awayCoeff)
+                .withHomeGoals(homeGoals)
+                .withAwayGoals(awayGoals)
+                .withResult(result)
+                .withProgress(progress)
+                .build();
     }
 }

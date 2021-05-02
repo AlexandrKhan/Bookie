@@ -64,7 +64,7 @@ public class BetServiceImpl implements BetService {
         try {
             result = betDao.payBets(bet);
         } catch (DaoException e) {
-            logger.error("Cant pay bet");
+            logger.error("Can't pay bet");
             throw new ServiceException(e);
         }
         return result;

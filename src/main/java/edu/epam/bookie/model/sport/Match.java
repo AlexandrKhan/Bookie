@@ -1,5 +1,7 @@
 package edu.epam.bookie.model.sport;
 
+import edu.epam.bookie.model.User;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,44 +19,125 @@ public class Match {
     private LocalTime startTime;
     private Result result;
     private MatchProgress matchProgress;
+
+    /**
+     * homeCoeff, drawCoeff, awayCoeff represent the coefficients for bets on this match
+     * ex. if homeCoeff is 3 and your bet is 100, win would be 300 (including the bet amount)
+     */
     private BigDecimal homeCoeff;
     private BigDecimal drawCoeff;
     private BigDecimal awayCoeff;
 
-    public Match() {
+    private Match(MatchBuilder builder) {
+        this.id = builder.id;
+        this.homeTeam = builder.homeTeam;
+        this.awayTeam = builder.awayTeam;
+        this.startDate = builder.startDate;
+        this.startTime = builder.startTime;
+        this.homeCoeff = builder.homeCoeff;
+        this.drawCoeff = builder.drawCoeff;
+        this.awayCoeff = builder.awayCoeff;
+        this.homeTeamGoals = builder.homeTeamGoals;
+        this.awayTeamGoals = builder.awayTeamGoals;
+        this.matchProgress = builder.matchProgress;
+        this.result = builder.result;
     }
 
-    public Match(int id, Team homeTeam, Team awayTeam, int homeTeamGoals, int awayTeamGoals, LocalDate startDate, LocalTime startTime, Result result) {
-        this.id = id;
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
-        this.homeTeamGoals = homeTeamGoals;
-        this.awayTeamGoals = awayTeamGoals;
-        this.startDate = startDate;
-        this.startTime = startTime;
-        this.result = result;
+    public static class MatchBuilder {
+        private int id;
+        private Team homeTeam;
+        private Team awayTeam;
+        private int homeTeamGoals;
+        private int awayTeamGoals;
+        private LocalDate startDate;
+        private LocalTime startTime;
+        private Result result;
+        private MatchProgress matchProgress;
+        private BigDecimal homeCoeff;
+        private BigDecimal drawCoeff;
+        private BigDecimal awayCoeff;
+
+        public MatchBuilder() {
+        }
+
+        public MatchBuilder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public MatchBuilder withHomeTeam(Team homeTeam) {
+            this.homeTeam = homeTeam;
+            return this;
+        }
+
+        public MatchBuilder withAwayTeam(Team awayTeam) {
+            this.awayTeam = awayTeam;
+            return this;
+        }
+
+        public MatchBuilder withHomeGoals(int homeTeamGoals) {
+            this.homeTeamGoals = homeTeamGoals;
+            return this;
+        }
+
+        public MatchBuilder withAwayGoals(int awayTeamGoals) {
+            this.awayTeamGoals = awayTeamGoals;
+            return this;
+        }
+
+        public MatchBuilder withStartDate(LocalDate startDate) {
+            this.startDate = startDate;
+            return this;
+        }
+
+        public MatchBuilder withStartTime(LocalTime startTime) {
+            this.startTime = startTime;
+            return this;
+        }
+
+        public MatchBuilder withResult(Result result) {
+            this.result = result;
+            return this;
+        }
+
+        public MatchBuilder withProgress(MatchProgress matchProgress) {
+            this.matchProgress = matchProgress;
+            return this;
+        }
+
+        public MatchBuilder withHomeCoeff(BigDecimal homeCoeff) {
+            this.homeCoeff = homeCoeff;
+            return this;
+        }
+
+        public MatchBuilder withDrawCoeff(BigDecimal drawCoeff) {
+            this.drawCoeff = drawCoeff;
+            return this;
+        }
+
+        public MatchBuilder withAwayCoeff(BigDecimal awayCoeff) {
+            this.awayCoeff = awayCoeff;
+            return this;
+        }
+
+        public MatchBuilder withProgress(BigDecimal awayCoeff) {
+            this.awayCoeff = awayCoeff;
+            return this;
+        }
+
+        public MatchBuilder withNewMatchValues() {
+            this.homeTeamGoals = 0;
+            this.awayTeamGoals = 0;
+            this.matchProgress = MatchProgress.NOT_STARTED;
+            this.result = Result.DRAW;
+            return this;
+        }
+
+        public Match build() {
+            return new Match(this);
+        }
     }
 
-    public Match(Team homeTeam, Team awayTeam, LocalDate startDate, LocalTime startTime, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) {
-        this.homeTeam = homeTeam;
-        this.awayTeam = awayTeam;
-        this.startDate = startDate;
-        this.startTime = startTime;
-        this.homeCoeff = homeCoeff;
-        this.drawCoeff = drawCoeff;
-        this.awayCoeff = awayCoeff;
-        this.homeTeamGoals = 0;
-        this.awayTeamGoals = 0;
-        this.matchProgress = MatchProgress.NOT_STARTED;
-        this.result = Result.DRAW;
-    }
-
-    /**
-     * homeCoeff, drawCoeff, awayCoeff represent the coefficients for bets on this match
-     * ex. if homeCoeff is 3 and your bet is 100, potential win would be 300 (including the bet amount)
-     *
-     * @return coefficient for match
-     */
     public BigDecimal getHomeCoeff() {
         return homeCoeff;
     }
@@ -79,11 +162,6 @@ public class Match {
         this.awayCoeff = awayCoeff;
     }
 
-    /**
-     * Goals scored by home team
-     *
-     * @return goals
-     */
     public int getHomeTeamGoals() {
         return homeTeamGoals;
     }
@@ -91,11 +169,7 @@ public class Match {
     public void setHomeTeamGoals(int firstTeamGoals) {
         this.homeTeamGoals = firstTeamGoals;
     }
-    /**
-     * Goals scored by away team
-     *
-     * @return goals
-     */
+
     public int getAwayTeamGoals() {
         return awayTeamGoals;
     }
@@ -103,11 +177,7 @@ public class Match {
     public void setAwayTeamGoals(int awayTeamGoals) {
         this.awayTeamGoals = awayTeamGoals;
     }
-    /**
-     * Shows whether the match is started/over
-     *
-     * @return progress
-     */
+
     public MatchProgress getMatchProgress() {
         return matchProgress;
     }
@@ -167,11 +237,7 @@ public class Match {
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
-    /**
-     * Result of the match (home win, draw, away win)
-     *
-     * @return result
-     */
+
     public Result getResult() {
         return result;
     }

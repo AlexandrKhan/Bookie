@@ -7,6 +7,7 @@ import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.model.sport.Team;
 import edu.epam.bookie.service.MatchService;
+import edu.epam.bookie.validator.MatchValidator;
 import edu.epam.bookie.validator.ValidationError;
 import edu.epam.bookie.validator.ValidationErrorSet;
 import org.apache.logging.log4j.LogManager;
@@ -42,25 +43,21 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match findById(int id) throws ServiceException {
+    public Optional<Match> findById(int id) throws ServiceException {
         Optional<Match> matchTemp;
-        Match match = new Match();
         try {
             matchTemp = matchDao.findById(id);
         } catch (DaoException e) {
             logger.error("Cant find match by id: {}", id);
             throw new ServiceException(e);
         }
-        if (matchTemp.isPresent()) {
-            match = matchTemp.get();
-        }
-        return match;
+        return matchTemp;
     }
 
     @Override
     public boolean updateMatchDate(int id, LocalDate date, LocalTime time) throws ServiceException {
         boolean result = false;
-        if (date.isAfter(LocalDate.now()) ||  (!date.isBefore(LocalDate.now()) && time.isAfter(LocalTime.now().plusMinutes(60)))) {
+        if (MatchValidator.isValidTimeForMatchUpdate(date, time)) {
             try {
                 result = matchDao.updateDateTimeAtNotStartedMatch(id, date, time);
             } catch (DaoException e) {
@@ -68,7 +65,7 @@ public class MatchServiceImpl implements MatchService {
                 throw new ServiceException(e);
             }
         } else {
-            logger.error("Validation shit on upodate amtch");
+            logger.error("Validation error on update match");
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
         }
@@ -93,9 +90,17 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws ServiceException {
-        Match matchTemp = new Match(first, second, date, time, homeCoeff, drawCoeff, awayCoeff);
         Optional<Match> match;
         try {
+            Match matchTemp = new Match.MatchBuilder()
+                    .withHomeTeam(first)
+                    .withAwayTeam(second)
+                    .withStartDate(date)
+                    .withStartTime(time)
+                    .withHomeCoeff(homeCoeff)
+                    .withDrawCoeff(drawCoeff)
+                    .withAwayCoeff(awayCoeff)
+                    .build();
             match = matchDao.create(matchTemp);
         } catch (DaoException e) {
             logger.error("Cant create match");

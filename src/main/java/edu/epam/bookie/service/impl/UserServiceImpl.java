@@ -294,13 +294,17 @@ public class UserServiceImpl implements UserService {
             .distinct()
             .forEach(id -> {
             try {
-                Match match  = matchService.findById(matchId);
-                userService.sendMessage(new Message(id, String.format(DELAY_MESSAGE,
-                        match.getHomeTeam().getName(),
-                        match.getAwayTeam().getName(),
-                        match.getStartDate(),
-                        match.getStartTime()),
-                        Theme.DELAY));
+                Optional<Match> matchTemp  = matchService.findById(matchId);
+                Match match;
+                if (matchTemp.isPresent()) {
+                    match = matchTemp.get();
+                    userService.sendMessage(new Message(id, String.format(DELAY_MESSAGE,
+                            match.getHomeTeam().getName(),
+                            match.getAwayTeam().getName(),
+                            match.getStartDate(),
+                            match.getStartTime()),
+                            Theme.DELAY));
+                }
             } catch (ServiceException e) {
                 logger.error("Error sending messsage about time changed to user: {}", id);
             }

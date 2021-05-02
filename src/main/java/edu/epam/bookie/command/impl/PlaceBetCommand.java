@@ -20,6 +20,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
+import java.util.Optional;
 
 /**
  * Command to place bet
@@ -40,22 +41,25 @@ public class PlaceBetCommand implements Command {
         BigDecimal betAmount = new BigDecimal(request.getParameter(RequestParameter.BET_AMOUNT));
         Result betOnResult = Result.valueOf(request.getParameter(RequestParameter.BET_ON_RESULT).toUpperCase());
         Bet bet = new Bet();
-        Match match;
+        Optional<Match> matchTemp;
 
         if (user.getStatusType().equals(StatusType.VERIFIED)) {
             try {
-                match = matchService.findById(Integer.parseInt(request.getParameter(RequestParameter.MATCH_ID)));
-                bet = new Bet(userId, matchId, betAmount, betOnResult);
-                switch (betOnResult.getName()) {
-                    case "Home":
-                        bet.setBetCoeff(match.getHomeCoeff());
-                        break;
-                    case "Away":
-                        bet.setBetCoeff(match.getAwayCoeff());
-                        break;
-                    default:
-                        bet.setBetCoeff(match.getDrawCoeff());
-                        break;
+                matchTemp = matchService.findById(Integer.parseInt(request.getParameter(RequestParameter.MATCH_ID)));
+                if (matchTemp.isPresent()) {
+                    Match match = matchTemp.get();
+                    bet = new Bet(userId, matchId, betAmount, betOnResult);
+                    switch (betOnResult.getName()) {
+                        case "Home":
+                            bet.setBetCoeff(match.getHomeCoeff());
+                            break;
+                        case "Away":
+                            bet.setBetCoeff(match.getAwayCoeff());
+                            break;
+                        default:
+                            bet.setBetCoeff(match.getDrawCoeff());
+                            break;
+                    }
                 }
             } catch (ServiceException e) {
                 logger.error("Error getting match by id", e);

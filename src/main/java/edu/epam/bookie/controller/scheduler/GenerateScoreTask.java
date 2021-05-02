@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 import static edu.epam.bookie.controller.scheduler.MatchContextListener.todayMatchStartTimeMap;
 
@@ -39,27 +40,30 @@ public class GenerateScoreTask implements Runnable {
                     if (matchService.generateScore(matchId)) {
                         logger.info("Generated score for match id = {}", matchId);
 
-                        Match match = matchService.findById(matchId);
-                        List<Bet> matchBets = betService.selectBetsByMatchId(matchId);
-                        matchBets.stream()
-                                .filter(b -> b.getBetStatus() == BetStatus.NOT_STARTED)
-                                .forEach(b -> {
-                                    try {
-                                        if (b.getBetOnResult() == match.getResult()) {
-                                            betService.payBets(b);
-                                            userService.sendMessage(new Message(b.getUserId(),
-                                                    String.format(WIN_MESSAGE,
-                                                            match.getHomeTeam().getName(),
-                                                            match.getAwayTeam().getName()),
-                                                    Theme.WON));
-                                        } else {
-                                            betService.betLost(b);
+                        Optional<Match> matchTemp = matchService.findById(matchId);
+                        if (matchTemp.isPresent()) {
+                            Match match = matchTemp.get();
+                            List<Bet> matchBets = betService.selectBetsByMatchId(matchId);
+                            matchBets.stream()
+                                    .filter(b -> b.getBetStatus() == BetStatus.NOT_STARTED)
+                                    .forEach(b -> {
+                                        try {
+                                            if (b.getBetOnResult() == match.getResult()) {
+                                                betService.payBets(b);
+                                                userService.sendMessage(new Message(b.getUserId(),
+                                                        String.format(WIN_MESSAGE,
+                                                                match.getHomeTeam().getName(),
+                                                                match.getAwayTeam().getName()),
+                                                        Theme.WON));
+                                            } else {
+                                                betService.betLost(b);
+                                            }
+                                        } catch (ServiceException e) {
+                                            logger.error("Paying bets exception", e);
                                         }
-                                    } catch (ServiceException e) {
-                                        logger.error("Paying bets exception", e);
-                                    }
-                                });
-                        todayMatchStartTimeMap.remove(matchId);
+                                    });
+                            todayMatchStartTimeMap.remove(matchId);
+                        }
                     }
                 } catch (ServiceException e) {
                     logger.error("Setting goals exception", e);

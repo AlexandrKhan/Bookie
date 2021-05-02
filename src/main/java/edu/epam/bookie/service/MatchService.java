@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface MatchService {
     List<Match> findAll() throws ServiceException;
 
-    Match findById(int id) throws ServiceException;
+    Optional<Match> findById(int id) throws ServiceException;
 
     Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws ServiceException;
 

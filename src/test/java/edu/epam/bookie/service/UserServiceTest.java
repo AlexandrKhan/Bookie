@@ -6,10 +6,9 @@ import edu.epam.bookie.dao.impl.UserDaoImpl;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.Message;
-import edu.epam.bookie.model.Role;
-import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.model.sport.Bet;
+import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.service.impl.UserServiceImpl;
 import org.powermock.reflect.Whitebox;
 import org.testng.annotations.BeforeMethod;
@@ -41,26 +40,23 @@ public class UserServiceTest {
         userService = UserServiceImpl.userService;
     }
 
-//    @Test
-//    public void testFindByUsernameAndPassword() throws DaoException, ServiceException {
-//        Optional<User> expected = Optional.of(new User(1, "admin123", "admin123", "Alexandr", "Khan",
-//                "alexandrhan22@gmail.com", Role.ADMIN, LocalDate.of(1995, 6, 28),
-//                new BigDecimal(1000), "Passport.jpg", StatusType.VERIFIED, "123456789"));
-//        when(userDao.findUserByUsernameAndPassword(anyString(), anyString())).thenReturn(expected);
-//        Optional<User> actual = userService.findUserByUsernameAndPassword("admin123", "admin123");
-//        assertEquals(actual, expected);
-//    }
-//
-//    @Test
-//    public void testRegister() throws DaoException, ServiceException {
-//        Optional<User> expected = Optional.of(new User(1, "admin123", "admin123", "Alexandr", "Khan",
-//                "alexandrhan22@gmail.com", Role.ADMIN, LocalDate.of(1995, 6, 28),
-//                new BigDecimal(1000), "Passport.jpg", StatusType.VERIFIED, "123456789"));
-//        when(userDao.create(any())).thenReturn(expected);
-//        Optional<User> actual = userService.registerUser("admin123", "Alexandr", "Khan",
-//                "alexandrhan22@gmail.com", "admin123", "admin123", LocalDate.of(1995, 6, 28));
-//        assertEquals(actual, expected);
-//    }
+    @Test
+    public void testFindByUsernameAndPassword() throws DaoException, ServiceException {
+        Optional<User> expected = Optional.of(new User.UserBuilder().build());
+        when(userDao.findUserByUsernameAndPassword(anyString(), anyString())).thenReturn(expected);
+        Optional<User> actual = userService.findUserByUsernameAndPassword("admin123", "admin123");
+        assertEquals(actual, expected);
+    }
+
+    @Test
+    public void testRegister() throws DaoException, ServiceException {
+        Optional<User> expected = Optional.of(new User.UserBuilder().build());
+
+        when(userDao.create(any())).thenReturn(expected);
+        Optional<User> actual = userService.registerUser("admin123", "Alexandr", "Khan",
+                "alexandrhan22@gmail.com", "admin123", "admin123", LocalDate.of(1995, 6, 28));
+        assertEquals(actual, expected);
+    }
 
     @Test
     public void testActivate() throws DaoException, ServiceException {
@@ -70,7 +66,7 @@ public class UserServiceTest {
 
     @Test
     public void testVerify() throws DaoException, ServiceException {
-        when(userDao.verifyAccount(anyInt())).thenReturn(true);
+        when(userDao.verifyAccount(1)).thenReturn(true);
         assertTrue(userService.verifyAccount(1));
     }
 
@@ -88,8 +84,9 @@ public class UserServiceTest {
 
     @Test
     public void testPlaceBet() throws DaoException, ServiceException {
-        Optional<Bet> expected = Optional.of(new Bet());
-        when(betDao.create(new Bet())).thenReturn(expected);
+        Optional<Bet> expected = Optional.of(new Bet(1,1, new BigDecimal(1), Result.AWAY));
+        when(betDao.create(any())).thenReturn(expected);
+        when(userDao.withdrawMoney(anyInt(), any())).thenReturn(true);
         assertTrue(userService.placeBet(new Bet()));
     }
 
