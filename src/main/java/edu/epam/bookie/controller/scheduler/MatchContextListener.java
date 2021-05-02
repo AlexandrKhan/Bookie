@@ -4,6 +4,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @WebListener
 public class MatchContextListener implements ServletContextListener {
     private ScheduledExecutorService scheduler;
-    static ConcurrentHashMap<Integer, LocalTime> todayMatchStartTimeMap = new ConcurrentHashMap<>();
+    static Map<Integer, LocalTime> todayMatchStartTimeMap = new ConcurrentHashMap<>();
 
     @Override
     public void contextInitialized(ServletContextEvent event) {

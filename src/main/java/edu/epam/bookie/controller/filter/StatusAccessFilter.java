@@ -1,7 +1,6 @@
 package edu.epam.bookie.controller.filter;
 
 import edu.epam.bookie.command.*;
-import edu.epam.bookie.model.Role;
 import edu.epam.bookie.model.StatusType;
 import edu.epam.bookie.model.User;
 import org.apache.logging.log4j.LogManager;
@@ -28,7 +27,7 @@ public class StatusAccessFilter implements Filter {
             CommandType commandType = CommandFactory.getCommandType(command);
             StatusType userStatus = getUserStatus(request);
             if (!MAP.hasStatus(commandType, userStatus)) {
-                logger.warn("Role filter. User with status {} can't execute {} command", userStatus, commandType);
+                logger.warn("Status filter. User with status {} can't execute {} command", userStatus, commandType);
                 response.sendRedirect(request.getContextPath() + PagePath.ERROR_404);
                 return;
             }
@@ -42,7 +41,7 @@ public class StatusAccessFilter implements Filter {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            return StatusType.BLOCKED;
+            return StatusType.NOT_ACTIVATED;
         } else {
             return user.getStatusType();
         }

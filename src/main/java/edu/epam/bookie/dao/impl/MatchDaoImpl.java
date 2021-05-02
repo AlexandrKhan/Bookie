@@ -3,7 +3,6 @@ package edu.epam.bookie.dao.impl;
 import edu.epam.bookie.connection.ConnectionPool;
 import edu.epam.bookie.dao.MatchDao;
 import edu.epam.bookie.exception.DaoException;
-import edu.epam.bookie.model.Comment;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Result;
 import org.apache.logging.log4j.LogManager;
@@ -29,7 +28,6 @@ public class MatchDaoImpl implements MatchDao {
     private static final String FIND_MATCHES_BY_TEAM = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.home_team LIKE ? OR bookie.match.away_team LIKE ?";
     private static final String FIND_MATCHES_BY_USER_ID = "SELECT DISTINCT M.id, home_team, away_team, start_date, start_time, home_coeff, draw_coeff, away_coeff, home_team_goals, away_team_goals, result, match_progress FROM bookie.match AS M JOIN bookie.match_result AS MR ON M.id = MR.id JOIN bookie.bet AS BB ON M.id = BB.match_id WHERE BB.user_id=?";
     private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.id=?";
-    private static final String FIND_COMMENTS = "SELECT * FROM bookie.match_comments WHERE match_id=?";
 
     private MatchDaoImpl() {
     }
@@ -177,32 +175,6 @@ public class MatchDaoImpl implements MatchDao {
             throw new DaoException(e);
         }
         return matches;
-    }
-
-    @Override
-    public Optional<List<Comment>> findCommentsForMatch(Long id) throws DaoException {
-        Optional<List<Comment>> comments;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_COMMENTS)) {
-            statement.setLong(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            List<Comment> commentList = new ArrayList<>();
-            while (resultSet.next()) {
-                Comment comment = new Comment();
-                comment.setId(resultSet.getInt(DatabaseColumn.ID));
-                comment.setMatchId(resultSet.getInt(DatabaseColumn.MATCH_ID));
-                comment.setUserId(resultSet.getInt(DatabaseColumn.USER_ID));
-                comment.setComment(resultSet.getString(DatabaseColumn.COMMENT));
-                comment.setDate(resultSet.getDate(DatabaseColumn.DATE).toLocalDate());
-                comment.setTime(resultSet.getTime(DatabaseColumn.TIME).toLocalTime());
-                commentList.add(comment);
-            }
-            comments = Optional.of(commentList);
-        } catch (SQLException e) {
-            logger.error("Cant find matches by user who bet", e);
-            throw new DaoException(e);
-        }
-        return comments;
     }
 
     @Override

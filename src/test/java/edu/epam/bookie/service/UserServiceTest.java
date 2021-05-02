@@ -1,4 +1,4 @@
-package edu.epam.bookie;
+package edu.epam.bookie.service;
 
 import edu.epam.bookie.dao.impl.BetDaoImpl;
 import edu.epam.bookie.dao.impl.MessageDaoImpl;
@@ -41,26 +41,26 @@ public class UserServiceTest {
         userService = UserServiceImpl.userService;
     }
 
-    @Test
-    public void testFindByUsernameAndPassword() throws DaoException, ServiceException {
-        Optional<User> expected = Optional.of(new User(1, "admin123", "admin123", "Alexandr", "Khan",
-                "alexandrhan22@gmail.com", Role.ADMIN, LocalDate.of(1995, 6, 28),
-                new BigDecimal(1000), "Passport.jpg", StatusType.VERIFIED, "123456789"));
-        when(userDao.findUserByUsernameAndPassword(anyString(), anyString())).thenReturn(expected);
-        Optional<User> actual = userService.findUserByUsernameAndPassword("admin123", "admin123");
-        assertEquals(actual, expected);
-    }
-
-    @Test
-    public void testRegister() throws DaoException, ServiceException {
-        Optional<User> expected = Optional.of(new User(1, "admin123", "admin123", "Alexandr", "Khan",
-                "alexandrhan22@gmail.com", Role.ADMIN, LocalDate.of(1995, 6, 28),
-                new BigDecimal(1000), "Passport.jpg", StatusType.VERIFIED, "123456789"));
-        when(userDao.create(any())).thenReturn(expected);
-        Optional<User> actual = userService.registerUser("admin123", "Alexandr", "Khan",
-                "alexandrhan22@gmail.com", "admin123", "admin123", LocalDate.of(1995, 6, 28));
-        assertEquals(actual, expected);
-    }
+//    @Test
+//    public void testFindByUsernameAndPassword() throws DaoException, ServiceException {
+//        Optional<User> expected = Optional.of(new User(1, "admin123", "admin123", "Alexandr", "Khan",
+//                "alexandrhan22@gmail.com", Role.ADMIN, LocalDate.of(1995, 6, 28),
+//                new BigDecimal(1000), "Passport.jpg", StatusType.VERIFIED, "123456789"));
+//        when(userDao.findUserByUsernameAndPassword(anyString(), anyString())).thenReturn(expected);
+//        Optional<User> actual = userService.findUserByUsernameAndPassword("admin123", "admin123");
+//        assertEquals(actual, expected);
+//    }
+//
+//    @Test
+//    public void testRegister() throws DaoException, ServiceException {
+//        Optional<User> expected = Optional.of(new User(1, "admin123", "admin123", "Alexandr", "Khan",
+//                "alexandrhan22@gmail.com", Role.ADMIN, LocalDate.of(1995, 6, 28),
+//                new BigDecimal(1000), "Passport.jpg", StatusType.VERIFIED, "123456789"));
+//        when(userDao.create(any())).thenReturn(expected);
+//        Optional<User> actual = userService.registerUser("admin123", "Alexandr", "Khan",
+//                "alexandrhan22@gmail.com", "admin123", "admin123", LocalDate.of(1995, 6, 28));
+//        assertEquals(actual, expected);
+//    }
 
     @Test
     public void testActivate() throws DaoException, ServiceException {

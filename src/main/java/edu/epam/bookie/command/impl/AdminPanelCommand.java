@@ -3,6 +3,7 @@ package edu.epam.bookie.command.impl;
 import edu.epam.bookie.command.Command;
 import edu.epam.bookie.command.PagePath;
 import edu.epam.bookie.command.RequestParameter;
+import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;

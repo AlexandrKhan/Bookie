@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class CommandStatusMap {
-    private static CommandStatusMap INSTANCE = new CommandStatusMap();
+    private static final CommandStatusMap INSTANCE = new CommandStatusMap();
     private static final EnumMap<CommandType, List<StatusType>> STATUS_MAP;
 
     static {

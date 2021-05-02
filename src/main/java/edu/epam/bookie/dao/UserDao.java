@@ -118,4 +118,5 @@ public interface UserDao extends BaseDao<User> {
      * @throws DaoException dao exception
      */
     boolean uploadScan(String scan, int id) throws DaoException;
+
 }

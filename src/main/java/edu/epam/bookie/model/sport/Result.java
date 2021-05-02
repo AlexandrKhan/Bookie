@@ -7,7 +7,7 @@ public enum Result {
     HOME("Home"),
     DRAW("Draw"),
     AWAY("Away");
-    private String name;
+    private final String name;
 
     Result(String name) {
         this.name = name;

@@ -1,9 +1,8 @@
-package edu.epam.bookie;
+package edu.epam.bookie.service;
 
 import edu.epam.bookie.dao.impl.MatchDaoImpl;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.exception.ServiceException;
-import edu.epam.bookie.model.Comment;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.service.impl.MatchServiceImpl;
 import org.powermock.reflect.Whitebox;
@@ -50,15 +49,6 @@ public class MatchServiceTest {
         List<Match> expected = Collections.singletonList(match.get());
         when(matchDao.findMatchesByTeam(any())).thenReturn(Optional.of(expected));
         List<Match> actual = matchService.findMatchesByTeam("Team");
-        assertEquals(actual, expected);
-    }
-
-    @Test
-    public void testFindCommentsForMatch() throws DaoException, ServiceException {
-        Optional<Comment> comment = Optional.of(new Comment());
-        List<Comment> expected = Collections.singletonList(comment.get());
-        when(matchDao.findCommentsForMatch(any())).thenReturn(Optional.of(expected));
-        List<Comment> actual = matchService.findCommentsForMatch(1L);
         assertEquals(actual, expected);
     }
 }

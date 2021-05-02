@@ -12,7 +12,7 @@ import java.util.List;
  */
 
 public class CommandRoleMap {
-    private static CommandRoleMap INSTANCE = new CommandRoleMap();
+    private static final CommandRoleMap INSTANCE = new CommandRoleMap();
     private static final EnumMap<CommandType, List<Role>> ROLE_MAP;
 
     static {

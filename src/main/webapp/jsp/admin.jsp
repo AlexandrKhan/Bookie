@@ -5,6 +5,7 @@
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="property/text"/>
 <c:set var="users" value="${sessionScope.users}"/>
+<c:set var="url" value="${sessionScope.url}"/>
 
 <html>
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
@@ -73,16 +74,16 @@
             <div class="col col-4" data-label="Email"><c:out value="${user.email}"/></div>
             <div class="col col-5" data-label="Date of birth"><c:out value="${user.dateOfBirth}"/></div>
             <div class="col col-6" data-label="Passport">
-                <c:if test="${user.passportScan != 'passport.jpg'}">
-                <img src="${pageContext.request.contextPath}/uploads/${user.passportScan}" width="10%" height="10%"
+<%--                <c:if test="${user.passportScan != 'passport.jpg'}">--%>
+                <img src="${pageContext.request.contextPath}/showImage/${user.passportScan}" width="10%" height="10%"
                    alt="${user.firstName} ${user.lastName}" class="img-thumbnail">
                 <div id="myModal" class="modal-scan">
                     <span class="close">&times;</span>
                     <img class="modal-content-scan" id="img01"
-                         src="${pageContext.request.contextPath}/uploads/${user.passportScan}">
+                         src="${pageContext.request.contextPath}/showImage/${user.passportScan}" alt="img">
                     <div id="caption"></div>
                 </div>
-                </c:if>
+<%--                </c:if>--%>
             </div>
             <div class="col col-7" data-label="Action">
                 <c:if test="${user.statusType == 'VERIFIED'}">

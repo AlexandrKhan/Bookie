@@ -10,19 +10,24 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ConnectionPool {
     private static final Logger logger = LogManager.getLogger(ConnectionPool.class);
-    private static final ConnectionPool INSTANCE = new ConnectionPool();
+    private static volatile ConnectionPool instance;
     private static final int DEFAULT_POOL_SIZE = 32;
     private final BlockingQueue<ProxyConnection> freeConnection;
     private final BlockingQueue<ProxyConnection> releasedConnection;
     private static final String DRIVER = "db.driver";
     private static final String URL = "db.url";
+    private static final AtomicBoolean poolInitialized = new AtomicBoolean(false);
+    private static final Lock lock = new ReentrantLock();
 
     private ConnectionPool() {
         String propertiesPath = PropertiesPath.DB_PROPERTIES;
@@ -43,7 +48,7 @@ public class ConnectionPool {
         }
 
         freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
-        releasedConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
+        releasedConnection = new LinkedBlockingDeque<>();
 
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
@@ -54,6 +59,21 @@ public class ConnectionPool {
                 logger.error("Can't create connection", e);
             }
         }
+    }
+
+    public static ConnectionPool getInstance() {
+        if (!poolInitialized.get()) {
+            lock.lock();
+            try {
+                if (instance == null) {
+                    instance = new ConnectionPool();
+                    poolInitialized.set(true);
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+        return instance;
     }
 
     public Connection getConnection() {
@@ -91,18 +111,14 @@ public class ConnectionPool {
     }
 
     private void deregisterDrivers() {
-        Enumeration<Driver> drivers = DriverManager.getDrivers();
-        while (drivers.hasMoreElements()) {
-            Driver driver = drivers.nextElement();
+        Iterator<Driver> drivers = DriverManager.getDrivers().asIterator();
+        while (drivers.hasNext()) {
+            Driver driver = drivers.next();
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException e) {
                 logger.error("Error while deregister drivers", e);
             }
         }
-    }
-
-    public static ConnectionPool getInstance() {
-        return INSTANCE;
     }
 }

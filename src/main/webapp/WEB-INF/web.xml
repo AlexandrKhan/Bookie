@@ -10,4 +10,8 @@
         <error-code>500</error-code>
         <location>/jsp/error/500.jsp</location>
     </error-page>
+    <context-param>
+        <param-name>uploadPath</param-name>
+        <param-value>C:/scans</param-value>
+    </context-param>
 </web-app>

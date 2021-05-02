@@ -43,6 +43,45 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findById(int id) throws ServiceException {
+        Optional<User> user = Optional.empty();
+        try {
+            user = userDao.findById(id);
+        } catch (DaoException e) {
+            logger.error("Can't find user by id");
+        }
+        return user;
+    }
+
+    @Override
+    public Optional<User> findUserByUsernameAndPassword(String username, String password) throws ServiceException {
+        Optional<User> user = Optional.empty();
+        try {
+            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
+            String encryptedPassword = PasswordEncryption.encryptMessage(password);
+            user = userDao.findUserByUsernameAndPassword(username, encryptedPassword);
+            if (!user.isPresent()) {
+                errorSet.add(ValidationError.WRONG_LOGIN_OR_PASSWORD);
+            }
+            logger.info("Login result: {}", user.isPresent());
+        } catch (DaoException e) {
+            logger.error("DB error");
+        }
+        return user;
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) throws ServiceException {
+        Optional<User> user = Optional.empty();
+        try {
+            user = userDao.findUserByUsername(username);
+        } catch (DaoException e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
+    @Override
     public List<User> findAll() throws ServiceException {
         Optional<List<User>> usersTemp = Optional.empty();
         List<User> users = new ArrayList<>();
@@ -81,6 +120,8 @@ public class UserServiceImpl implements UserService {
         return matches;
     }
 
+
+
     @Override
     public Optional<User> registerUser(String username, String firstName, String lastName, String email,
                                        String password, String repeatPassword, LocalDate dateOfBirth) throws ServiceException {
@@ -107,39 +148,29 @@ public class UserServiceImpl implements UserService {
                 errorSet.add(ValidationError.PASSWORDS_DONT_MATCH);
                 return user;
             }
-            if (UserValidator.isUsername(username) && UserValidator.isEmail(email) && UserValidator.isPassword(password)) {
+            if (UserValidator.isUsername(username) &&
+                UserValidator.isEmail(email) &&
+                UserValidator.isPassword(password)) {
+
                 String token = String.valueOf(UUID.randomUUID());
                 String encryptedPassword = PasswordEncryption.encryptMessage(password);
-                User userTemp = new User(username, firstName, lastName, email, encryptedPassword, dateOfBirth, token);
-                userTemp.setRole(Role.USER.toString());
-                userTemp.setStatusType(StatusType.NOT_ACTIVATED.name().toUpperCase());
-                userTemp.setMoneyBalance(BigDecimal.valueOf(0));
-
+                User userTemp = new User.UserBuilder()
+                        .withUsername(username)
+                        .withFirstName(firstName)
+                        .withLastName(lastName)
+                        .withEmail(email)
+                        .withPassword(encryptedPassword)
+                        .withDateOfBirth(dateOfBirth)
+                        .withToken(token)
+                        .withNewUserValues()
+                        .build();
                 user = userDao.create(userTemp);
                 MailUtility.sendConfirmMessage(email, token);
             } else {
-                logger.info("VALIDATOR");
+                logger.info("User validation error");
             }
         } catch (DaoException e) {
             throw new ServiceException(e);
-        }
-        return user;
-    }
-
-
-    @Override
-    public Optional<User> findUserByUsernameAndPassword(String username, String password) throws ServiceException {
-        Optional<User> user = Optional.empty();
-        try {
-            ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
-            String encryptedPassword = PasswordEncryption.encryptMessage(password);
-            user = userDao.findUserByUsernameAndPassword(username, encryptedPassword);
-            if (!user.isPresent()) {
-                errorSet.add(ValidationError.WRONG_LOGIN_OR_PASSWORD);
-            }
-            logger.info("Login result: {}", user.isPresent());
-        } catch (DaoException e) {
-            logger.error("DB error");
         }
         return user;
     }
@@ -178,7 +209,7 @@ public class UserServiceImpl implements UserService {
             result = userDao.blockUser(id);
             if (result) {
                 messageDao.create(new Message(id, message, Theme.BAN));
-                logger.info("User {} is blocked", id);
+                logger.info("User {} is blocked for {} days", id, days);
                 scheduleUnban(id, days);
             } else {
                 logger.info("User {} is not found for blocking", id);

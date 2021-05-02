@@ -2,6 +2,7 @@ package edu.epam.bookie.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class User implements Entity {
     private int id;
@@ -17,42 +18,110 @@ public class User implements Entity {
     private StatusType statusType;
     private String token;
 
-
-    public User() {
+    private User(UserBuilder builder) {
+        this.id = builder.id;
+        this.username = builder.username;
+        this.password = builder.password;
+        this.firstName = builder.firstName;
+        this.lastName = builder.lastName;
+        this.email = builder.email;
+        this.role = builder.role;
+        this.dateOfBirth = builder.dateOfBirth;
+        this.moneyBalance = builder.moneyBalance;
+        this.passportScan = builder.passportScan;
+        this.statusType = builder.statusType;
+        this.token = builder.token;
     }
 
-    public User(String username, String firstName, String lastName, String email, String password, LocalDate dateOfBirth, String token) {
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.dateOfBirth = dateOfBirth;
-        this.role = Role.USER;
-        this.statusType = StatusType.NOT_ACTIVATED;
-        this.token = token;
+    public static class UserBuilder {
+        private int id;
+        private String username;
+        private String password;
+        private String firstName;
+        private String lastName;
+        private String email;
+        private Role role;
+        private LocalDate dateOfBirth;
+        private BigDecimal moneyBalance;
+        private String passportScan;
+        private StatusType statusType;
+        private String token;
+
+        public UserBuilder() {
+        }
+
+        public UserBuilder withId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public UserBuilder withUsername(String username) {
+            this.username = username;
+            return this;
+        }
+
+        public UserBuilder withPassword(String password) {
+            this.password = password;
+            return this;
+        }
+
+        public UserBuilder withFirstName(String firstName) {
+            this.firstName = firstName;
+            return this;
+        }
+
+        public UserBuilder withLastName(String lastName) {
+            this.lastName = lastName;
+            return this;
+        }
+
+        public UserBuilder withEmail(String email) {
+            this.email = email;
+            return this;
+        }
+
+        public UserBuilder withRole(Role role) {
+            this.role = role;
+            return this;
+        }
+
+        public UserBuilder withDateOfBirth(LocalDate dateOfBirth) {
+            this.dateOfBirth = dateOfBirth;
+            return this;
+        }
+
+        public UserBuilder withMoney(BigDecimal money) {
+            this.moneyBalance = money;
+            return this;
+        }
+
+        public UserBuilder withPassport(String passportScan) {
+            this.passportScan = passportScan;
+            return this;
+        }
+
+        public UserBuilder withStatus(StatusType status) {
+            this.statusType = status;
+            return this;
+        }
+
+        public UserBuilder withToken(String token) {
+            this.token = token;
+            return this;
+        }
+
+        public UserBuilder withNewUserValues() {
+            this.role = Role.USER;
+            this.statusType = StatusType.NOT_ACTIVATED;
+            this.moneyBalance = new BigDecimal(0);
+            return this;
+        }
+
+        public User build() {
+            return new User(this);
+        }
     }
 
-    public User(int id, String username, String password, String firstName, String lastName, String email, Role role, LocalDate dateOfBirth, BigDecimal moneyBalance, String passportScan, StatusType statusType, String token) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.role = role;
-        this.dateOfBirth = dateOfBirth;
-        this.moneyBalance = moneyBalance;
-        this.passportScan = passportScan;
-        this.statusType = statusType;
-        this.token = token;
-    }
-
-    /**
-     * Token for account activation and password change
-     *
-     * @return token
-     */
     public String getToken() {
         return token;
     }
@@ -161,35 +230,22 @@ public class User implements Entity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         User user = (User) o;
-
-        if (id != user.id) return false;
-        if (username != null ? !username.equals(user.username) : user.username != null) return false;
-        if (password != null ? !password.equals(user.password) : user.password != null) return false;
-        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
-        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
-        if (email != null ? !email.equals(user.email) : user.email != null) return false;
-        if (role != user.role) return false;
-        if (dateOfBirth != null ? !dateOfBirth.equals(user.dateOfBirth) : user.dateOfBirth != null) return false;
-        if (moneyBalance != null ? !moneyBalance.equals(user.moneyBalance) : user.moneyBalance != null) return false;
-        if (passportScan != null ? !passportScan.equals(user.passportScan) : user.passportScan != null) return false;
-        return statusType == user.statusType;
+        return id == user.id && username.equals(user.username)
+                && firstName.equals(user.firstName)
+                && lastName.equals(user.lastName)
+                && email.equals(user.email)
+                && dateOfBirth.equals(user.dateOfBirth);
     }
 
     @Override
     public int hashCode() {
         int result = id;
         result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
         result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
         result = 31 * result + (email != null ? email.hashCode() : 0);
-        result = 31 * result + (role != null ? role.hashCode() : 0);
         result = 31 * result + (dateOfBirth != null ? dateOfBirth.hashCode() : 0);
-        result = 31 * result + (moneyBalance != null ? moneyBalance.hashCode() : 0);
-        result = 31 * result + (passportScan != null ? passportScan.hashCode() : 0);
-        result = 31 * result + (statusType != null ? statusType.hashCode() : 0);
         return result;
     }
 }

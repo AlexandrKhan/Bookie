@@ -9,8 +9,10 @@ import java.io.IOException;
 
 @WebFilter(urlPatterns = {"/*"}, initParams = { @WebInitParam(name = "encoding", value = "UTF-8", description = "Encoding Param")})
 public class EncodingFilter implements Filter {
+
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
+
 
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
@@ -22,12 +24,6 @@ public class EncodingFilter implements Filter {
             req.getSession().setAttribute("lang", req.getParameter("sessionLocale"));
         }
         chain.doFilter(request, response);
-    }
-
-    public void destroy() {
-    }
-
-    public void init(FilterConfig arg0) throws ServletException {
     }
 }
 

@@ -13,9 +13,13 @@ import java.util.Optional;
 
 public interface UserService {
 
+    Optional<User> findById(int id) throws ServiceException;
+
     Optional<User> registerUser(String username, String firstName, String lastName, String email, String password, String repeatPassword, LocalDate dateOfBirth) throws ServiceException;
 
     Optional<User> findUserByUsernameAndPassword(String username, String password) throws ServiceException;
+
+    Optional<User> findByUsername(String username) throws ServiceException;
 
     List<User> findAll() throws ServiceException;
 

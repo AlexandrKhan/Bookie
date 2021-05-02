@@ -12,7 +12,7 @@ public class MailUtility {
     private static final Logger logger = LogManager.getLogger(MailUtility.class);
     private static final String MESSAGE_TEXT = "Your confirmation link: \n%s";
     private static final String MESSAGE_SUBJECT = "Email confirmation";
-    private static final String CONFIRMATION_LINK = "http://localhost:8081/controller?command=activate_account&token=%s";
+    private static final String CONFIRMATION_LINK = "http://localhost:8080/controller?command=activate_account&token=%s";
 
     private MailUtility() {
     }

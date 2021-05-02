@@ -3,7 +3,6 @@ package edu.epam.bookie.service.impl;
 import edu.epam.bookie.dao.impl.MatchDaoImpl;
 import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.exception.ServiceException;
-import edu.epam.bookie.model.Comment;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Result;
 import edu.epam.bookie.model.sport.Team;
@@ -86,21 +85,6 @@ public class MatchServiceImpl implements MatchService {
             matches = matchList.get();
         }
         return matches;
-    }
-
-    @Override
-    public List<Comment> findCommentsForMatch(Long id) {
-        Optional<List<Comment>> commentList = Optional.empty();
-        List<Comment> comments = new ArrayList<>();
-        try {
-            commentList = matchDao.findCommentsForMatch(id);
-        } catch (DaoException e) {
-            logger.error("Can't get comments for match", e);
-        }
-        if (commentList.isPresent()) {
-            comments = commentList.get();
-        }
-        return comments;
     }
 
     @Override

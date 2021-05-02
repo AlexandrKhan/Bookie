@@ -34,7 +34,7 @@ public enum CommandType {
         this.command = command;
     }
 
-    private Command command;
+    private final Command command;
 
     public Command getCommand() {
         return command;

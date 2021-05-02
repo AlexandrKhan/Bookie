@@ -1,5 +1,7 @@
 package edu.epam.bookie.controller.scheduler;
 
+import edu.epam.bookie.command.Command;
+import edu.epam.bookie.command.impl.PlaceBetCommand;
 import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.Message;
 import edu.epam.bookie.model.Theme;
@@ -12,6 +14,7 @@ import edu.epam.bookie.service.impl.UserServiceImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -24,9 +27,6 @@ public class GenerateScoreTask implements Runnable {
     private final UserServiceImpl userService = UserServiceImpl.userService;
     private final String WIN_MESSAGE = "Your bet on match: %s - %s has won!";
 
-    /**
-     *
-     */
     @Override
     public void run() {
         todayMatchStartTimeMap.forEach((matchId, startTime) -> {
@@ -43,7 +43,8 @@ public class GenerateScoreTask implements Runnable {
                                 try {
                                     if (b.getBetOnResult() == match.getResult()) {
                                         betService.payBets(b);
-                                        userService.sendMessage(new Message(b.getUserId(), String.format(WIN_MESSAGE,
+                                        userService.sendMessage(new Message(b.getUserId(),
+                                                String.format(WIN_MESSAGE,
                                                 match.getHomeTeam().getName(),
                                                 match.getAwayTeam().getName()),
                                                 Theme.WON));

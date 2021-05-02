@@ -186,6 +186,7 @@ public class Match implements Entity {
         this.result = Result.valueOf(result);
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -198,8 +199,6 @@ public class Match implements Entity {
         if (awayTeamGoals != match.awayTeamGoals) return false;
         if (homeTeam != match.homeTeam) return false;
         if (awayTeam != match.awayTeam) return false;
-        if (startDate != null ? !startDate.equals(match.startDate) : match.startDate != null) return false;
-        if (startTime != null ? !startTime.equals(match.startTime) : match.startTime != null) return false;
         if (result != match.result) return false;
         if (matchProgress != match.matchProgress) return false;
         if (homeCoeff != null ? !homeCoeff.equals(match.homeCoeff) : match.homeCoeff != null) return false;
@@ -214,8 +213,6 @@ public class Match implements Entity {
         result1 = 31 * result1 + (awayTeam != null ? awayTeam.hashCode() : 0);
         result1 = 31 * result1 + homeTeamGoals;
         result1 = 31 * result1 + awayTeamGoals;
-        result1 = 31 * result1 + (startDate != null ? startDate.hashCode() : 0);
-        result1 = 31 * result1 + (startTime != null ? startTime.hashCode() : 0);
         result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
         result1 = 31 * result1 + (matchProgress != null ? matchProgress.hashCode() : 0);
         result1 = 31 * result1 + (homeCoeff != null ? homeCoeff.hashCode() : 0);

@@ -1,4 +1,4 @@
-package edu.epam.bookie;
+package edu.epam.bookie.service;
 
 import edu.epam.bookie.dao.impl.BetDaoImpl;
 import edu.epam.bookie.exception.DaoException;

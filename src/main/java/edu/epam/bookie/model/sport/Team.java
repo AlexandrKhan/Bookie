@@ -25,7 +25,7 @@ public enum Team {
     WEST_BROMWICH_ALBION("West Bromwich Albion"),
     SHEFFIELD_UNITED("Sheffield United");
 
-    private String name;
+    private final String name;
     private static final String WHITESPACE = "\\s";
     private static final String UNDERLINE = "_";
 

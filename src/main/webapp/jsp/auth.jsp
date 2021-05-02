@@ -18,13 +18,34 @@
         <h2 class="form-title" id="signup"><fmt:message key="sign.up"/></h2>
         <form id="registration_form" action="${pageContext.request.contextPath}/controller?command=registration" method="post">
         <div class="form-holder">
-            <input type="text" name="username" class="input" placeholder=<fmt:message key="auth.username"/>  required pattern="[a-zA-Z0-9]{5,20}"/>
-            <input type="text" name="firstName" class="input" placeholder=<fmt:message key="auth.firstname"/>  required pattern="[a-zA-Z0-9]+([_-]?[a-zA-Z0-9]+){5,20}"/>
-            <input type="text" name="lastName" class="input" placeholder=<fmt:message key="auth.lastname"/>  required pattern="[a-zA-Z0-9]+([_-]?[a-zA-Z0-9]+){5,20}"/>
-            <input type="text" name="email" class="input" placeholder=<fmt:message key="auth.email"/> required pattern="^([A-Za-z0-9_-]+\.)*[A-Za-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$"/>
-            <input type="password" name="password" class="input" placeholder=<fmt:message key="auth.password"/> required  pattern="[a-zA-Z0-9@#$%!]{8,20}"/>
-            <input type="password" name="repeatPassword" class="input"  placeholder=<fmt:message key="auth.repeat"/> required  pattern="[a-zA-Z0-9@#$%!]{8,20}"/>
-            <input type="date" name="dateOfBirth" class="input"  placeholder=<fmt:message key="auth.date"/> required>
+            <label>
+                <input type="text" name="username" class="input"
+                       placeholder=<fmt:message key="auth.username"/>  required pattern="[a-zA-Z0-9]{5,20}"/>
+            </label>
+            <label>
+                <input type="text" name="firstName" class="input"
+                       placeholder=<fmt:message key="auth.firstname"/>  required pattern="[a-zA-Z0-9]+([_-]?[a-zA-Z0-9]+){5,20}"/>
+            </label>
+            <label>
+                <input type="text" name="lastName" class="input"
+                       placeholder=<fmt:message key="auth.lastname"/>  required pattern="[a-zA-Z0-9]+([_-]?[a-zA-Z0-9]+){5,20}"/>
+            </label>
+            <label>
+                <input type="text" name="email" class="input"
+                       placeholder=<fmt:message key="auth.email"/> required pattern="^([A-Za-z0-9_-]+\.)*[A-Za-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$"/>
+            </label>
+            <label>
+                <input type="password" name="password" class="input"
+                       placeholder=<fmt:message key="auth.password"/> required  pattern="[a-zA-Z0-9@#$%!]{8,20}"/>
+            </label>
+            <label>
+                <input type="password" name="repeatPassword" class="input"
+                       placeholder=<fmt:message key="auth.repeat"/> required  pattern="[a-zA-Z0-9@#$%!]{8,20}"/>
+            </label>
+            <label>
+                <input type="date" name="dateOfBirth" class="input"
+                       placeholder=<fmt:message key="auth.date"/> required>
+            </label>
         </div>
         <button type="submit" class="submit-btn"><fmt:message key="sign.up"/></button>
         </form>
@@ -35,8 +56,8 @@
             <h2 class="form-title" id="login"><fmt:message key="log.in"/></h2>
             <form id="login_form" action="${pageContext.request.contextPath}/controller?command=login" method="post">
             <div class="form-holder">
-                <input type="text" name="username" id="username" class="input" placeholder=<fmt:message key="auth.username"/> required pattern="[a-zA-Z0-9]{5,20}"/>
-                <input type="password" name="password" id="password" class="input" placeholder=<fmt:message key="auth.password"/> required pattern="[a-zA-Z0-9@#$%!]{8,20}"/>
+                <label for="username"></label><input type="text" name="username" id="username" class="input" placeholder=<fmt:message key="auth.username"/> required pattern="[a-zA-Z0-9]{5,20}"/>
+                <label for="password"></label><input type="password" name="password" id="password" class="input" placeholder=<fmt:message key="auth.password"/> required pattern="[a-zA-Z0-9@#$%!]{8,20}"/>
             </div>
             <button type="submit" class="submit-btn"><fmt:message key="log.in"/></button>
                 <c:if test="${not empty requestScope.errorSet}">

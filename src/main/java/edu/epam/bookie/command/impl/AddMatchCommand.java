@@ -39,12 +39,12 @@ public class AddMatchCommand implements Command {
         if (!MatchValidator.areDifferentTeams(firstTeam, secondTeam)) {
             errorSet.add(ValidationError.BAD_DATE_FOR_MATCH);
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
-            logger.error("Bad date");
+            logger.error("Same team");
             return PagePath.ADD_MATCH.getServletPath();
         } else if (!MatchValidator.isValidTimeForMatchUpdate(date, time)) {
             errorSet.add(ValidationError.TWO_SAME_TEAMS);
             request.setAttribute(SessionAttribute.ERROR_SET, errorSet.getAllAndClear());
-            logger.error("Same team");
+            logger.error("Bad date");
             return PagePath.ADD_MATCH.getServletPath();
         } else if (!MatchValidator.correctCoeff(homeCoeff, drawCoeff, awayCoeff)) {
             errorSet.add(ValidationError.BAD_COEFF);

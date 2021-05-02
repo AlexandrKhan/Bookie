@@ -1,9 +1,7 @@
 package edu.epam.bookie.dao;
 
 import edu.epam.bookie.exception.DaoException;
-import edu.epam.bookie.model.Comment;
 import edu.epam.bookie.model.sport.Match;
-import edu.epam.bookie.model.sport.MatchProgress;
 import edu.epam.bookie.model.sport.Result;
 
 import java.time.LocalDate;
@@ -55,13 +53,4 @@ public interface MatchDao extends BaseDao<Match> {
      * @throws DaoException dao exception
      */
     Optional<List<Match>> findMatchesOnWhichUserBetByUserId(Long id) throws DaoException;
-
-    /**
-     * Selects all user comments to this match
-     *
-     * @param id match id
-     * @return list of comments
-     * @throws DaoException dao exception
-     */
-    Optional<List<Comment>> findCommentsForMatch(Long id) throws DaoException;
 }

@@ -1,7 +1,6 @@
 package edu.epam.bookie.service;
 
 import edu.epam.bookie.exception.ServiceException;
-import edu.epam.bookie.model.Comment;
 import edu.epam.bookie.model.sport.Match;
 import edu.epam.bookie.model.sport.Team;
 
@@ -32,5 +31,4 @@ public interface MatchService {
 
     List<Match> findMatchesByTeam(String team) throws ServiceException;
 
-    List<Comment> findCommentsForMatch(Long id) throws ServiceException;
 }

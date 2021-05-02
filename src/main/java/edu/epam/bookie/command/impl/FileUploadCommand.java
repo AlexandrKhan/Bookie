@@ -45,8 +45,8 @@ public class FileUploadCommand implements Command {
                     }
                     if (!item.isFormField()) {
                         String fileName = FileNameGenerator.generateName(item.getName());
-                        String root = request.getServletContext().getRealPath("/");
-                        File path = new File(root + "/uploads/" + fileName);
+                        String root = session.getServletContext().getInitParameter("uploadPath");
+                        File path = new File(root + "/" + fileName);
                         request.getSession().setAttribute(RequestParameter.PASSPORT_SCAN, fileName);
                         try {
                             item.write(path);

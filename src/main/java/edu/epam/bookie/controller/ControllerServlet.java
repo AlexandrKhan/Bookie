@@ -27,13 +27,15 @@ public class ControllerServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String page = processRequest(req);
         resp.sendRedirect(page);
     }
 
-    private String processRequest(HttpServletRequest request) throws ServletException, IOException {
-        logger.info("URI: " + request.getRequestURI() + ", content type: " + request.getContentType() + ", method: " + request.getMethod());
+    private String processRequest(HttpServletRequest request) {
+        logger.info("URI: " + request.getRequestURI()
+                + ", content type: " + request.getContentType()
+                + ", method: " + request.getMethod());
         String commandName = request.getParameter(RequestParameter.COMMAND);
         Command command = CommandFactory.defineCommand(commandName);
         return command.execute(request);

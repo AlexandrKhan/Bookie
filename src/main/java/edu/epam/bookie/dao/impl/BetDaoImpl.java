@@ -21,7 +21,7 @@ public class BetDaoImpl implements BetDao {
     private static final String SELECT_ALL_BETS = "SELECT * FROM bookie.bet";
     private static final String SELECT_BET_BY_ID = "SELECT * FROM bookie.bet WHERE id=?";
     private static final String SELECT_ALL_BETS_ON_MATCH_ID = "SELECT * FROM bookie.bet WHERE match_id=?";
-    private static final String PAY_BETS_ON_BET_ID = "UPDATE bookie.user, bookie.bet SET money_balance = money_balance + ?, bet_status='WON' WHERE bookie.bet.id=? AND bookie.user.id=bookie.bet.user_id";
+    private static final String PAY_BETS_ON_BET_ID = "UPDATE bookie.user, bookie.bet SET money = money + ?, bet_status='WON' WHERE bookie.bet.id=? AND bookie.user.id=bookie.bet.user_id";
     private static final String SET_BET_STATUS_LOST = "UPDATE bookie.bet SET bet_status='LOST' WHERE id=?";
     private static final String SELECT_ALL_BETS_OF_USER = "SELECT * FROM bookie.bet WHERE user_id=?";
 
@@ -159,7 +159,7 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
-    public boolean deleteById(long id) throws DaoException {
+    public boolean deleteById(long id) {
         throw new UnsupportedOperationException();
     }
 
