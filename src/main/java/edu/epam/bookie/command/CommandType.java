@@ -39,4 +39,14 @@ public enum CommandType {
     public Command getCommand() {
         return command;
     }
+
+    public static CommandType getCommandType(String commandName) {
+        CommandType command;
+        try {
+            command = CommandType.valueOf(commandName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            command = CommandType.INVALID_COMMAND;
+        }
+        return command;
+    }
 }

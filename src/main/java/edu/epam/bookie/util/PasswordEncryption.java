@@ -3,6 +3,9 @@ package edu.epam.bookie.util;
 import java.util.Base64;
 import java.util.UUID;
 
+/**
+ * Password encryption
+ */
 public class PasswordEncryption {
     private static final int OFFSET = 4;
 

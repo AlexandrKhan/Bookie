@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSessionListener;
 @WebListener
 public class SessionListener implements HttpSessionListener {
     /**
-     * Set enum values (teams, result) to session on start
+     * Set enum values (teams, result) to session on startup
      */
     private static final Logger logger = LogManager.getLogger(SessionListener.class);
 

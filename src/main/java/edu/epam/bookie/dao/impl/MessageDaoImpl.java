@@ -18,7 +18,8 @@ public class MessageDaoImpl implements MessageDao {
     private final ConnectionPool pool = ConnectionPool.getInstance();
 
     private static final String SELECT_ALL_MESSAGES_OF_USER = "SELECT * FROM bookie.message WHERE user_id=?";
-    private static final String ADD_MESSAGE = "INSERT INTO bookie.message(user_id, date, time, text, theme) VALUES (?,?,?,?,?)";
+    private static final String ADD_MESSAGE =
+            "INSERT INTO bookie.message(user_id, date, time, text, theme) VALUES (?,?,?,?,?)";
 
     private MessageDaoImpl() {
     }
@@ -29,14 +30,10 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public Optional<Message> findById(long id) throws DaoException {
+    public Optional<Message> findById(int id) throws DaoException {
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public boolean deleteById(long id) throws DaoException {
-        throw new UnsupportedOperationException();
-    }
 
     @Override
     public Optional<Message> create(Message message) throws DaoException {
@@ -49,7 +46,8 @@ public class MessageDaoImpl implements MessageDao {
             statement.setString(5, message.getTheme().name());
             statement.execute();
         } catch (SQLException e) {
-            logger.error("Eror creating message", e);
+            logger.error("Eror creating message");
+            throw new DaoException(e);
         }
         return Optional.of(message);
     }

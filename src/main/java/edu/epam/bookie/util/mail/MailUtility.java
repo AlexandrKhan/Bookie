@@ -1,7 +1,6 @@
 package edu.epam.bookie.util.mail;
 
 import edu.epam.bookie.exception.PropertyReaderException;
-import edu.epam.bookie.util.PropertiesPath;
 import edu.epam.bookie.util.PropertiesReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -13,16 +12,22 @@ public class MailUtility {
     private static final String MESSAGE_TEXT = "Your confirmation link: \n%s";
     private static final String MESSAGE_SUBJECT = "Email confirmation";
     private static final String CONFIRMATION_LINK = "http://localhost:8080/controller?command=activate_account&token=%s";
+    private static final String MAIL_PROPERTIES = "property/mail.properties";
 
     private MailUtility() {
     }
 
+    /**
+     * Send confirmation link
+     *
+     * @param email user email
+     * @param token user token
+     */
     public static void sendConfirmMessage(String email, String token) {
-        String path = PropertiesPath.MAIL_PROPERTIES;
         String confirmLink = prepareConfirmLink(token);
         String text = String.format(MESSAGE_TEXT, confirmLink);
         try {
-            Properties properties = PropertiesReader.readProperties(path);
+            Properties properties = PropertiesReader.readProperties(MAIL_PROPERTIES);
             MailSender sender = new MailSender(email, MESSAGE_SUBJECT, text, properties);
             sender.send();
             logger.info("Confirmation link was sent to '{}'", email);
@@ -31,11 +36,18 @@ public class MailUtility {
         }
     }
 
+    /**
+     * Send simplle message
+     *
+     * @param email user email
+     * @param subject theme of message
+     * @param message text
+     * @return result
+     */
     public static boolean sendMessage(String email, String subject, String message) {
-        String path = PropertiesPath.MAIL_PROPERTIES;
         boolean result;
         try {
-            Properties properties = PropertiesReader.readProperties(path);
+            Properties properties = PropertiesReader.readProperties(MAIL_PROPERTIES);
             MailSender sender = new MailSender(email, subject, message, properties);
             sender.send();
             logger.info("Message was successfully sent to '{}'", email);
@@ -47,6 +59,12 @@ public class MailUtility {
         return result;
     }
 
+    /**
+     * Confirm link formatted
+     *
+     * @param token user token
+     * @return prepared link
+     */
     private static String prepareConfirmLink(String token) {
         return String.format(CONFIRMATION_LINK, token);
     }

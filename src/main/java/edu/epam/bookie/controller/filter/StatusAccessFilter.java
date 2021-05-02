@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Filters user access to commands by status
+ * @see CommandStatusMap
+ */
 @WebFilter(urlPatterns = {"/controller"})
 public class StatusAccessFilter implements Filter {
     private static final CommandStatusMap MAP = CommandStatusMap.getInstance();
@@ -24,7 +28,7 @@ public class StatusAccessFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String command = request.getParameter(RequestParameter.COMMAND);
         if (command != null) {
-            CommandType commandType = CommandFactory.getCommandType(command);
+            CommandType commandType = CommandType.getCommandType(command);
             StatusType userStatus = getUserStatus(request);
             if (!MAP.hasStatus(commandType, userStatus)) {
                 logger.warn("Status filter. User with status {} can't execute {} command", userStatus, commandType);

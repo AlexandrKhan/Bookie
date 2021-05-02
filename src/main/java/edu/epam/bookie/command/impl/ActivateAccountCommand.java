@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class ActivateAccountCommand implements Command{
     public static final Logger logger = LogManager.getLogger(ActivateAccountCommand.class);
-    private UserServiceImpl service = UserServiceImpl.userService;
+    private final UserServiceImpl service = UserServiceImpl.userService;
 
 
     @Override

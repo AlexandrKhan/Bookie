@@ -4,7 +4,6 @@ import edu.epam.bookie.command.SessionAttribute;
 import edu.epam.bookie.exception.ServiceException;
 import edu.epam.bookie.model.User;
 import edu.epam.bookie.service.impl.UserServiceImpl;
-import edu.epam.bookie.util.PasswordEncryption;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,6 +13,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Optional;
+
+/**
+ * Filter updates user info in session on every command execution
+ */
 
 @WebFilter(urlPatterns = {"/controller"})
 public class UserUpdateFilter implements Filter {

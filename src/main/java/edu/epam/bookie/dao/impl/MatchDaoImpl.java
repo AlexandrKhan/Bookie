@@ -57,7 +57,7 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public boolean setGoalsResultAndOverMatchById(Long id, int home, int away, Result matchResult) throws DaoException {
+    public boolean setGoalsResultAndOverMatchById(int id, int home, int away, Result matchResult) throws DaoException {
         boolean result;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(SET_GOALS_RESULT_AND_OVER_MATCH_BY_ID)) {
@@ -74,7 +74,7 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public boolean updateDateTimeAtNotStartedMatch(Long matchId, LocalDate date, LocalTime time) throws DaoException {
+    public boolean updateDateTimeAtNotStartedMatch(int matchId, LocalDate date, LocalTime time) throws DaoException {
         boolean result;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(UPDATE_DATE_TIME_AT_MATCH)) {
@@ -112,7 +112,7 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public Optional<Match> findById(long id) throws DaoException {
+    public Optional<Match> findById(int id) throws DaoException {
         Optional<Match> match;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_MATCH_BY_ID)) {
@@ -156,7 +156,7 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
-    public Optional<List<Match>> findMatchesOnWhichUserBetByUserId(Long id) throws DaoException {
+    public Optional<List<Match>> findMatchesOnWhichUserBetByUserId(int id) throws DaoException {
         Optional<List<Match>> matches;
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_MATCHES_BY_USER_ID)) {
@@ -175,20 +175,6 @@ public class MatchDaoImpl implements MatchDao {
             throw new DaoException(e);
         }
         return matches;
-    }
-
-    @Override
-    public boolean deleteById(long id) throws DaoException {
-        boolean result;
-        try (Connection connection = ConnectionPool.getInstance().getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_MATCH_BY_ID)) {
-            statement.setLong(1, id);
-            result = statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            logger.error("Can't delete match by id", e);
-            throw new DaoException(e);
-        }
-        return result;
     }
 
     private void setNotStartedMatchFields(ResultSet resultSet, Match match) throws SQLException {

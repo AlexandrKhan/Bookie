@@ -1,9 +1,10 @@
 package edu.epam.bookie.exception;
 
+/**
+ * Exception thrown by DAO methods
+ */
 public class DaoException extends Exception {
-    /**
-     * Exception thrown by DAO methods
-     */
+
     public DaoException() {
         super();
     }

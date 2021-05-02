@@ -4,18 +4,9 @@ import edu.epam.bookie.exception.DaoException;
 import edu.epam.bookie.model.User;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 public interface UserDao extends BaseDao<User> {
-    /**
-     * Select user by username
-     *
-     * @param username username
-     * @return user
-     * @throws DaoException dao exception
-     */
-    Optional<User> findUserByUsername(String username) throws DaoException;
 
     /**
      * Select user by username and password
@@ -26,15 +17,6 @@ public interface UserDao extends BaseDao<User> {
      * @throws DaoException dao exception
      */
     Optional<User> findUserByUsernameAndPassword(String username, String password) throws DaoException;
-
-    /**
-     * Select email by user id
-     *
-     * @param id user id
-     * @return email
-     * @throws DaoException dao exception
-     */
-    Optional<String> findEmailById(int id) throws DaoException;
 
     /**
      * Set user status as 'ACTIVATED'
@@ -55,7 +37,7 @@ public interface UserDao extends BaseDao<User> {
     boolean verifyAccount(int id) throws DaoException;
 
     /**
-     * Check if this login is already taken
+     * Check if login is already taken
      *
      * @param username username
      * @return boolean

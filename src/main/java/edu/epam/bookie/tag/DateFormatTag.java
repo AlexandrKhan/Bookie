@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Formats LocalDate and LocalTime into one pretty line
+ */
 public class DateFormatTag {
     private static final String DATE_PATTERN =  "dd/MM/yyyy, HH:mm";
 

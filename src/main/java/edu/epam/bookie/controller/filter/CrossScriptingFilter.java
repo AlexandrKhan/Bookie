@@ -5,11 +5,13 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Enumeration;
 
+/**
+ * Filter prevents XSS-attacks
+ */
 @WebFilter(urlPatterns = {"/*"})
 public class CrossScriptingFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
         Enumeration<String> enumeration = servletRequest.getAttributeNames();
         while (enumeration.hasMoreElements()) {
             String parameterName = enumeration.nextElement();

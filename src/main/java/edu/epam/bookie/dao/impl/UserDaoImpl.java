@@ -23,11 +23,8 @@ public class UserDaoImpl implements UserDao {
 
     private static final String ADD_USER = "INSERT INTO bookie.user (username, first_name, last_name, email, password, date_of_birth, role, token) VALUES (?,?,?,?,?,?,?,?)";
     private static final String SELECT_ALL_USERS = "SELECT * FROM bookie.user";
-    private static final String SELECT_USER_BY_USERNAME = "SELECT * FROM bookie.user WHERE username=?";
-    private static final String DELETE_USER_BY_ID = "DELETE FROM bookie.user WHERE id=?";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM bookie.user WHERE id=?";
     private static final String SELECT_USER_BY_USERNAME_AND_PASSWORD = "SELECT * FROM bookie.user WHERE username=? AND password=?";
-    private static final String SELECT_EMAIL_BY_ID = "SELECT email FROM bookie.user WHERE id=?";
     private static final String ACTIVATE_ACCOUNT = "UPDATE bookie.user SET status='ACTIVATED' WHERE token=?";
     private static final String VERIFY_ACCOUNT = "UPDATE bookie.user SET status='VERIFIED' WHERE id=?";
     private static final String EMAIL_EXISTS = "SELECT * FROM bookie.user WHERE email=?";
@@ -62,11 +59,11 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public Optional<User> findById(long id) throws DaoException {
+    public Optional<User> findById(int id) throws DaoException {
         Optional<User> user = Optional.empty();
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_ID)) {
-            statement.setInt(1, (int) id);
+            statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 User userTemp = setUserFields(resultSet);
@@ -117,43 +114,6 @@ public class UserDaoImpl implements UserDao {
             throw new DaoException(e);
         }
         return users;
-    }
-
-    @Override
-    public Optional<User> findUserByUsername(String username) throws DaoException {
-        Optional<User> user = Optional.empty();
-
-        try (Connection connection = pool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_USER_BY_USERNAME)) {
-            statement.setString(1, username);
-            ResultSet resultSet = statement.executeQuery(SELECT_USER_BY_USERNAME);
-
-            if (resultSet.next()) {
-                User userTemp = setUserFields(resultSet);
-                user = Optional.of(userTemp);
-            }
-        } catch (SQLException e) {
-            logger.error("Can't find user with username");
-            throw new DaoException(e);
-        }
-        return user;
-    }
-
-    @Override
-    public Optional<String> findEmailById(int id) throws DaoException {
-        Optional<String> email = Optional.empty();
-        try (Connection connection = pool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_EMAIL_BY_ID)) {
-            statement.setInt(1, id);
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                email = Optional.of(resultSet.getString(DatabaseColumn.EMAIL));
-            }
-        } catch (SQLException e) {
-            logger.error("Can't find user with such id");
-            throw new DaoException(e);
-        }
-        return email;
     }
 
     @Override
@@ -286,20 +246,6 @@ public class UserDaoImpl implements UserDao {
             result = statement.executeUpdate() > 0;
         } catch (SQLException e) {
             logger.error("Error uploading scan to: {}", id, e);
-            throw new DaoException(e);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean deleteById(long id) throws DaoException {
-        boolean result;
-        try (Connection connection = pool.getConnection();
-             PreparedStatement statement = connection.prepareStatement(DELETE_USER_BY_ID)) {
-            statement.setLong(1, id);
-            result = statement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            logger.error("Can't delete user by id");
             throw new DaoException(e);
         }
         return result;

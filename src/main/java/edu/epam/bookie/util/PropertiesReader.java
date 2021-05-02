@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+/**
+ * Reader for bundle properties (mail and DB)
+ */
 public class PropertiesReader {
     private static final Logger logger = LogManager.getLogger(PropertiesReader.class);
 

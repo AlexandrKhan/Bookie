@@ -1,5 +1,8 @@
 package edu.epam.bookie.validator;
 
+/**
+ * Errors in input forms (for UI)
+ */
 public enum ValidationError {
     LOGIN_EXISTS,
     EMAIL_EXISTS,

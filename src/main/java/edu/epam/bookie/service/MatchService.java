@@ -13,22 +13,39 @@ import java.util.Optional;
 public interface MatchService {
     List<Match> findAll() throws ServiceException;
 
-    Match findById(Long id) throws ServiceException;
+    Match findById(int id) throws ServiceException;
 
     Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws ServiceException;
 
     /**
-     * Generates random score (homeTeamGoals & awayTeamGoals)
-     * Based on score sets the result of the match (home, draw, away)
-     * And sets match progress as over
+     * Generate random score (homeTeamGoals & awayTeamGoals)
+     * Based on score set the result of the match (home, draw, away)
+     * And set match progress as over
+     *
      * @param id match id
      * @return boolean
      * @throws ServiceException service exception
      */
-    boolean generateScore(Long id) throws ServiceException;
+    boolean generateScore(int id) throws ServiceException;
 
-    boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws ServiceException;
+    /**
+     * Update match date
+     *
+     * @param id match id
+     * @param date new Date
+     * @param time new Time
+     * @return result
+     * @throws ServiceException exception
+     */
+    boolean updateMatchDate(int id, LocalDate date, LocalTime time) throws ServiceException;
 
+    /**
+     * Select all matches of this team
+     *
+     * @param team team
+     * @return list of matches
+     * @throws ServiceException exception
+     */
     List<Match> findMatchesByTeam(String team) throws ServiceException;
 
 }

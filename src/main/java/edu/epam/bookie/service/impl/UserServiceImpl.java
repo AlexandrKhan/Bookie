@@ -44,18 +44,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> findById(int id) throws ServiceException {
-        Optional<User> user = Optional.empty();
+        Optional<User> user;
         try {
             user = userDao.findById(id);
         } catch (DaoException e) {
             logger.error("Can't find user by id");
+            throw new ServiceException(e);
         }
         return user;
     }
 
     @Override
     public Optional<User> findUserByUsernameAndPassword(String username, String password) throws ServiceException {
-        Optional<User> user = Optional.empty();
+        Optional<User> user;
         try {
             ValidationErrorSet errorSet = ValidationErrorSet.getInstance();
             String encryptedPassword = PasswordEncryption.encryptMessage(password);
@@ -65,30 +66,21 @@ public class UserServiceImpl implements UserService {
             }
             logger.info("Login result: {}", user.isPresent());
         } catch (DaoException e) {
-            logger.error("DB error");
-        }
-        return user;
-    }
-
-    @Override
-    public Optional<User> findByUsername(String username) throws ServiceException {
-        Optional<User> user = Optional.empty();
-        try {
-            user = userDao.findUserByUsername(username);
-        } catch (DaoException e) {
-            e.printStackTrace();
+            logger.error("Can't find user with username and password");
+            throw new ServiceException(e);
         }
         return user;
     }
 
     @Override
     public List<User> findAll() throws ServiceException {
-        Optional<List<User>> usersTemp = Optional.empty();
+        Optional<List<User>> usersTemp;
         List<User> users = new ArrayList<>();
         try {
             usersTemp = userDao.findAll();
         } catch (DaoException e) {
             logger.error("No users found");
+            throw new ServiceException(e);
         }
         if (usersTemp.isPresent()) {
             users = usersTemp.get();
@@ -98,24 +90,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<Message> findAllMessagesOfUser(int id) throws ServiceException {
-        List<Message> messages = new ArrayList<>();
+        List<Message> messages;
         try {
             messages = messageDao.findAllMessagesOfUser(id).orElse(new ArrayList<>());
             Collections.reverse(messages);
         } catch (DaoException e) {
             logger.error("No messages found");
+            throw new ServiceException(e);
         }
         return messages;
     }
 
     @Override
-    public List<Match> findAllMatchesOnWhichUserBetByUserId(Long id) throws ServiceException {
-        List<Match> matches = new ArrayList<>();
+    public List<Match> findAllMatchesOnWhichUserBetByUserId(int id) throws ServiceException {
+        List<Match> matches;
         try {
             matches = matchDao.findMatchesOnWhichUserBetByUserId(id).orElse(new ArrayList<>());
             Collections.reverse(matches);
         } catch (DaoException e) {
             logger.error("No matches with bets");
+            throw new ServiceException(e);
         }
         return matches;
     }
@@ -170,6 +164,7 @@ public class UserServiceImpl implements UserService {
                 logger.info("User validation error");
             }
         } catch (DaoException e) {
+            logger.error("Can't register user");
             throw new ServiceException(e);
         }
         return user;
@@ -177,7 +172,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean activateAccount(String token) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = userDao.activateAccount(token);
             if (result) {
@@ -187,24 +182,26 @@ public class UserServiceImpl implements UserService {
             }
         } catch (DaoException e) {
             logger.error("Service activation account error");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean verifyAccount(int id) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = userDao.verifyAccount(id);
         } catch (DaoException e) {
             logger.error("Cant verify account");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean blockUser(int id, int days, String message) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = userDao.blockUser(id);
             if (result) {
@@ -215,14 +212,15 @@ public class UserServiceImpl implements UserService {
                 logger.info("User {} is not found for blocking", id);
             }
         } catch (DaoException e) {
-            logger.error("Service error blocking user", e);
+            logger.error("Service error blocking user");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean unblockUser(int id) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = userDao.unblockUser(id);
             if (result) {
@@ -231,62 +229,65 @@ public class UserServiceImpl implements UserService {
                 logger.info("User {} is not found for unblocking", id);
             }
         } catch (DaoException e) {
-            logger.error("Service error unblocking user", e);
+            logger.error("Service error unblocking user");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean cashIn(int id, BigDecimal money) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = userDao.cashIn(id, money);
             logger.info("User with id: {} got {} money", id, money);
         } catch (DaoException e) {
-            logger.error("Error cashing in", e);
+            logger.error("Error cashing in");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean placeBet(Bet bet) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             betDao.create(bet);
-            userDao.withdrawMoney(bet.getUserId(), bet.getBetAmount());
-            result = true;
+            result = userDao.withdrawMoney(bet.getUserId(), bet.getBetAmount());
             logger.info("Placed bet with id: {}, money: {}", bet.getMatchId(), bet.getBetAmount());
         } catch (DaoException e) {
-            logger.error("Error placing bet", e);
+            logger.error("Error placing bet");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean sendMessage(Message message) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             messageDao.create(message);
             result = true;
         } catch (DaoException e) {
-            logger.error("Cant create message", e);
+            logger.error("Cant create message");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean uploadScan(String scan, int id) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
-            userDao.uploadScan(scan, id);
-            result = true;
+            result = userDao.uploadScan(scan, id);
         } catch (DaoException e) {
-            logger.error("Error uploading scan", e);
+            logger.error("Error uploading scan");
+            throw new ServiceException(e);
         }
         return result;
     }
 
-    public void sendMessageAboutChangedTimeToUser(Long matchId) throws ServiceException {
+    public void sendMessageAboutChangedTimeToUser(int matchId) throws ServiceException {
         List<Bet> bets = betService.selectBetsByMatchId(matchId);
         bets.stream()
             .map(Bet::getUserId)
@@ -309,9 +310,10 @@ public class UserServiceImpl implements UserService {
     private void scheduleUnban(int id, int days) {
         scheduler.schedule(() -> {
             try {
-                unblockUser(id);
-                messageDao.create(new Message(id, UNBAN_MESSAGE, Theme.UNBAN));
-                logger.info("Auto unblock user: {}", id);
+                if (unblockUser(id)) {
+                    messageDao.create(new Message(id, UNBAN_MESSAGE, Theme.UNBAN));
+                    logger.info("Auto unblock user: {}", id);
+                }
             } catch (ServiceException | DaoException e) {
                 logger.error("Error in scheduled unblocking");
             }

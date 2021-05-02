@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Filters user access to commands by role
+ * @see CommandRoleMap
+ */
 @WebFilter(urlPatterns = {"/controller"})
 public class RoleAccessFilter implements Filter {
     private static final CommandRoleMap MAP = CommandRoleMap.getInstance();
@@ -24,7 +28,7 @@ public class RoleAccessFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String command = request.getParameter(RequestParameter.COMMAND);
         if (command != null) {
-            CommandType commandType = CommandFactory.getCommandType(command);
+            CommandType commandType = CommandType.getCommandType(command);
             Role userRole = getUserRole(request);
             if (!MAP.hasRole(commandType, userRole)) {
                 logger.warn("Role filter. User with role {} can't execute {} command", userRole, commandType);

@@ -1,7 +1,5 @@
 package edu.epam.bookie.model.sport;
 
-import edu.epam.bookie.model.Entity;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -9,7 +7,7 @@ import java.time.LocalTime;
 /**
  * Football match
  */
-public class Match implements Entity {
+public class Match {
     private int id;
     private Team homeTeam;
     private Team awayTeam;

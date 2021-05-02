@@ -1,7 +1,6 @@
 package edu.epam.bookie.connection;
 
 import edu.epam.bookie.exception.PropertyReaderException;
-import edu.epam.bookie.util.PropertiesPath;
 import edu.epam.bookie.util.PropertiesReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +10,6 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -23,17 +21,17 @@ public class ConnectionPool {
     private static volatile ConnectionPool instance;
     private static final int DEFAULT_POOL_SIZE = 32;
     private final BlockingQueue<ProxyConnection> freeConnection;
-    private final BlockingQueue<ProxyConnection> releasedConnection;
+    private final Queue<ProxyConnection> releasedConnection;
     private static final String DRIVER = "db.driver";
     private static final String URL = "db.url";
+    private static final String DB_PROPERTIES = "property/database.properties";
     private static final AtomicBoolean poolInitialized = new AtomicBoolean(false);
     private static final Lock lock = new ReentrantLock();
 
     private ConnectionPool() {
-        String propertiesPath = PropertiesPath.DB_PROPERTIES;
         Properties properties;
         try {
-            properties = PropertiesReader.readProperties(propertiesPath);
+            properties = PropertiesReader.readProperties(DB_PROPERTIES);
         } catch (PropertyReaderException e) {
             throw new RuntimeException("Can't read DB properties", e);
         }
@@ -48,7 +46,7 @@ public class ConnectionPool {
         }
 
         freeConnection = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
-        releasedConnection = new LinkedBlockingDeque<>();
+        releasedConnection = new ArrayDeque<>();
 
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {

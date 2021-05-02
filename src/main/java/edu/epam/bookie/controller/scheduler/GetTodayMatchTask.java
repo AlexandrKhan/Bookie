@@ -13,33 +13,34 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Collect today matches to map (todayMatchStartTimeMap)
+ * Check if any match time was updated (line 34) -> write new time
+ */
 public class GetTodayMatchTask implements Runnable {
     private static final Logger logger = LogManager.getLogger(GetTodayMatchTask.class);
     private final MatchServiceImpl service = MatchServiceImpl.matchService;
 
-    /**
-     * Add today matches to todayMatchStartTimeMap
-     */
     @Override
     public void run() {
         try {
             List<Match> matchList = service.findAll();
-            for (Match match : matchList) {
-                int id = match.getId();
-                LocalTime time = match.getStartTime();
+            matchList.forEach(m -> {
+                int id = m.getId();
+                LocalTime time = m.getStartTime();
 
-                if (matchTodayAndNotOver(match)) {
+                if (matchTodayAndNotOver(m)) {
                     if (todayMatchStartTimeMap.containsKey(id)) {
                         if (todayMatchStartTimeMap.get(id).compareTo(time) != 0) {
                             todayMatchStartTimeMap.put(id, time);
-                            logger.info("Added match with id {} to todayMap, start time at: {}", id, time);
+                            logger.info("Match with id {} was updated, new start time at: {}", id, time);
                         }
                     } else {
                         todayMatchStartTimeMap.put(id, time);
                         logger.info("Added match with id {} to todayMap, start time at: {}", id, time);
                     }
                 }
-            }
+            });
         } catch (ServiceException e) {
             logger.error("Error finding today matches: " + e);
         }
@@ -52,7 +53,7 @@ public class GetTodayMatchTask implements Runnable {
      * @return boolean
      */
     private boolean matchTodayAndNotOver(Match match) {
-        return (!match.getMatchProgress().equals(MatchProgress.valueOf("OVER"))
+        return (match.getMatchProgress().equals(MatchProgress.valueOf("NOT_STARTED"))
                 && match.getStartDate().isEqual(LocalDate.now()));
     }
 }

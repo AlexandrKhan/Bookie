@@ -3,6 +3,10 @@ package edu.epam.bookie.validator;
 import java.util.EnumSet;
 import java.util.Set;
 
+/**
+ * Set of Validation errors
+ * @see ValidationError
+ */
 public class ValidationErrorSet {
     private static final ValidationErrorSet INSTANCE = new ValidationErrorSet();
     private final EnumSet<ValidationError> errors = EnumSet.noneOf(ValidationError.class);

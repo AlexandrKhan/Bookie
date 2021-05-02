@@ -27,12 +27,13 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public List<Match> findAll() throws ServiceException {
-        Optional<List<Match>> matchList = Optional.empty();
+        Optional<List<Match>> matchList;
         List<Match> matches = new ArrayList<>();
         try {
             matchList = matchDao.findAll();
         } catch (DaoException e) {
-            logger.error("Cant find all matches",e);
+            logger.error("Cant find all matches");
+            throw new ServiceException(e);
         }
         if (matchList.isPresent()) {
             matches = matchList.get();
@@ -41,13 +42,14 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public Match findById(Long id) throws ServiceException {
-        Optional<Match> matchTemp = Optional.empty();
+    public Match findById(int id) throws ServiceException {
+        Optional<Match> matchTemp;
         Match match = new Match();
         try {
             matchTemp = matchDao.findById(id);
         } catch (DaoException e) {
             logger.error("Cant find match by id: {}", id);
+            throw new ServiceException(e);
         }
         if (matchTemp.isPresent()) {
             match = matchTemp.get();
@@ -56,13 +58,14 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public boolean updateMatchDate(Long id, LocalDate date, LocalTime time) throws ServiceException {
+    public boolean updateMatchDate(int id, LocalDate date, LocalTime time) throws ServiceException {
         boolean result = false;
         if (date.isAfter(LocalDate.now()) ||  (!date.isBefore(LocalDate.now()) && time.isAfter(LocalTime.now().plusMinutes(60)))) {
             try {
                 result = matchDao.updateDateTimeAtNotStartedMatch(id, date, time);
             } catch (DaoException e) {
-                logger.error("Can't update date at match", e);
+                logger.error("Can't update date at match");
+                throw new ServiceException(e);
             }
         } else {
             logger.error("Validation shit on upodate amtch");
@@ -74,12 +77,13 @@ public class MatchServiceImpl implements MatchService {
 
     @Override
     public List<Match> findMatchesByTeam(String team) throws ServiceException {
-        Optional<List<Match>> matchList = Optional.empty();
+        Optional<List<Match>> matchList;
         List<Match> matches = new ArrayList<>();
         try {
             matchList = matchDao.findMatchesByTeam(team);
         } catch (DaoException e) {
-            logger.error("Cant find matches by team", e);
+            logger.error("Cant find matches by team");
+            throw new ServiceException(e);
         }
         if (matchList.isPresent()) {
             matches = matchList.get();
@@ -90,18 +94,19 @@ public class MatchServiceImpl implements MatchService {
     @Override
     public Optional<Match> create(Team first, Team second, LocalDate date, LocalTime time, BigDecimal homeCoeff, BigDecimal drawCoeff, BigDecimal awayCoeff) throws ServiceException {
         Match matchTemp = new Match(first, second, date, time, homeCoeff, drawCoeff, awayCoeff);
-        Optional<Match> match = Optional.empty();
+        Optional<Match> match;
         try {
             match = matchDao.create(matchTemp);
         } catch (DaoException e) {
-            logger.error("Cant create match",e);
+            logger.error("Cant create match");
+            throw new ServiceException(e);
         }
         return match;
     }
 
     @Override
-    public boolean generateScore(Long id) throws ServiceException {
-        boolean result = false;
+    public boolean generateScore(int id) throws ServiceException {
+        boolean result;
         int firstTeamGoal = (int) (6.0 * Math.random());
         int secondTeamGoal = (int) (6.0 * Math.random());
         Result matchResult = calculateResult(firstTeamGoal, secondTeamGoal);
@@ -109,6 +114,7 @@ public class MatchServiceImpl implements MatchService {
                 result = matchDao.setGoalsResultAndOverMatchById(id, firstTeamGoal, secondTeamGoal, matchResult);
             } catch (DaoException e) {
                 logger.error("Cant set score by id: {}", id);
+                throw new ServiceException(e);
             }
         return result;
     }

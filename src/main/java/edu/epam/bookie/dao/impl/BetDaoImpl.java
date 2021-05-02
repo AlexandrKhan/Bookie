@@ -77,7 +77,7 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
-    public Optional<List<Bet>> selectBetsByMatchId(Long matchId) throws DaoException {
+    public Optional<List<Bet>> selectBetsByMatchId(int matchId) throws DaoException {
         Optional<List<Bet>> bets;
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BETS_ON_MATCH_ID)) {
@@ -98,7 +98,7 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
-    public Optional<List<Bet>> selectBetsByUserId(Long userId) throws DaoException {
+    public Optional<List<Bet>> selectBetsByUserId(int userId) throws DaoException {
         Optional<List<Bet>> bets;
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_ALL_BETS_OF_USER)) {
@@ -140,7 +140,7 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
-    public Optional<Bet> findById(long id) throws DaoException {
+    public Optional<Bet> findById(int id) throws DaoException {
         Optional<Bet> bet;
         try (Connection connection = pool.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_BET_BY_ID)) {
@@ -156,11 +156,6 @@ public class BetDaoImpl implements BetDao {
             throw new DaoException(e);
         }
         return bet;
-    }
-
-    @Override
-    public boolean deleteById(long id) {
-        throw new UnsupportedOperationException();
     }
 
     private void setBetFields(ResultSet resultSet, Bet bet) throws SQLException {

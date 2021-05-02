@@ -1,7 +1,7 @@
 package edu.epam.bookie.controller;
 
 import edu.epam.bookie.command.Command;
-import edu.epam.bookie.command.CommandFactory;
+import edu.epam.bookie.command.CommandType;
 import edu.epam.bookie.command.RequestParameter;
 import edu.epam.bookie.connection.ConnectionPool;
 import org.apache.logging.log4j.LogManager;
@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Main controller
+ */
 @WebServlet(urlPatterns = "/controller")
 public class ControllerServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(ControllerServlet.class);
@@ -37,7 +40,7 @@ public class ControllerServlet extends HttpServlet {
                 + ", content type: " + request.getContentType()
                 + ", method: " + request.getMethod());
         String commandName = request.getParameter(RequestParameter.COMMAND);
-        Command command = CommandFactory.defineCommand(commandName);
+        Command command = CommandType.getCommandType(commandName).getCommand();
         return command.execute(request);
     }
 

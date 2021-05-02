@@ -29,10 +29,24 @@ public class UserValidator {
         return name != null && name.matches(NAME_REGEX);
     }
 
+    /**
+     * User must be 18 to register
+     *
+     * @param date birth date
+     * @return result
+     */
     public static boolean legalAge(LocalDate date) {
         return date != null && date.plusYears(18).isAfter(LocalDate.now());
     }
 
+    /**
+     * When user registrates he must input password twice
+     * Check if they match
+     *
+     * @param pass password
+     * @param repeat password
+     * @return result
+     */
     public static boolean passwordsMatch(String pass, String repeat) {
         return pass.equals(repeat);
     }

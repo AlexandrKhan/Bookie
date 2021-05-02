@@ -1,9 +1,10 @@
 package edu.epam.bookie.exception;
 
+/**
+ * Exception thrown by property reader
+ */
 public class PropertyReaderException extends Exception {
-    /**
-     * Exception thrown by property reader
-     */
+
     public PropertyReaderException() {
         super();
     }

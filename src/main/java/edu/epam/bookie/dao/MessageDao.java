@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface MessageDao extends BaseDao<Message> {
     /**
-     * Selects all messages of this user
+     * Select all messages of this user
      *
      * @param id user is
      * @return list of messages

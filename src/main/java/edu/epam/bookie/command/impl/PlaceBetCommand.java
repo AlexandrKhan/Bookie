@@ -21,6 +21,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 
+/**
+ * Command to place bet
+ */
 public class PlaceBetCommand implements Command {
     private static final Logger logger = LogManager.getLogger(PlaceBetCommand.class);
     private final UserServiceImpl userService = UserServiceImpl.userService;
@@ -41,7 +44,7 @@ public class PlaceBetCommand implements Command {
 
         if (user.getStatusType().equals(StatusType.VERIFIED)) {
             try {
-                match = matchService.findById(Long.valueOf(request.getParameter(RequestParameter.MATCH_ID)));
+                match = matchService.findById(Integer.parseInt(request.getParameter(RequestParameter.MATCH_ID)));
                 bet = new Bet(userId, matchId, betAmount, betOnResult);
                 switch (betOnResult.getName()) {
                     case "Home":
@@ -76,6 +79,7 @@ public class PlaceBetCommand implements Command {
             }
         } else {
             logger.error("You are blocked");
+            return PagePath.ERROR_404.getDirectUrl();
         }
 
         return PagePath.MATCHES.getServletPath();

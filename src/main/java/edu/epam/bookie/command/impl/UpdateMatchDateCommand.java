@@ -31,7 +31,7 @@ public class UpdateMatchDateCommand implements Command {
     public String execute(HttpServletRequest request) {
         String page = null;
 
-        Long id = Long.valueOf(request.getParameter(MATCH_ID));
+        int id = Integer.parseInt(request.getParameter(MATCH_ID));
         LocalDate date = LocalDate.parse(request.getParameter(START_DATE));
         LocalTime time = LocalTime.parse(request.getParameter(START_TIME));
         if (MatchValidator.isValidTimeForMatchUpdate(date, time)) {

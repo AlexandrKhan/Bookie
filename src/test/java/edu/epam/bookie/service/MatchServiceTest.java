@@ -32,15 +32,15 @@ public class MatchServiceTest {
     @Test
     public void testUpdateMatchDate() throws DaoException, ServiceException {
         Optional<Match> expected = Optional.of(new Match());
-        when(matchDao.updateDateTimeAtNotStartedMatch(anyLong(), any(), any())).thenReturn(true);
-        assertTrue(matchService.updateMatchDate(1L, LocalDate.now(), LocalTime.now().plusHours(6)));
+        when(matchDao.updateDateTimeAtNotStartedMatch(anyInt(), any(), any())).thenReturn(true);
+        assertTrue(matchService.updateMatchDate(1, LocalDate.now(), LocalTime.now().plusHours(6)));
     }
 
     @Test
     public void testUpdateMatchDateFalse() throws DaoException, ServiceException {
         Optional<Match> expected = Optional.of(new Match());
-        when(matchDao.updateDateTimeAtNotStartedMatch(anyLong(), any(), any())).thenReturn(true);
-        assertFalse(matchService.updateMatchDate(1L, LocalDate.now(), LocalTime.now()));
+        when(matchDao.updateDateTimeAtNotStartedMatch(anyInt(), any(), any())).thenReturn(true);
+        assertFalse(matchService.updateMatchDate(1, LocalDate.now(), LocalTime.now()));
     }
 
     @Test

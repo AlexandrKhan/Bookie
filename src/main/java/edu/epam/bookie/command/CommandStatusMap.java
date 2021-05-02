@@ -8,7 +8,8 @@ import java.util.EnumMap;
 import java.util.List;
 
 /**
- * Map of command as key and status of user as value, allowing execution of this command only to users with declared status
+ * Map of command as key and status of user as value,
+ * allowing execution of this command only to users with declared status
  */
 
 public class CommandStatusMap {

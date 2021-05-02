@@ -1,16 +1,13 @@
 package edu.epam.bookie.model.sport;
 
-import edu.epam.bookie.model.Entity;
-import edu.epam.bookie.model.StatusType;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 /**
- * User bet on match
+ * Bet on match
  */
-public class Bet implements Entity {
+public class Bet {
     private int id;
     private int userId;
     private int matchId;

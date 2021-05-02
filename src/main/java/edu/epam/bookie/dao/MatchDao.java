@@ -13,7 +13,7 @@ public interface MatchDao extends BaseDao<Match> {
     /**
      * After the score has been generated
      * @see edu.epam.bookie.controller.scheduler.GenerateScoreTask
-     * sets goals, result
+     * set goals, result
      * and match progress as 'OVER'
      *
      * @param id id
@@ -23,10 +23,10 @@ public interface MatchDao extends BaseDao<Match> {
      * @return boolean
      * @throws DaoException dao exception
      */
-    boolean setGoalsResultAndOverMatchById(Long id, int home, int away, Result result) throws DaoException;
+    boolean setGoalsResultAndOverMatchById(int id, int home, int away, Result result) throws DaoException;
 
     /**
-     * Sets new match date and time
+     * Set new match date and time
      *
      * @param matchId match id
      * @param date new date of the match
@@ -34,10 +34,10 @@ public interface MatchDao extends BaseDao<Match> {
      * @return boolean
      * @throws DaoException dao exception
      */
-    boolean updateDateTimeAtNotStartedMatch(Long matchId, LocalDate date, LocalTime time) throws DaoException;
+    boolean updateDateTimeAtNotStartedMatch(int matchId, LocalDate date, LocalTime time) throws DaoException;
 
     /**
-     * Selects all matches of this team
+     * Select all matches of this team
      *
      * @param team team
      * @return list of matches
@@ -46,11 +46,11 @@ public interface MatchDao extends BaseDao<Match> {
     Optional<List<Match>> findMatchesByTeam(String team) throws DaoException;
 
     /**
-     * Selects all matches on which this user placed bets
+     * Select all matches on which this user placed bets
      *
      * @param id user id
      * @return list of matches
      * @throws DaoException dao exception
      */
-    Optional<List<Match>> findMatchesOnWhichUserBetByUserId(Long id) throws DaoException;
+    Optional<List<Match>> findMatchesOnWhichUserBetByUserId(int id) throws DaoException;
 }

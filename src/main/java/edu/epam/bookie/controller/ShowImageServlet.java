@@ -8,13 +8,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLDecoder;
 import java.nio.file.Files;
-import java.util.HashSet;
 
+/**
+ * Servlet gets images (passport scan) from local storage
+ */
 
 @WebServlet(name = "showImage", urlPatterns = "/showImage/*")
 public class ShowImageServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String imagePath = request.getServletContext().getInitParameter("uploadPath");
         String requestedImage = request.getPathInfo();
         File image = new File(imagePath, URLDecoder.decode(requestedImage, "UTF-8"));

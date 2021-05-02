@@ -50,7 +50,9 @@ public class FileUploadCommand implements Command {
                         request.getSession().setAttribute(RequestParameter.PASSPORT_SCAN, fileName);
                         try {
                             item.write(path);
-                            userService.uploadScan(fileName, user.getId());
+                            if (userService.uploadScan(fileName, user.getId())) {
+                                logger.info("Scan uploaded");
+                            }
                         } catch (Exception e) {
                             logger.error("File write error", e);
                         }

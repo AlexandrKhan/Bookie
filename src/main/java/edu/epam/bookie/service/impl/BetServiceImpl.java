@@ -22,13 +22,14 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<Bet> selectBetsByMatchId(long id) throws ServiceException {
-        Optional<List<Bet>> optional = Optional.empty();
+    public List<Bet> selectBetsByMatchId(int id) throws ServiceException {
+        Optional<List<Bet>> optional;
         List<Bet> bets = new ArrayList<>();
         try {
             optional = betDao.selectBetsByMatchId(id);
         } catch (DaoException e) {
-            logger.error("Error selecting bets by match id: {}", id, e);
+            logger.error("Error selecting bets by match id: {}", id);
+            throw new ServiceException(e);
         }
         if (optional.isPresent()) {
             bets = optional.get();
@@ -39,13 +40,14 @@ public class BetServiceImpl implements BetService {
     }
 
     @Override
-    public List<Bet> selectBetsByUserId(long id) throws ServiceException {
-        Optional<List<Bet>> optional = Optional.empty();
+    public List<Bet> selectBetsByUserId(int id) throws ServiceException {
+        Optional<List<Bet>> optional;
         List<Bet> bets = new ArrayList<>();
         try {
             optional = betDao.selectBetsByUserId(id);
         } catch (DaoException e) {
-            logger.error("Error selecting bets by user id: {}", id, e);
+            logger.error("Error selecting bets by user id: {}", id);
+            throw new ServiceException(e);
         }
         if (optional.isPresent()) {
             bets = optional.get();
@@ -58,22 +60,24 @@ public class BetServiceImpl implements BetService {
 
     @Override
     public boolean payBets(Bet bet) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = betDao.payBets(bet);
         } catch (DaoException e) {
-            logger.error("Cant pay bet", e);
+            logger.error("Cant pay bet");
+            throw new ServiceException(e);
         }
         return result;
     }
 
     @Override
     public boolean betLost(Bet bet) throws ServiceException {
-        boolean result = false;
+        boolean result;
         try {
             result = betDao.betLost(bet);
         } catch (DaoException e) {
-            logger.error("Cant set bet as lost", e);
+            logger.error("Cant set bet as lost");
+            throw new ServiceException(e);
         }
         return result;
     }

@@ -33,8 +33,8 @@ public class BetServiceTest {
     public void testSelectBetsByMatchId() throws DaoException, ServiceException {
         Optional<Bet> bet = Optional.of(new Bet());
         List<Bet> expected = Collections.singletonList(bet.get());
-        when(betDao.selectBetsByMatchId(anyLong())).thenReturn(Optional.of(expected));
-        List<Bet> actual = betService.selectBetsByMatchId(1L);
+        when(betDao.selectBetsByMatchId(anyInt())).thenReturn(Optional.of(expected));
+        List<Bet> actual = betService.selectBetsByMatchId(1);
         assertEquals(actual, expected);
     }
 
@@ -42,8 +42,8 @@ public class BetServiceTest {
     public void testSelectBetsByUserId() throws DaoException, ServiceException {
         Optional<Bet> bet = Optional.of(new Bet());
         List<Bet> expected = Collections.singletonList(bet.get());
-        when(betDao.selectBetsByUserId(anyLong())).thenReturn(Optional.of(expected));
-        List<Bet> actual = betService.selectBetsByUserId(1L);
+        when(betDao.selectBetsByUserId(anyInt())).thenReturn(Optional.of(expected));
+        List<Bet> actual = betService.selectBetsByUserId(1);
         assertEquals(actual, expected);
     }
 

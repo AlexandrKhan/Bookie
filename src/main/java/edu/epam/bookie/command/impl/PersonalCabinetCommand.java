@@ -34,7 +34,7 @@ public class PersonalCabinetCommand implements Command{
         List<Match> matchList;
         try {
             bets = service.selectBetsByUserId(user.getId());
-            matchList = userService.findAllMatchesOnWhichUserBetByUserId((long) user.getId());
+            matchList = userService.findAllMatchesOnWhichUserBetByUserId(user.getId());
             session.setAttribute(SessionAttribute.MY_BETS, bets);
             session.setAttribute(SessionAttribute.MY_MATCHES, matchList);
         } catch (ServiceException e) {

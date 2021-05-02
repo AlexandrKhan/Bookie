@@ -2,6 +2,7 @@ package edu.epam.bookie.model;
 
 /**
  * Theme of message sent to user
+ * Used for UI (color of message)
  */
 public enum Theme {
     WON("Won"),

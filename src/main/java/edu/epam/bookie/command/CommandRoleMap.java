@@ -8,7 +8,8 @@ import java.util.EnumMap;
 import java.util.List;
 
 /**
- * Map of command as key and role of user as value, allowing execution of this command only to users with declared roles
+ * Map of command as key and role of user as value,
+ * allowing execution of this command only to users with declared roles
  */
 
 public class CommandRoleMap {

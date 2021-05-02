@@ -1,10 +1,9 @@
 package edu.epam.bookie.dao.impl;
 
+/**
+ * Columns from all tables of application database
+ */
 class DatabaseColumn {
-    /**
-     * Columns from all tables of application database 'bookie'
-     */
-
     static final String ID = "id";
     static final String USERNAME = "username";
     static final String FIRST_NAME = "first_name";
@@ -40,5 +39,4 @@ class DatabaseColumn {
     static final String MESSAGE = "text";
     static final String THEME = "theme";
     static final String TOKEN = "token";
-    static final String COMMENT = "comment";
 }

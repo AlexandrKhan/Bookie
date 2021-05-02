@@ -2,6 +2,9 @@ package edu.epam.bookie.util;
 
 import java.util.UUID;
 
+/**
+ * Generates random name for passport scan
+ */
 public class FileNameGenerator {
     public static String generateName(String fileName) {
         StringBuilder result = new StringBuilder();

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface BetDao extends BaseDao<Bet>{
     /**
      * Invoked if user bet has won
-     * Pays bet * coeff to user
+     * Pays (bet * coeff) to user
      * Sets bet status as 'WON'
      *
      * @param bet bet
@@ -35,7 +35,7 @@ public interface BetDao extends BaseDao<Bet>{
      * @return list of bets
      * @throws DaoException dao exception
      */
-    Optional<List<Bet>> selectBetsByMatchId(Long matchId) throws DaoException;
+    Optional<List<Bet>> selectBetsByMatchId(int matchId) throws DaoException;
 
     /**
      * Selects all bets of this user
@@ -44,5 +44,5 @@ public interface BetDao extends BaseDao<Bet>{
      * @return list of bets
      * @throws DaoException dao exception
      */
-    Optional<List<Bet>> selectBetsByUserId(Long userId) throws DaoException;
+    Optional<List<Bet>> selectBetsByUserId(int userId) throws DaoException;
 }
