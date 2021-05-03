@@ -25,10 +25,10 @@ public class MatchDaoImpl implements MatchDao {
     private static final String SELECT_ALL_MATCHES = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id";
     private static final String ADD_MATCH = "INSERT INTO bookie.match(home_team, away_team, start_date, start_time, home_coeff, draw_coeff, away_coeff) VALUES (?,?,?,?,?,?,?)";
     private static final String ADD_DEFAULT_MATCH_PROGRESS = "INSERT INTO bookie.match_result(id, home_team_goals, away_team_goals, result, match_progress) VALUES (LAST_INSERT_ID(), 0, 0, 'DRAW', 'NOT_STARTED')";
-    private static final String DELETE_MATCH_BY_ID = "DELETE FROM bookie.match WHERE id=?";
     private static final String SET_GOALS_RESULT_AND_OVER_MATCH_BY_ID = "UPDATE bookie.match_result SET home_team_goals=?, away_team_goals=?, result=?, match_progress='OVER' WHERE id=?";
     private static final String UPDATE_DATE_TIME_AT_MATCH = "UPDATE bookie.match SET start_date=?, start_time=? WHERE id=?";
     private static final String FIND_MATCHES_BY_TEAM = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.home_team LIKE ? OR bookie.match.away_team LIKE ?";
+    private static final String FIND_MATCHES_BY_DATE = "SELECT * FROM bookie.match LEFT JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.start_date=?";
     private static final String FIND_MATCHES_BY_USER_ID = "SELECT DISTINCT M.id, home_team, away_team, start_date, start_time, home_coeff, draw_coeff, away_coeff, home_team_goals, away_team_goals, result, match_progress FROM bookie.match AS M JOIN bookie.match_result AS MR ON M.id = MR.id JOIN bookie.bet AS BB ON M.id = BB.match_id WHERE BB.user_id=?";
     private static final String SELECT_MATCH_BY_ID = "SELECT * FROM bookie.match JOIN bookie.match_result ON bookie.match.id = bookie.match_result.id WHERE bookie.match.id=?";
 
@@ -160,6 +160,26 @@ public class MatchDaoImpl implements MatchDao {
         try (Connection connection = ConnectionPool.getInstance().getConnection();
              PreparedStatement statement = connection.prepareStatement(FIND_MATCHES_BY_USER_ID)) {
             statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+            List<Match> matchList = new ArrayList<>();
+            while (resultSet.next()) {
+                Match match = setMatchFields(resultSet);
+                matchList.add(match);
+            }
+            matches = Optional.of(matchList);
+        } catch (SQLException e) {
+            logger.error("Cant find matches by user who bet", e);
+            throw new DaoException(e);
+        }
+        return matches;
+    }
+
+    @Override
+    public Optional<List<Match>> findMatchesOfDate(LocalDate date) throws DaoException {
+        Optional<List<Match>> matches;
+        try (Connection connection = ConnectionPool.getInstance().getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_MATCHES_BY_DATE)) {
+            statement.setDate(1, Date.valueOf(date));
             ResultSet resultSet = statement.executeQuery();
             List<Match> matchList = new ArrayList<>();
             while (resultSet.next()) {

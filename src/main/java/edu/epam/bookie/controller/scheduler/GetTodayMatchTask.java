@@ -24,7 +24,7 @@ public class GetTodayMatchTask implements Runnable {
     @Override
     public void run() {
         try {
-            List<Match> matchList = service.findAll();
+            List<Match> matchList = service.findMatchesOfDate(LocalDate.now());
             matchList.forEach(m -> {
                 int id = m.getId();
                 LocalTime time = m.getStartTime();

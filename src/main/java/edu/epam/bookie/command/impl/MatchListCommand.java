@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class MatchListCommand implements Command {
     private static final Logger logger = LogManager.getLogger(MatchListCommand.class);
-    private final MatchServiceImpl service = MatchServiceImpl.matchService;
+    private static final MatchServiceImpl service = MatchServiceImpl.matchService;
 
     @Override
     public String execute(HttpServletRequest request) {
@@ -29,6 +29,7 @@ public class MatchListCommand implements Command {
             session.setAttribute(SessionAttribute.MATCHES, matches);
         } catch (ServiceException e) {
             logger.error("Cant find all matches");
+            return PagePath.AUTHORISATION.getServletPath();
         }
         return PagePath.MATCHES.getDirectUrl();
     }

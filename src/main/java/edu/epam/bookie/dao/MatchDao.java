@@ -53,4 +53,6 @@ public interface MatchDao extends BaseDao<Match> {
      * @throws DaoException dao exception
      */
     Optional<List<Match>> findMatchesOnWhichUserBetByUserId(int id) throws DaoException;
+
+    Optional<List<Match>> findMatchesOfDate(LocalDate date) throws DaoException;
 }

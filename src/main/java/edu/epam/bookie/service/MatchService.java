@@ -48,4 +48,6 @@ public interface MatchService {
      */
     List<Match> findMatchesByTeam(String team) throws ServiceException;
 
+    List<Match> findMatchesOfDate(LocalDate date) throws ServiceException;
+
 }
