@@ -14,7 +14,8 @@ Application for sport bets, providing functionality of betting on different outc
 * After match is over, if your bet has won you will get paid
 
 ## Features:
-* Patterns: Singleton, Command, Proxy, Factory
+* Java 8 (Stream API/ Lambdas)
+* Patterns: Singleton, Command, Proxy, Factory, Builder
 * Servlet
 * JSP/JSTL/JS/CSS
 * MYSQL
