@@ -22,7 +22,7 @@ import static edu.epam.bookie.controller.scheduler.MatchContextListener.todayMat
  * Thread executes several service methods
  * #1 Generate score (line 40)
  * #2 Select all bets for this match (lines 46)
- * #3 If bet won - pay for bet (line 52and send message about win (lines 53-56)
+ * #3 If bet won - pay for bet (line 52) and send message about win (lines 53-56)
  * #4 Else mark bet as lost (line 59)
  */
 public class GenerateScoreTask implements Runnable {
